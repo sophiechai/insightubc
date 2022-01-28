@@ -1,0 +1,15 @@
+{
+  "title": "missing WHERE throws InsightError",
+  "input":
+  {
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_pass",
+        "courses_fail"
+      ],
+      "ORDER": "courses_fail"
+    }
+  },
+  "errorExpected": true,
+  "expected": "InsightError"
+}
