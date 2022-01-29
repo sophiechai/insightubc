@@ -31,43 +31,19 @@ export default class InsightFacade implements IInsightFacade {
 		// content - fs.readFileSync("test/resources/archives/courses.zip").toString("base64")
 
 		if (kind === InsightDatasetKind.Rooms) {
-			return Promise.reject(InsightError);
+			return Promise.reject(new InsightError("Rooms dataset is not supported"));
 		}
-		// js_zip.loadAsync(content, {base64: true})
-		// 	.then(function (zip) {
-		// 		zip.forEach(async (relativePath, file) => {
-		// 			const promise = file.async('string')
-		// 			promises.push(promise)
-		// 			zipContent.push({
-		// 			  file: relativePath,
-		// 			  content: await promise
-		// 			})
-		// 		  })
-		// const zipContent: Array<{[file: string]: string}> = [];
-		// const promises: Array<Promise<string>> = [];
-		// js_zip.loadAsync(content)
-		// 	.then(function (zip) {
-		// 		zip.forEach(async (relativePath, file) => {
-		// 			console.log("file is " + relativePath);
-		// 			const promise = file.async("string");
-		// 			promises.push(promise);
-		// 			zipContent.push({
-		// 				file: relativePath,
-		// 				content: await promise
-		// 			});
-		// 		});
-		// 		console.log("zipContent is " + zipContent);
-		// 	});
-		// return Promise.all(promises);
-		// return zipContent
+		if (id.includes("_") || id.trim() === "") {
+			return Promise.reject(new InsightError("Invalid id"));
+		}
 
 		const zipContent: Array<{[file: string]: string}> = [];
 		const promises: Array<Promise<string>> = [];
-		await jsZip.loadAsync(content)
-			.then(function (zip) {
-				console.log("zipContent is" + zip.files["courses/LARC502.txt"]);
+		// jsZip.loadAsync(content, {base64: true})
+		// 	.then(function (zip) {
+				// console.log("zip is ", zip);
 				// zip.forEach(async (relativePath, file) => {
-				// 	console.log("file is " + relativePath);
+				// 	// console.log("file is " + relativePath);
 				// 	const promise = file.async("string");
 				// 	promises.push(promise);
 				// 	zipContent.push({
@@ -75,32 +51,21 @@ export default class InsightFacade implements IInsightFacade {
 				// 		content: await promise
 				// 	});
 				// });
-				// console.log("zipContent is " + zipContent);
-			});
-		// fse.readFile("./test/resources/archives/courses.zip", function (err, data) {
-		// 	if (err) throw err;
-		// 	var zip = new JSZip();
-		// 	zip.loadAsync(data);
-		// }
-		// const zipContent = [];
-		// const promises: Array<Promise<string>> = [];
-		// const zip = (await JSZip.loadAsync(content));
-		// zip.forEach(async (relativePath, file) => {
-		// 	const promise = file.async("string");
-		// 	promises.push(promise);
-		// 	zipContent.push({
-		// 		file: relativePath,
-		// 		content: await promise
-		// 	});
-		// });
-
-		// await Promise.all(promises);
-
-			// .then(function (zip) {
-			// 	console.log(zip.files["courses/LARC502.txt"]); // .async("string");
-			// 	return zip.files["courses/LARC502.txt"].async("string");
+			// 	console.log(zip.files["courses/ZOOL649"]);
+			// 	return zip.files["courses/ZOOL649"].async("text").then(function (txt) {
+			// 		console.log("text is " + txt);
+			// 	});
 			// });
-		return Promise.reject("Not implemented.");
+
+		jsZip.loadAsync(content,{base64: true}).then(function (zip) {
+			Object.keys(zip.files).forEach(function (filename) {
+				console.log("file name " + filename);
+				zip.files[filename].async("text").then(function (fileData) {
+					console.log("file content " + fileData); // These are your file contents
+				});
+			});
+		});
+		return Promise.all(promises);
 	}
 
 	public removeDataset(id: string): Promise<string> {
