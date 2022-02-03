@@ -1,5 +1,4 @@
-import * as fs from "fs-extra";
-import {NotFoundError} from "../../src/controller/IInsightFacade";
+import fse from "fs-extra";
 
 function checkValidSection(section: object): boolean {
 	return (
@@ -20,4 +19,14 @@ function checkValidSection(section: object): boolean {
 	);
 }
 
-export {checkValidSection};
+function writeToData(fileName: string, myJSON: string): void {
+	fse.writeFile(fileName, myJSON, (err) => {
+		if (err) {
+			console.error("file created error: " + err);
+			return;
+		}
+		console.log("file written successfully");
+	});
+}
+
+export {checkValidSection, writeToData};

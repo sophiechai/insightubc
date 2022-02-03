@@ -11,6 +11,7 @@ coverage/
 dist/
 
 # Persist Dir
+data2/
 data/
 
 # Normal Things
