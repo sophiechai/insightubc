@@ -26,6 +26,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
+		let q: any = query;
 		return Promise.reject("Not implemented.");
 	}
 
