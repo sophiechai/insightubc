@@ -18,13 +18,13 @@ import fse from "fs-extra";
  *
  */
 let jsZip: JSZip;
-let addedIds: string[] = [];
+let addedIds: string[];
 let dataPath = __dirname + "/../../data";
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		jsZip = new JSZip();
-
+		addedIds = [];
 		console.log("InsightFacadeImpl::init()");
 		console.log(dataPath);
 		fse.mkdir(dataPath, function (err) {
@@ -42,12 +42,12 @@ export default class InsightFacade implements IInsightFacade {
 		if (kind === InsightDatasetKind.Rooms) {
 			return Promise.reject(new InsightError("Rooms dataset is not supported"));
 		}
-		// if (id.includes("_") || id.trim() === "") {
-		// 	return Promise.reject(new InsightError("Invalid id"));
-		// }
-		if (addedIds.includes(id)) {
-			return Promise.reject(new InsightError("Dataset already added"));
+		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
+			return Promise.reject(new InsightError("Invalid id"));
 		}
+		// if (addedIds.includes(id)) {
+		// 	return Promise.reject(new InsightError("Dataset already added"));
+		// }
 		// OR
 		// const idExisted = await fse.pathExists("data/" + id);
 		// if (idExisted) {
@@ -59,7 +59,9 @@ export default class InsightFacade implements IInsightFacade {
 
 		return jsZip.loadAsync(content, {base64: true}).then((zip) => {
 			zip.forEach((relativePath, file) => {
-				// console.log("relativePath is " + relativePath);
+				if(!relativePath.includes("courses/")) {
+					promises.push(Promise.reject(new InsightError("invalid directory")));
+				}
 				// console.log("file is " + file);
 				const promise = file.async("string");
 				promise.then(function (fileData) {
@@ -72,8 +74,6 @@ export default class InsightFacade implements IInsightFacade {
 							const validSection = checkValidSection(section);
 							if (validSection) {
 								tempList.push(section);
-								// console.log("tempList length 1: " + tempList.length);
-								// return tempList;
 							}
 						});
 					}
@@ -84,7 +84,7 @@ export default class InsightFacade implements IInsightFacade {
 				// console.log("tempList length 2: " + tempList.length);
 
 				if (tempList.length === 0) {
-					return Promise.reject(new InsightError("Invalid dataset"));
+					return Promise.reject(new InsightError("Invalid sections"));
 				} else {
 					// console.log("tempList length: " + tempList.length);
 					let data: InsightDataset = {id, kind, numRows: tempList.length};
