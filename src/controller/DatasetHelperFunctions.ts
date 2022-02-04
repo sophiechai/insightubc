@@ -29,4 +29,14 @@ function writeToData(fileName: string, myJSON: string): void {
 	});
 }
 
-export {checkValidSection, writeToData};
+function removeItem<T>(arr: T[], value: T): T[] {
+	console.log("before: " + arr.length);
+	const index = arr.indexOf(value);
+	if (index > -1) {
+		arr.splice(index, 1);
+	}
+	console.log("after: " + arr.length);
+	return arr;
+}
+
+export {checkValidSection, writeToData, removeItem};
