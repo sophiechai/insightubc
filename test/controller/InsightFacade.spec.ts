@@ -18,7 +18,6 @@ type Input = unknown;
 type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
-// eslint-disable-next-line max-lines-per-function
 describe("InsightFacade", function () {
 	let courses: string;
 	let facade: IInsightFacade;
