@@ -59,7 +59,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		return jsZip.loadAsync(content, {base64: true}).then((zip) => {
 			zip.forEach((relativePath, file) => {
-				if(!relativePath.includes("courses/")) {
+				if (!relativePath.includes("courses/")) {
 					promises.push(Promise.reject(new InsightError("invalid directory")));
 				}
 				// console.log("file is " + file);
