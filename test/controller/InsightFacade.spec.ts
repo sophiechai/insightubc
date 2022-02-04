@@ -24,7 +24,7 @@ describe("InsightFacade", function () {
 	let facade: IInsightFacade;
 
 	before(function () {
-		courses = getContentFromArchives("courses_smaller.zip");
+		courses = getContentFromArchives("courses.zip");
 	});
 
 	beforeEach(function () {
