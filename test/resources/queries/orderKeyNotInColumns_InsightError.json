@@ -1,0 +1,21 @@
+{
+  "title": "query with order key not in columns array throws InsightError",
+  "input": {
+    "WHERE": {
+      "GT": {
+        "courses_avg": 90
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_title",
+        "courses_instructor",
+        "courses_id"
+      ],
+      "ORDER": "courses_avg"
+    }
+  },
+  "errorExpected": true,
+  "expected": "InsightError"
+}
