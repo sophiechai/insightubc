@@ -112,9 +112,25 @@ export function isSComparisonValid(obj: object): boolean {
 
 // Checks NEGATION
 export function isNegationValid(obj: object): boolean {
-	// Check what FILTER
+	// Check it has only one FILTER
 	let keys = Object.keys(obj);
-	return true;
+	if (keys.length === 0 || keys.length > 1) {
+		return false;
+	}
+	// Figure out what FILTER it is and check it
+	let k = keys[0];
+	let values = Object.values(obj);
+	let v = values[0];
+	if (k === "AND" || k === "OR") {
+		return isLogicComparisonValid(v);
+	} else if (k === "LT" || k === "GT" || k === "EQ") {
+		return isMComparisonValid(v);
+	} else if (k === "IS") {
+		return isSComparisonValid(v);
+	} else if (k === "NOT") {
+		return isNegationValid(v);
+	}
+	return false;
 }
 // END BODY VALIDITY CHECK
 
@@ -161,3 +177,4 @@ export function isOrderValid(key: string, keys: string[]) {
 	return false;
 }
 // END OPTIONS VALIDITY CHECK
+
