@@ -1,10 +1,11 @@
 import {InsightError} from "./IInsightFacade";
 
-type LOGIC = "AND" | "OR";
-type MCOMPARATOR = "LT" | "GT" | "EQ";
-type KEYS = "_dept" | "_id" | "_avg" | "_instructor" | "_title" | "_pass" | "_fail" | "_audit" | "_uuid" | "_year";
+// type LOGIC = "AND" | "OR";
+// type MCOMPARATOR = "LT" | "GT" | "EQ";
+// type KEYS = "_dept" | "_id" | "_avg" | "_instructor" | "_title" | "_pass" | "_fail" | "_audit" | "_uuid" | "_year";
 
-let datasetId: string; // store the dataset id to query
+// PROBABLY ADD MORE PARAMETERS:
+// will need to check all dataset ids are the same (no multiple ids)
 // Will need a list of all the dataset ids added to check valid query keys
 
 // MAIN
@@ -25,42 +26,95 @@ export function isQueryValid(query: object) {
 	if (keys[0] !== "WHERE" || keys[1] !== "OPTIONS") {
 		return new InsightError("Invalid query: Incorrect placement of WHERE and/or OPTIONS");
 	}
-
+	// Check if ODY and OPTIONS are valid
 	let values = Object.values(query);
 	let bodyValid = isBodyValid(values[0]);
 	let optionsValid = isOptionsValid(values[1]);
-
-	if (bodyValid && optionsValid) {
-		return true;
+	if (!bodyValid) {
+		return new InsightError("Body Invalid");
 	}
-	return new InsightError("Should not have gotten here");
+	if (!optionsValid) {
+		return new InsightError("Options Invalid");
+	}
+	return true;
 }
 
 // BEGIN BODY VALIDITY CHECK
 // Checks body of query input
 export function isBodyValid(obj: object) {
-	console.log(obj);
-	return true;
+	// Check number of filters; 0 or 1 filter is valid; >1 is invalid
+	let keys = Object.keys(obj);
+	if (keys.length === 0) {
+		return true;
+	}
+	if (keys.length > 1) {
+		return new InsightError("Too many FILTER");
+	}
+	// Check syntax and semantic of Logic, MComp, SComp, Neg
+	let logicValid: boolean;
+	let mCompValid: boolean;
+	let sCompValid: boolean;
+	let negationValid: boolean;
+	let values = Object.values(obj);
+	let k = keys[0];
+	let v = values[0];
+	if (k === "AND" || k === "OR") {
+		logicValid = isLogicComparisonValid(v);
+		if (logicValid) {
+			return true;
+		}
+	} else if (k === "LT" || k === "GT" || k === "EQ") {
+		mCompValid = isMComparisonValid(v);
+		if (mCompValid) {
+			return true;
+		}
+	} else if (k === "IS") {
+		sCompValid = isSComparisonValid(v);
+		if (sCompValid) {
+			return true;
+		}
+	} else if (k === "NOT") {
+		negationValid = isNegationValid(v);
+		if (negationValid) {
+			return true;
+		}
+	}
+	return new InsightError("No valid FILTER");
 }
 
 // Checks LOGICCOMPARISON
-export function isLogicComparisonValid(obj: object) {
-	return;
+export function isLogicComparisonValid(obj: object): boolean {
+	return true;
 }
 
 // Checks MCOMPARISON
-export function isMComparisonValid(obj: object) {
-	return;
+export function isMComparisonValid(obj: object): boolean {
+	let keys = Object.keys(obj);
+	let values = Object.values(obj);
+	if (keys.length !== 1 || values.length !== 1) {
+		return false;
+	}
+	// TODO: Check semantics for the key and value
+	return true;
 }
 
 // Checks SCOMPARISON
-export function isSComparisonValid(obj: object) {
-	return;
+export function isSComparisonValid(obj: object): boolean {
+	// Check there's only one skey and input string
+	let keys = Object.keys(obj);
+	let values = Object.values(obj);
+	if (keys.length !== 1 || values.length !== 1) {
+		return false;
+	}
+	// TODO: Check semantics of the key and value
+	return true;
 }
 
 // Checks NEGATION
-export function isNegationValid(obj: object) {
-	return;
+export function isNegationValid(obj: object): boolean {
+	// Check what FILTER
+	let keys = Object.keys(obj);
+	return true;
 }
 // END BODY VALIDITY CHECK
 

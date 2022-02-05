@@ -76,7 +76,7 @@ describe("ValidateQuery", function () {
 	});
 
 	describe("isBodyValid", function () {
-		it("should return InsightError if ...", function () {
+		it("should return true if no filter in WHERE", function () {
 			let where = {};
 			expect(isBodyValid(where)).to.equal(true);
 		});
