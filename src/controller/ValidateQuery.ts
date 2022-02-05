@@ -39,6 +39,7 @@ export function isQueryValid(query: object) {
 // BEGIN BODY VALIDITY CHECK
 // Checks body of query input
 export function isBodyValid(obj: object) {
+	console.log(obj);
 	return true;
 }
 

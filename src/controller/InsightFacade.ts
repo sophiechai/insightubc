@@ -11,6 +11,7 @@ import {checkValidSection, writeToData} from "./DatasetHelperFunctions";
 
 import JSZip from "jszip";
 import fse from "fs-extra";
+import {isQueryValid} from "./ValidateQuery";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -105,6 +106,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		let q: any = query;
+		let isValid = isQueryValid(q);
 		return Promise.reject("Not implemented.");
 	}
 

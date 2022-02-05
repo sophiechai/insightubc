@@ -75,7 +75,12 @@ describe("ValidateQuery", function () {
 		});
 	});
 
-	// describe("isBodyValid", function () {});
+	describe("isBodyValid", function () {
+		it("should return InsightError if ...", function () {
+			let where = {};
+			expect(isBodyValid(where)).to.equal(true);
+		});
+	});
 
 	// describe("isLogicComparisonValid", function () {});
 
