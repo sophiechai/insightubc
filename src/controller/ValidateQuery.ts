@@ -7,9 +7,13 @@ import {InsightError} from "./IInsightFacade";
 // PROBABLY ADD MORE PARAMETERS:
 // will need to check all dataset ids are the same (no multiple ids)
 // Will need a list of all the dataset ids added to check valid query keys
+let queryKeys: string[];
 
 // MAIN
 export function isQueryValid(query: object) {
+	// Initialize queryKeys array
+	queryKeys = [];
+	// Check if WHERE and OPTIONS are present
 	let hasWhere: boolean = Object.prototype.hasOwnProperty.call(query, "WHERE");
 	let hasOptions: boolean = Object.prototype.hasOwnProperty.call(query, "OPTIONS");
 	if (!hasWhere) {
@@ -194,6 +198,13 @@ export function isOrderValid(key: string, keys: string[]): boolean {
 }
 // END OPTIONS VALIDITY CHECK
 
+
+// have the m/scomp and columns push keys into global array and then function checks valid
+export function areQueryKeysValid(): boolean {
+	// TODO: above spec
+	return false;
+}
+//
 // export function validCheckDecisionHelper(key: string, value: any): boolean {
 // 	if (key === "AND" || key === "OR") {
 // 		return isLogicComparisonValid(value);
