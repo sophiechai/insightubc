@@ -7,7 +7,7 @@ import {
 	NotFoundError,
 } from "./IInsightFacade";
 
-import {checkValidSection, writeToData} from "./DatasetHelperFunctions";
+import {checkValidSection, writeToData, removeItem} from "./DatasetHelperFunctions";
 
 import JSZip from "jszip";
 import fse from "fs-extra";
@@ -20,12 +20,14 @@ import {isQueryValid} from "./ValidateQuery";
  */
 let jsZip: JSZip;
 let addedIds: string[];
+let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		jsZip = new JSZip();
 		addedIds = [];
+		addedDatasets = [];
 		console.log("InsightFacadeImpl::init()");
 		console.log(dataPath);
 		fse.mkdir(dataPath, function (err) {
@@ -60,7 +62,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		return jsZip.loadAsync(content, {base64: true}).then((zip) => {
 			zip.forEach((relativePath, file) => {
-				if(!relativePath.includes("courses/")) {
+				if (!relativePath.includes("courses/")) {
 					promises.push(Promise.reject(new InsightError("invalid directory")));
 				}
 				// console.log("file is " + file);
@@ -68,7 +70,7 @@ export default class InsightFacade implements IInsightFacade {
 				promise.then(function (fileData) {
 					const dataObj = JSON.parse(fileData)["result"];
 					if (dataObj.length === 0) {
-						console.log("empty");
+						// console.log("empty");
 					} else {
 						dataObj.forEach((section: any) => {
 							// console.log("section is " + JSON.stringify(section));
@@ -94,6 +96,7 @@ export default class InsightFacade implements IInsightFacade {
 					const fileName = dataPath + "/" + id + ".json";
 					writeToData(fileName, myJSON);
 					addedIds.push(id);
+					addedDatasets.push(data);
 					return Promise.resolve(addedIds);
 				}
 			});
@@ -101,7 +104,24 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public removeDataset(id: string): Promise<string> {
-		return Promise.reject("Not implemented.");
+		if (id.includes("_") || id.trim() === "") {
+			return Promise.reject(new InsightError("Invalid id"));
+		}
+		if (!addedIds.includes(id)) {
+			return Promise.reject(new NotFoundError("Dataset not found"));
+		}
+		const fileName = dataPath + "/" + id + ".json";
+		try {
+			fse.unlinkSync(fileName);
+			let index = addedIds.indexOf(id);
+			addedIds = removeItem(addedIds, id);
+			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+			console.log("File successfully deleted.");
+			return Promise.resolve(id);
+		} catch (err) {
+			console.error(err);
+			return Promise.reject(new InsightError("unlinkSync failed"));
+		}
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
@@ -111,8 +131,6 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
-		// return Promise.resolve(this.insights);
-
-		return Promise.reject("Not implemented.");
+		return Promise.resolve(addedDatasets);
 	}
 }

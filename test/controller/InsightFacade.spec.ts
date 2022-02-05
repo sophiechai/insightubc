@@ -4,7 +4,7 @@ import {
 	InsightError,
 	InsightResult,
 	NotFoundError,
-	ResultTooLargeError
+	ResultTooLargeError,
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
 import {expect, use} from "chai";
@@ -18,7 +18,6 @@ type Input = unknown;
 type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
-// eslint-disable-next-line max-lines-per-function
 describe("InsightFacade", function () {
 	let courses: string;
 	let facade: IInsightFacade;
@@ -77,15 +76,18 @@ describe("InsightFacade", function () {
 			// OR instead use async
 			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 			const insightDatasets = await facade.listDatasets();
-			expect(insightDatasets).to.deep.equal([{
-				id: "courses",
-				kind: InsightDatasetKind.Courses,
-				numRows: 64612
-			}]);
+			expect(insightDatasets).to.deep.equal([
+				{
+					id: "courses",
+					kind: InsightDatasetKind.Courses,
+					numRows: 64612,
+				},
+			]);
 		});
 
 		it("should list multiple datasets", function () {
-			return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
+			return facade
+				.addDataset("courses", courses, InsightDatasetKind.Courses)
 				.then(() => {
 					return facade.addDataset("courses-2", courses, InsightDatasetKind.Courses);
 				})
@@ -114,14 +116,14 @@ describe("InsightFacade", function () {
 					expect(insightDatasetCourses).to.deep.equal({
 						id: "courses",
 						kind: InsightDatasetKind.Courses,
-						numRows: 64612
+						numRows: 64612,
 					});
 					const insightDatasetCourses2 = insightDatasets.find((dataset) => dataset.id === "courses-2");
 					expect(insightDatasetCourses2).to.exist;
 					expect(insightDatasetCourses2).to.deep.equal({
 						id: "courses-2",
 						kind: InsightDatasetKind.Courses,
-						numRows: 64612
+						numRows: 64612,
 					});
 				});
 		});
@@ -208,7 +210,8 @@ describe("InsightFacade", function () {
 			});
 
 			it("should reject if id is the same as an already added dataset", function () {
-				return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
+				return facade
+					.addDataset("courses", courses, InsightDatasetKind.Courses)
 					.then(() => {
 						return facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 					})
@@ -223,7 +226,8 @@ describe("InsightFacade", function () {
 			it("should reject if invalid zip file (empty)", function () {
 				let empty: string = getContentFromArchives("empty.zip");
 
-				return facade.addDataset("courses", empty, InsightDatasetKind.Courses)
+				return facade
+					.addDataset("courses", empty, InsightDatasetKind.Courses)
 					.then((res) => {
 						throw new Error("Resolved with " + res);
 					})
@@ -235,7 +239,8 @@ describe("InsightFacade", function () {
 			it("should reject if invalid zip file (no valid files)", function () {
 				let noValidFiles: string = getContentFromArchives("no valid files.zip");
 
-				return facade.addDataset("courses", noValidFiles, InsightDatasetKind.Courses)
+				return facade
+					.addDataset("courses", noValidFiles, InsightDatasetKind.Courses)
 					.then((res) => {
 						throw new Error("Resolved with " + res);
 					})
@@ -247,7 +252,8 @@ describe("InsightFacade", function () {
 			it("should reject if invalid zip file (no valid section)", function () {
 				let noValidSection: string = getContentFromArchives("no valid section.zip");
 
-				return facade.addDataset("courses", noValidSection, InsightDatasetKind.Courses)
+				return facade
+					.addDataset("courses", noValidSection, InsightDatasetKind.Courses)
 					.then((res) => {
 						throw new Error("Resolved with " + res);
 					})
@@ -259,7 +265,8 @@ describe("InsightFacade", function () {
 			it("should reject if invalid zip file (incorrect directory name)", function () {
 				let incorrectDir: string = getContentFromArchives("incorrect directory name.zip");
 
-				return facade.addDataset("courses", incorrectDir, InsightDatasetKind.Courses)
+				return facade
+					.addDataset("courses", incorrectDir, InsightDatasetKind.Courses)
 					.then((res) => {
 						throw new Error("Resolved with " + res);
 					})
@@ -275,11 +282,13 @@ describe("InsightFacade", function () {
 			it("should remove dataset with given id from one element array", async function () {
 				await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 				let insightDatasets = await facade.listDatasets();
-				expect(insightDatasets).to.deep.equal([{
-					id: "courses",
-					kind: InsightDatasetKind.Courses,
-					numRows: 64612
-				}]);
+				expect(insightDatasets).to.deep.equal([
+					{
+						id: "courses",
+						kind: InsightDatasetKind.Courses,
+						numRows: 64612,
+					},
+				]);
 				const removedId = await facade.removeDataset("courses");
 				expect(removedId).to.equal("courses");
 				insightDatasets = await facade.listDatasets();
@@ -295,21 +304,25 @@ describe("InsightFacade", function () {
 				const removedId = await facade.removeDataset("courses");
 				expect(removedId).to.equal("courses");
 				insightDatasets = await facade.listDatasets();
-				expect(insightDatasets).to.deep.equal([{
-					id: "courses-2",
-					kind: InsightDatasetKind.Courses,
-					numRows: 64612
-				}]);
+				expect(insightDatasets).to.deep.equal([
+					{
+						id: "courses-2",
+						kind: InsightDatasetKind.Courses,
+						numRows: 64612,
+					},
+				]);
 			});
 
 			it("should remove dataset with given id (valid with whitespace)", async function () {
 				await facade.addDataset("ubc courses", courses, InsightDatasetKind.Courses);
 				let insightDatasets = await facade.listDatasets();
-				expect(insightDatasets).to.deep.equal([{
-					id: "ubc courses",
-					kind: InsightDatasetKind.Courses,
-					numRows: 64612
-				}]);
+				expect(insightDatasets).to.deep.equal([
+					{
+						id: "ubc courses",
+						kind: InsightDatasetKind.Courses,
+						numRows: 64612,
+					},
+				]);
 				const removedId = await facade.removeDataset("ubc courses");
 				expect(removedId).to.equal("ubc courses");
 				insightDatasets = await facade.listDatasets();
@@ -374,9 +387,8 @@ describe("Dynamic folder test for performQuery", function () {
 		(input: Input): Output => facade.performQuery(input),
 		"./test/resources/queries",
 		{
-			errorValidator: (error): error is Error =>
-				error === "InsightError" || error === "ResultTooLargeError",
-			assertOnError: assertError
+			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
+			assertOnError: assertError,
 		}
 	);
 });
