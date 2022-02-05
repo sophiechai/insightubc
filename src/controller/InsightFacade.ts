@@ -125,9 +125,14 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
+		console.log("THIS IS THE QUERY INPUT BELOW: ");
+		console.log(query);
 		let q: any = query;
+		console.log("THIS IS THE QUERY OBJECT CAST TO ANY: ");
+		console.log(q);
 		let isValid = isQueryValid(q);
-		return Promise.reject("Not implemented.");
+		console.log("ISVALID VALUE: ", isValid);
+		return Promise.resolve([]);
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {

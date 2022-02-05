@@ -41,49 +41,67 @@ export function isQueryValid(query: object) {
 
 // BEGIN BODY VALIDITY CHECK
 // Checks body of query input
-export function isBodyValid(obj: object) {
+export function isBodyValid(obj: object): boolean {
 	// Check number of filters; 0 or 1 filter is valid; >1 is invalid
 	let keys = Object.keys(obj);
 	if (keys.length === 0) {
 		return true;
 	}
 	if (keys.length > 1) {
-		return new InsightError("Too many FILTER");
+		return false;
 	}
 	// Check syntax and semantic of Logic, MComp, SComp, Neg
-	let logicValid: boolean;
-	let mCompValid: boolean;
-	let sCompValid: boolean;
-	let negationValid: boolean;
 	let values = Object.values(obj);
 	let k = keys[0];
 	let v = values[0];
 	if (k === "AND" || k === "OR") {
-		logicValid = isLogicComparisonValid(v);
-		if (logicValid) {
-			return true;
-		}
+		return isLogicComparisonValid(v);
 	} else if (k === "LT" || k === "GT" || k === "EQ") {
-		mCompValid = isMComparisonValid(v);
-		if (mCompValid) {
-			return true;
-		}
+		return isMComparisonValid(v);
 	} else if (k === "IS") {
-		sCompValid = isSComparisonValid(v);
-		if (sCompValid) {
-			return true;
-		}
+		return isSComparisonValid(v);
 	} else if (k === "NOT") {
-		negationValid = isNegationValid(v);
-		if (negationValid) {
-			return true;
-		}
+		return isNegationValid(v);
 	}
-	return new InsightError("No valid FILTER");
+	return false;
 }
 
 // Checks LOGICCOMPARISON
-export function isLogicComparisonValid(obj: object): boolean {
+export function isLogicComparisonValid(array: object[]): boolean {
+	// Check if there is at least one FILTER in array
+	if (array.length === 0) {
+		return false;
+	}
+	// Loop through array checking if valid filters
+	for (const obj of array) {
+		let keys = Object.keys(obj);
+		let values = Object.values(obj);
+		// Check there's only one key and value
+		if (keys.length !== 1 || values.length !== 1) {
+			return false;
+		}
+		let k = keys[0];
+		let v = values[0];
+		if (k === "AND" || k === "OR") {
+			if (!isLogicComparisonValid(v)) {
+				return false;
+			}
+		} else if (k === "LT" || k === "GT" || k === "EQ") {
+			if (!isMComparisonValid(v)) {
+				return false;
+			}
+		} else if (k === "IS") {
+			if (!isSComparisonValid(v)) {
+				return false;
+			}
+		} else if (k === "NOT") {
+			if (!isNegationValid(v)) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -136,29 +154,27 @@ export function isNegationValid(obj: object): boolean {
 
 
 // BEGIN OPTIONS VALIDITY CHECK
-export function isOptionsValid(obj: object) {
+export function isOptionsValid(obj: object): boolean {
 	// Check if COLUMNS property is present
 	let hasColumns = Object.prototype.hasOwnProperty.call(obj, "COLUMNS");
 	if (!hasColumns) {
-		return new InsightError("Missing COLUMNS");
+		return false;
 	}
 	// Check if COLUMNS keys are valid
 	let values = Object.values(obj);
 	let columnsValid = isColumnsValid(values[0]);
 	if (!columnsValid) {
-		return new InsightError("Invalid COLUMNS");
+		return false;
 	}
 	// Check if there is ORDER property and if it is valid
 	let hasOrder = Object.prototype.hasOwnProperty.call(obj, "ORDER");
 	if (hasOrder) {
-		if (!isOrderValid(values[1], values[0])) {
-			return new InsightError("Invalid ORDER");
-		}
+		return isOrderValid(values[1], values[0]);
 	}
 	return true;
 }
 
-export function isColumnsValid(list: string[]) {
+export function isColumnsValid(list: string[]): boolean {
 	// Check if COLUMNS array is empty
 	if (list.length === 0) {
 		return false;
@@ -168,7 +184,7 @@ export function isColumnsValid(list: string[]) {
 	return true;
 }
 
-export function isOrderValid(key: string, keys: string[]) {
+export function isOrderValid(key: string, keys: string[]): boolean {
 	for (const k of keys) {
 		if (k === key) {
 			return true;
@@ -178,3 +194,15 @@ export function isOrderValid(key: string, keys: string[]) {
 }
 // END OPTIONS VALIDITY CHECK
 
+// export function validCheckDecisionHelper(key: string, value: any): boolean {
+// 	if (key === "AND" || key === "OR") {
+// 		return isLogicComparisonValid(value);
+// 	} else if (key === "LT" || key === "GT" || key === "EQ") {
+// 		return isMComparisonValid(value);
+// 	} else if (key === "IS") {
+// 		return isSComparisonValid(value);
+// 	} else if (key === "NOT") {
+// 		return isNegationValid(value);
+// 	}
+// 	return false;
+// }
