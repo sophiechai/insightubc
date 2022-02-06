@@ -183,7 +183,6 @@ export function isNegationValid(obj: object): boolean {
 }
 // END BODY VALIDITY CHECK
 
-
 // BEGIN OPTIONS VALIDITY CHECK
 export function isOptionsValid(obj: object): boolean {
 	// Check if COLUMNS property is present
@@ -225,7 +224,6 @@ export function isOrderValid(key: string, keys: string[]): boolean {
 }
 // END OPTIONS VALIDITY CHECK
 
-
 export function areQueryKeysValid(queryKeysList: string[], ids: string[]): boolean {
 	// Given a list, get the first element of it
 	let key = queryKeysList[0];
@@ -244,10 +242,18 @@ export function areQueryKeysValid(queryKeysList: string[], ids: string[]): boole
 	// console.log("IF I CONCAT PRE + AVG: ", pre.concat("avg"));
 	// Loop through list checking if it matches one of the 10 string options
 	for (const k of queryKeysList) {
-		if (k !== pre.concat("avg") && k !== pre.concat("pass") && k !== pre.concat("fail") &&
-			k !== pre.concat("audit") && k !== pre.concat("year") && k !== pre.concat("dept") &&
-			k !== pre.concat("id") && k !== pre.concat("instructor") && k !== pre.concat("title") &&
-			k !== pre.concat("uuid")) {
+		if (
+			k !== pre.concat("avg") &&
+			k !== pre.concat("pass") &&
+			k !== pre.concat("fail") &&
+			k !== pre.concat("audit") &&
+			k !== pre.concat("year") &&
+			k !== pre.concat("dept") &&
+			k !== pre.concat("id") &&
+			k !== pre.concat("instructor") &&
+			k !== pre.concat("title") &&
+			k !== pre.concat("uuid")
+		) {
 			return false;
 		}
 	}
