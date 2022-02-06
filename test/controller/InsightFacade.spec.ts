@@ -19,6 +19,7 @@ type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
 describe("InsightFacade", function () {
+	this.timeout(10000);
 	let courses: string;
 	let facade: IInsightFacade;
 
