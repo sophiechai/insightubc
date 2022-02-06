@@ -1,18 +1,18 @@
 import {InsightError} from "./IInsightFacade";
 
-// type LOGIC = "AND" | "OR";
-// type MCOMPARATOR = "LT" | "GT" | "EQ";
 // type KEYS = "_dept" | "_id" | "_avg" | "_instructor" | "_title" | "_pass" | "_fail" | "_audit" | "_uuid" | "_year";
 
 // PROBABLY ADD MORE PARAMETERS:
 // will need to check all dataset ids are the same (no multiple ids)
 // Will need a list of all the dataset ids added to check valid query keys
 let queryKeys: string[];
+let datasetIds: string[];
 
 // MAIN
-export function isQueryValid(query: object) {
-	// Initialize queryKeys array
+export function isQueryValid(query: object, ids: string[]) {
+	// Initialize queryKeys and datasetIds array
 	queryKeys = [];
+	datasetIds = ids;
 	// Check if WHERE and OPTIONS are present
 	let hasWhere: boolean = Object.prototype.hasOwnProperty.call(query, "WHERE");
 	let hasOptions: boolean = Object.prototype.hasOwnProperty.call(query, "OPTIONS");
@@ -39,6 +39,10 @@ export function isQueryValid(query: object) {
 	}
 	if (!optionsValid) {
 		return new InsightError("Options Invalid");
+	}
+	// Check semantics of queryKeys
+	if (!areQueryKeysValid(queryKeys, datasetIds)) {
+		return new InsightError("Query Keys Invalid");
 	}
 	return true;
 }
@@ -116,7 +120,10 @@ export function isMComparisonValid(obj: object): boolean {
 	if (keys.length !== 1 || values.length !== 1) {
 		return false;
 	}
-	// TODO: Check semantics for the key and value
+	// Check semantics for the key and value
+	queryKeys = queryKeys.concat(keys);
+	// Check semantics of the value
+	console.log("THE TYPE OF MCOMP VALUE IS: ", typeof values[0]);
 	return true;
 }
 
@@ -128,7 +135,10 @@ export function isSComparisonValid(obj: object): boolean {
 	if (keys.length !== 1 || values.length !== 1) {
 		return false;
 	}
-	// TODO: Check semantics of the key and value
+	// Check semantics of the key
+	queryKeys = queryKeys.concat(keys);
+	// Check semantics of the value
+	console.log("THE TYPE OF SCOMP VALUE IS: ", typeof values[0]);
 	return true;
 }
 
@@ -183,9 +193,9 @@ export function isColumnsValid(list: string[]): boolean {
 	if (list.length === 0) {
 		return false;
 	}
-
-	// TODO: semantic check needed for keys
-	return true;
+	queryKeys = queryKeys.concat(list);
+	console.log("CONCAT FROM COLUMNS: ", queryKeys);
+	return areQueryKeysValid(list, datasetIds);
 }
 
 export function isOrderValid(key: string, keys: string[]): boolean {
@@ -200,8 +210,13 @@ export function isOrderValid(key: string, keys: string[]): boolean {
 
 
 // have the m/scomp and columns push keys into global array and then function checks valid
-export function areQueryKeysValid(): boolean {
+export function areQueryKeysValid(queryKeysList: string[], ids: string[]): boolean {
 	// TODO: above spec
+	// Given a list, get the first element of it
+	let k = queryKeysList[0];
+	// Get the substring pertaining to the dataset id
+	let underscoreIdx = k.indexOf("_");
+	// Loop through list checking if it matches one of the 10 string options
 	return false;
 }
 //

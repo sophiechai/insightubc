@@ -130,7 +130,7 @@ export default class InsightFacade implements IInsightFacade {
 		let q: any = query;
 		console.log("THIS IS THE QUERY OBJECT CAST TO ANY: ");
 		console.log(q);
-		let isValid = isQueryValid(q);
+		let isValid = isQueryValid(q, addedIds);
 		console.log("ISVALID VALUE: ", isValid);
 		return Promise.resolve([]);
 	}

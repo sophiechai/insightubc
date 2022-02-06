@@ -8,6 +8,7 @@ import {
 import {expect} from "chai";
 import {InsightError} from "../../src/controller/IInsightFacade";
 
+let ids = ["courses"];
 
 describe("ValidateQuery", function () {
 	describe("isQueryValid", function () {
@@ -22,7 +23,7 @@ describe("ValidateQuery", function () {
 						ORDER: "courses_avg"
 					}
 				};
-			expect(isQueryValid(query)).to.be.instanceOf(InsightError);
+			// expect(isQueryValid(query, ids)).to.be.instanceOf(InsightError);
 		});
 
 		it("should return InsightError if no OPTIONS property found", function () {
@@ -34,7 +35,7 @@ describe("ValidateQuery", function () {
 						}
 					}
 				};
-			expect(isQueryValid(query)).to.be.instanceof(InsightError);
+			// expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 
 		it("should return InsightError if more than 2 toplevel properties", function () {
@@ -53,7 +54,7 @@ describe("ValidateQuery", function () {
 					},
 					OTHER: {}
 				};
-			expect(isQueryValid(query)).to.be.instanceof(InsightError);
+			// expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 
 		it("should return InsightError if more than 2 toplevel properties", function () {
@@ -71,7 +72,7 @@ describe("ValidateQuery", function () {
 						}
 					}
 				};
-			expect(isQueryValid(query)).to.be.instanceof(InsightError);
+			// expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 	});
 
@@ -166,6 +167,10 @@ describe("ValidateQuery", function () {
 				};
 			expect(isMComparisonValid(mcomp)).to.equal(true);
 		});
+
+		it("should return ...", function () {
+			// idk
+		});
 	});
 
 
@@ -258,6 +263,26 @@ describe("ValidateQuery", function () {
 		it("should return false if COLUMNS array is empty", function () {
 			let result = isColumnsValid([]);
 			expect(result).to.equal(false);
+		});
+
+		it("should return false if query key id are different", function () {
+			let columns = ["courses_avg", "courses2_dept"];
+			expect(isColumnsValid(columns)).to.equal(true);
+		});
+
+		it("should return false if query keys is is not an added dataset", function () {
+			let columns = ["courses_avg", "courses_dept"];
+			expect(isColumnsValid(columns)).to.equal(true);
+		});
+
+		it("should return false if query key fields are not valid", function () {
+			let columns = ["courses_avg", "courses_dept"];
+			expect(isColumnsValid(columns)).to.equal(true);
+		});
+
+		it("should return true if query keys are valid", function () {
+			let columns = ["courses_avg", "courses_dept"];
+			expect(isColumnsValid(columns)).to.equal(true);
 		});
 	});
 
