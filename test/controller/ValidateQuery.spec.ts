@@ -1,4 +1,5 @@
 import {
+	areQueryKeysValid,
 	isBodyValid,
 	isColumnsValid, isLogicComparisonValid, isMComparisonValid, isNegationValid,
 	isOptionsValid,
@@ -8,7 +9,7 @@ import {
 import {expect} from "chai";
 import {InsightError} from "../../src/controller/IInsightFacade";
 
-let ids = ["courses"];
+let ids = ["courses", "courses2"];
 
 describe("ValidateQuery", function () {
 	describe("isQueryValid", function () {
@@ -23,7 +24,7 @@ describe("ValidateQuery", function () {
 						ORDER: "courses_avg"
 					}
 				};
-			// expect(isQueryValid(query, ids)).to.be.instanceOf(InsightError);
+			expect(isQueryValid(query, ids)).to.be.instanceOf(InsightError);
 		});
 
 		it("should return InsightError if no OPTIONS property found", function () {
@@ -35,7 +36,7 @@ describe("ValidateQuery", function () {
 						}
 					}
 				};
-			// expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
+			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 
 		it("should return InsightError if more than 2 toplevel properties", function () {
@@ -54,7 +55,7 @@ describe("ValidateQuery", function () {
 					},
 					OTHER: {}
 				};
-			// expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
+			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 
 		it("should return InsightError if more than 2 toplevel properties", function () {
@@ -72,7 +73,12 @@ describe("ValidateQuery", function () {
 						}
 					}
 				};
-			// expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
+			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
+		});
+
+		it("should return InsightError if ...", function () {
+			let query = {};
+			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 	});
 
@@ -167,10 +173,6 @@ describe("ValidateQuery", function () {
 				};
 			expect(isMComparisonValid(mcomp)).to.equal(true);
 		});
-
-		it("should return ...", function () {
-			// idk
-		});
 	});
 
 
@@ -245,17 +247,28 @@ describe("ValidateQuery", function () {
 			expect(isOptionsValid(options)).to.equal(false);
 		});
 
-		it("should return false if ORDER string is not in COLUMNS array", function () {
-			let options =
-				{
-					COLUMNS: [
-						"courses_avg",
-						"courses_instructor"
-					],
-					ORDER: "courses_pass"
-				};
-			expect(isOptionsValid(options)).to.equal(false);
-		});
+		// it("should return false if ORDER string is not in COLUMNS array", function () {
+		// 	let options =
+		// 		{
+		// 			COLUMNS: [
+		// 				"courses_avg",
+		// 				"courses_instructor"
+		// 			],
+		// 			ORDER: "courses_pass"
+		// 		};
+		// 	expect(isOptionsValid(options)).to.equal(false);
+		// });
+
+		// it("should return true if COLUMNS exists but ORDER doesn't", function () {
+		// 	let options =
+		// 		{
+		// 			COLUMNS: [
+		// 				"courses_avg",
+		// 				"courses_instructor"
+		// 			]
+		// 		};
+		// 	expect(isOptionsValid(options)).to.equal(true);
+		// });
 	});
 
 
@@ -263,26 +276,6 @@ describe("ValidateQuery", function () {
 		it("should return false if COLUMNS array is empty", function () {
 			let result = isColumnsValid([]);
 			expect(result).to.equal(false);
-		});
-
-		it("should return false if query key id are different", function () {
-			let columns = ["courses_avg", "courses2_dept"];
-			expect(isColumnsValid(columns)).to.equal(true);
-		});
-
-		it("should return false if query keys is is not an added dataset", function () {
-			let columns = ["courses_avg", "courses_dept"];
-			expect(isColumnsValid(columns)).to.equal(true);
-		});
-
-		it("should return false if query key fields are not valid", function () {
-			let columns = ["courses_avg", "courses_dept"];
-			expect(isColumnsValid(columns)).to.equal(true);
-		});
-
-		it("should return true if query keys are valid", function () {
-			let columns = ["courses_avg", "courses_dept"];
-			expect(isColumnsValid(columns)).to.equal(true);
 		});
 	});
 
@@ -298,6 +291,54 @@ describe("ValidateQuery", function () {
 			let keys = ["courses_avg", "courses_year"];
 			let result = isOrderValid("courses_year", keys);
 			expect(result).to.equal(true);
+		});
+	});
+
+
+	describe("areQueryKeysValid", function () {
+		it("should return false if no underscore first item", function () {
+			let qkList = ["coursesavg"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if no underscore any item", function () {
+			let qkList = ["courses_avg", "coursesid"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if not an added id first item", function () {
+			let qkList = ["courses3_avg", "courses_avg"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if not an added id any item", function () {
+			let qkList = ["courses_avg", "courses3_id"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if no id", function () {
+			let qkList = ["_avg"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if not valid key field first item", function () {
+			let qkList = ["courses_rating"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if not valid key field any item", function () {
+			let qkList = ["courses_avg", "courses_rating"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return false if multiple ids", function () {
+			let qkList = ["courses_avg", "courses2_instructor"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(false);
+		});
+
+		it("should return true if valid query keys", function () {
+			let qkList = ["courses_avg", "courses_pass", "courses_uuid"];
+			expect(areQueryKeysValid(qkList, ids)).to.equal(true);
 		});
 	});
 });

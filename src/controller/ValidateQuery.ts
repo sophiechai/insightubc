@@ -1,11 +1,6 @@
 import {InsightError} from "./IInsightFacade";
 
-// type KEYS = "_dept" | "_id" | "_avg" | "_instructor" | "_title" | "_pass" | "_fail" | "_audit" | "_uuid" | "_year";
-
-// PROBABLY ADD MORE PARAMETERS:
-// will need to check all dataset ids are the same (no multiple ids)
-// Will need a list of all the dataset ids added to check valid query keys
-let queryKeys: string[];
+let queryKeys: string[] = [];
 let datasetIds: string[];
 
 // MAIN
@@ -120,11 +115,17 @@ export function isMComparisonValid(obj: object): boolean {
 	if (keys.length !== 1 || values.length !== 1) {
 		return false;
 	}
-	// Check semantics for the key and value
+	// Check semantics for the key...
+	let underscoreIdx = keys[0].indexOf("_");
+	// console.log("THE UNDERSCORE INDEX: ", underscoreIdx);
+	let k = keys[0].substring(underscoreIdx + 1);
+	// console.log("THE SUBSTRING: ", k);
+	if (k !== "avg" && k !== "pass" && k !== "fail" && k !== "audit" && k !== "year") {
+		return false;
+	}
 	queryKeys = queryKeys.concat(keys);
 	// Check semantics of the value
-	console.log("THE TYPE OF MCOMP VALUE IS: ", typeof values[0]);
-	return true;
+	return typeof values[0] === "number";
 }
 
 // Checks SCOMPARISON
@@ -136,10 +137,15 @@ export function isSComparisonValid(obj: object): boolean {
 		return false;
 	}
 	// Check semantics of the key
+	let underscoreIdx = keys[0].indexOf("_");
+	let k = keys[0].substring(underscoreIdx + 1);
+	// console.log("THE SUBSTRING: ", k);
+	if (k !== "dept" && k !== "id" && k !== "instructor" && k !== "title" && k !== "uuid") {
+		return false;
+	}
 	queryKeys = queryKeys.concat(keys);
 	// Check semantics of the value
-	console.log("THE TYPE OF SCOMP VALUE IS: ", typeof values[0]);
-	return true;
+	return typeof values[0] === "string";
 }
 
 // Checks NEGATION
@@ -194,7 +200,7 @@ export function isColumnsValid(list: string[]): boolean {
 		return false;
 	}
 	queryKeys = queryKeys.concat(list);
-	console.log("CONCAT FROM COLUMNS: ", queryKeys);
+	// console.log("CONCAT FROM COLUMNS: ", queryKeys);
 	return areQueryKeysValid(list, datasetIds);
 }
 
@@ -209,15 +215,32 @@ export function isOrderValid(key: string, keys: string[]): boolean {
 // END OPTIONS VALIDITY CHECK
 
 
-// have the m/scomp and columns push keys into global array and then function checks valid
 export function areQueryKeysValid(queryKeysList: string[], ids: string[]): boolean {
-	// TODO: above spec
 	// Given a list, get the first element of it
-	let k = queryKeysList[0];
+	let key = queryKeysList[0];
 	// Get the substring pertaining to the dataset id
-	let underscoreIdx = k.indexOf("_");
+	let underscoreIdx = key.indexOf("_");
+	if (underscoreIdx === -1 || underscoreIdx === 0) {
+		return false;
+	}
+	let id = key.substring(0, underscoreIdx);
+	// console.log("AQKV THE SUBSTRING: ", id);
+	// Check id is in the list of added ids
+	if (!ids.includes(id)) {
+		return false;
+	}
+	let pre = id.concat("_");
+	// console.log("IF I CONCAT PRE + AVG: ", pre.concat("avg"));
 	// Loop through list checking if it matches one of the 10 string options
-	return false;
+	for (const k of queryKeysList) {
+		if (k !== pre.concat("avg") && k !== pre.concat("pass") && k !== pre.concat("fail") &&
+			k !== pre.concat("audit") && k !== pre.concat("year") && k !== pre.concat("dept") &&
+			k !== pre.concat("id") && k !== pre.concat("instructor") && k !== pre.concat("title") &&
+			k !== pre.concat("uuid")) {
+			return false;
+		}
+	}
+	return true;
 }
 //
 // export function validCheckDecisionHelper(key: string, value: any): boolean {
