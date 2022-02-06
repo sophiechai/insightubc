@@ -4,7 +4,7 @@ let queryKeys: string[] = [];
 let datasetIds: string[];
 
 // MAIN
-export function isQueryValid(query: object, ids: string[]) {
+export function isQueryValid(query: object, ids: string[]): boolean | Error {
 	// Initialize queryKeys and datasetIds array
 	queryKeys = [];
 	datasetIds = ids;
@@ -145,7 +145,18 @@ export function isSComparisonValid(obj: object): boolean {
 	}
 	queryKeys = queryKeys.concat(keys);
 	// Check semantics of the value
-	return typeof values[0] === "string";
+	if (typeof values[0] !== "string") {
+		return false;
+	}
+	// Check if input string is empty or only asterisk or only one character
+	let length = values[0].length;
+	if (values[0] === "" || length === 1) {
+		return true;
+	}
+	// Check inputstring has no asterisk inside
+	// console.log("LENGTH OF STRING: ", length);
+	let asteriskIdx = values[0].indexOf("*", 1);
+	return asteriskIdx === -1 || asteriskIdx === length - 1;
 }
 
 // Checks NEGATION

@@ -76,9 +76,90 @@ describe("ValidateQuery", function () {
 			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
 		});
 
-		it("should return InsightError if ...", function () {
-			let query = {};
+		it("should return InsightError if query key invalid", function () {
+			let query =
+				{
+					WHERE: {
+						EQ: {
+							fail_courses: 50
+						}
+					},
+					OPTIONS: {
+						COLUMNS: [
+							"courses_pass",
+							"courses_fail"
+						],
+						ORDER: "courses_fail"
+					}
+				};
 			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
+		});
+
+		it("should return InsightError if ORDER key not in COLUMNS", function () {
+			let query =
+				{
+					WHERE: {
+						GT: {
+							courses_avg: 90
+						}
+					},
+					OPTIONS: {
+						COLUMNS: [
+							"courses_dept",
+							"courses_title",
+							"courses_instructor",
+							"courses_id"
+						],
+						ORDER: "courses_avg"
+					}
+				};
+			expect(isQueryValid(query, ids)).to.be.instanceof(InsightError);
+		});
+
+		it("should return true for valid query", function () {
+			let query =
+				{
+					WHERE: {
+						OR: [
+							{
+								GT: {
+									courses_avg: 88.75
+								}
+							},
+							{
+								OR: [
+									{
+										LT: {
+											courses_avg: 51.5
+										}
+									},
+									{
+										AND: [
+											{
+												IS: {
+													courses_dept: "math"
+												}
+											},
+											{
+												EQ: {
+													courses_avg: 51.5
+												}
+											}
+										]
+									}
+								]
+							}
+						]
+					},
+					OPTIONS: {
+						COLUMNS: [
+							"courses_dept",
+							"courses_avg"
+						],
+						ORDER: "courses_avg"
+					}
+				};
+			expect(isQueryValid(query, ids)).to.equal(true);
 		});
 	});
 
@@ -195,6 +276,54 @@ describe("ValidateQuery", function () {
 			let scomp =
 				{
 					courses_dept: "cpsc"
+				};
+			expect(isSComparisonValid(scomp)).to.equal(true);
+		});
+
+		it("should return false if asterisk is in input string", function () {
+			let scomp =
+				{
+					courses_dept: "m*th"
+				};
+			expect(isSComparisonValid(scomp)).to.equal(false);
+		});
+
+		it("should return true if asterisk only", function () {
+			let scomp =
+				{
+					courses_dept: "*"
+				};
+			expect(isSComparisonValid(scomp)).to.equal(true);
+		});
+
+		it("should return true if asterisk at beginning", function () {
+			let scomp =
+				{
+					courses_dept: "*ath"
+				};
+			expect(isSComparisonValid(scomp)).to.equal(true);
+		});
+
+		it("should return true if asterisk at end", function () {
+			let scomp =
+				{
+					courses_dept: "mat*"
+				};
+			expect(isSComparisonValid(scomp)).to.equal(true);
+		});
+
+		it("should return true if empty string", function () {
+			let scomp =
+				{
+					courses_dept: ""
+				};
+			expect(isSComparisonValid(scomp)).to.equal(true);
+		});
+
+		it("should return true if whitespace", function () {
+			let scomp =
+				{
+					courses_dept: " "
 				};
 			expect(isSComparisonValid(scomp)).to.equal(true);
 		});
