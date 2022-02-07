@@ -46,9 +46,14 @@ export function filterGT(instruction: object): object[] {
 	let k = keys[0];
 	let v = values[0];
 	// TODO: get the substring for what specific section I need to compare
+	let underscoreIdx = k.indexOf("_");
+	let section = k.substring(underscoreIdx + 1);
+	console.log("SECTION SUBSTRING: ", section);
 	// TODO: get the correct corresponding string for that section in raw data
 	for (const d of data) {
 		// TODO: get value of that section of the raw data
+		let sections = Object.keys(d);
+		let idx = sections.indexOf(section);
 		// TODO: compare and place in result[] if meets requirement
 	}
 	return [];
@@ -106,4 +111,31 @@ export function filterNOT(instruction: object): object[] {
 	let k = keys[0];
 	let v = values[0];
 	return result;
+}
+
+function getDataKeyString(str: string): string {
+	switch (str) {
+		case "dept":
+			return "Subject";
+		case "id":
+			return "Course";
+		case "avg":
+			return "Avg";
+		case "instructor":
+			return "Professor";
+		case "title":
+			return "Title";
+		case "pass":
+			return "Pass";
+		case "fail":
+			return "Fail";
+		case "audit":
+			return "Audit";
+		case "uuid":
+			return "id";
+		case "year":
+			return "Year";
+		default:
+			return "";
+	}
 }
