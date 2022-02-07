@@ -135,7 +135,25 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(isValid);
 		}
 
-
+		// figure out which dataset to query
+		let whereOptionsValues: object[] = Object.values(q);
+		console.log("ARRAY WITH WHERE AND OPTION VALUES: ", whereOptionsValues);
+		let optionsValue: object = whereOptionsValues[1];
+		console.log("OPTIONS VALUE: ", optionsValue);
+		let columnsValue: object[] = Object.values(optionsValue);
+		console.log("COLUMNS VALUE: ", columnsValue);
+		let keysArray: any = columnsValue[0];
+		console.log("THE KEYS ARRAY: ", keysArray);
+		let key: string = keysArray[0];
+		console.log("THE KEY: ", key);
+		let underscoreIdx = key.indexOf("_");
+		let idSubstring = key.substring(0,underscoreIdx);
+		console.log(idSubstring);
+		// get the data from json file... grab the content array store in a local variable
+		let data = [];
+		// Then call filter() which returns resulting array...?
+		// Then create the InsightResult objects and put in array
+		// Then need helper function? that will sort in the order specified (if any)
 		return Promise.resolve([]);
 	}
 
