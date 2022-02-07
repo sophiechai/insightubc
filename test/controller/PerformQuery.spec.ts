@@ -15,10 +15,12 @@ type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
 describe("Dynamic folder test for performQuery", function () {
+	this.timeout(10000);
 	let courses: string;
 	let facade: IInsightFacade;
 	before(async function () {
-		courses = getContentFromArchives("courses.zip");
+		courses = getContentFromArchives("courses_smaller.zip");
+		// let coursesSmaller = getContentFromArchives("courses_smaller.zip");
 		facade = new InsightFacade();
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);

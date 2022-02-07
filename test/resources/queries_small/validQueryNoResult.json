@@ -1,0 +1,17 @@
+{
+	"title": "Valid query with empty result",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"courses_avg": 100
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_avg"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": []
+}

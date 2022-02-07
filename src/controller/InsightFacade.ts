@@ -28,7 +28,7 @@ export default class InsightFacade implements IInsightFacade {
 		jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
-		console.log("InsightFacadeImpl::init()");
+		// console.log("InsightFacadeImpl::init()");
 		console.log(dataPath);
 		fse.mkdir(dataPath, function (err) {
 			if (err) {
@@ -125,13 +125,17 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		console.log("THIS IS THE QUERY INPUT BELOW: ");
-		console.log(query);
+		console.log("THIS IS THE QUERY INPUT: ", query);
 		let q: any = query;
-		console.log("THIS IS THE QUERY OBJECT CAST TO ANY: ");
-		console.log(q);
+		// console.log("THIS IS THE QUERY OBJECT CAST TO ANY: ");
+		// console.log(q);
 		let isValid = isQueryValid(q, addedIds);
-		console.log("ISVALID VALUE: ", isValid);
+		console.log("ISVALID IS OF TYPE: ", typeof isValid);
+		if (typeof isValid !== "boolean") {
+			return Promise.reject(isValid);
+		}
+
+
 		return Promise.resolve([]);
 	}
 
