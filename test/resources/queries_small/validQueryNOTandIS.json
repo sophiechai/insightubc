@@ -1,0 +1,19 @@
+{
+	"title": "Valid NOT IS query with no results",
+	"input": {
+		"WHERE": {
+			"NOT": {
+				"IS": {
+					"courses_dept": "*th"
+				}
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": []
+}
