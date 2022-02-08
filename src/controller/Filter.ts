@@ -120,8 +120,68 @@ export function filterIS(instruction: object): object[] {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
-	let v = values[0];
+	let v: string = values[0];
+	console.log("THE STRING TO MATCH: ", v);
+	// Get the substring for what specific section I need to compare
+	let underscoreIdx = k.indexOf("_");
+	let section = k.substring(underscoreIdx + 1);
+	// Get the correct corresponding string for that section in raw data
+	let rawDataSection = getDataKeyString(section);
+	// All strings are OK so return entire data
+	if (v === "*") {
+		return data;
+	}
+	// Check if input string has asterisk at beginning and/or end
+	let beginAsteriskIdx = v.indexOf("*");
+	let endAsteriskIdx = v.indexOf("*", 1);
+	for (const d of data) {
+		// Get value of that section of the raw data
+		let sections = Object.keys(d);
+		let sectionValues = Object.values(d);
+		let sectionIdx = sections.indexOf(rawDataSection);
+		let sectionValue = sectionValues[sectionIdx];
+		console.log("SECTION VALUE I CHECK: ", sectionValue);
+		// Beginning only asterisk
+		if (beginAsteriskIdx !== -1 && endAsteriskIdx === -1) {
+			if (beginningAsteriskOnly(v, sectionValue)) {
+				result.push(d);
+			}
+		} else if (beginAsteriskIdx === -1 && endAsteriskIdx !== -1) {
+			if (endAsteriskOnly(v, sectionValue)) {
+				result.push(d);
+			}
+		} else if (beginAsteriskIdx !== -1 && endAsteriskIdx !== -1) {
+			let inputSubstr = v.substring(1, v.length - 1);
+			let idx = sectionValue.indexOf(inputSubstr);
+			if (idx !== -1) {
+				result.push(d);
+			}
+		} else {
+			if (v === sectionValue) {
+				result.push(d);
+			}
+		}
+	}
 	return result;
+}
+
+function beginningAsteriskOnly(inputString: string, sectionValue: string): boolean {
+	let inputSubstr = inputString.substring(1);
+	// Check if the value has the substring
+	let idx = sectionValue.indexOf(inputSubstr);
+	if (idx === -1) {
+		return false;
+	}
+	let valSubstr = sectionValue.substring(idx);
+	return valSubstr === inputSubstr;
+}
+
+function endAsteriskOnly(inputString: string, sectionValue: string): boolean {
+	let inputSubstr = inputString.substring(0, inputString.length - 1);
+	console.log("HOPE I INDEXED CORRECTLY SUBSTRING: ", inputSubstr);
+	// Check if the value has the substring
+	let idx = sectionValue.indexOf(inputSubstr);
+	return !(idx === -1 || idx !== 0);
 }
 
 export function filterAND(instruction: object): object[] {
