@@ -1,42 +1,41 @@
-// Need to pass in the array of data as a parameter to filter()...
+import {InsightResult} from "./IInsightFacade";
 
 let data: object[];
 
 // TRUST THE NATURAL RECURSION...
 export function filter(instruction: object, dataArray: object[]): object[] {
 	data = dataArray;
-	let result: object[] = [];
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let v = values[0];
-	console.log("THIS IS THE KEYS: ", keys);
+	console.log("THIS IS THE KEYS ARRAY: ", keys);
 	console.log("THIS IS THE KEY: ", keys[0]);
 	switch (keys[0]) {
 		case "GT":
-			filterGT(v);
+			data = filterGT(v);
 			break;
 		case "LT":
-			filterLT(v);
+			data = filterLT(v);
 			break;
 		case "EQ":
-			filterEQ(v);
+			data = filterEQ(v);
 			break;
 		case "IS":
-			filterIS(v);
+			data = filterIS(v);
 			break;
 		case "AND":
-			filterAND(v);
+			data = filterAND(v);
 			break;
 		case "OR":
-			filterOR(v);
+			data = filterOR(v);
 			break;
 		case "NOT":
-			filterNOT(v);
+			data = filterNOT(v);
 			break;
 		default:
 			console.log("UNEXPECTED CASE");
 	}
-	return result;
+	return data;
 }
 
 export function filterGT(instruction: object): object[] {
@@ -44,19 +43,24 @@ export function filterGT(instruction: object): object[] {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
-	let v = values[0];
-	// TODO: get the substring for what specific section I need to compare
+	let v: number = values[0];
+	// Get the substring for what specific section I need to compare
 	let underscoreIdx = k.indexOf("_");
 	let section = k.substring(underscoreIdx + 1);
-	console.log("SECTION SUBSTRING: ", section);
-	// TODO: get the correct corresponding string for that section in raw data
+	// Get the correct corresponding string for that section in raw data
+	let rawDataSection = getDataKeyString(section);
 	for (const d of data) {
-		// TODO: get value of that section of the raw data
+		// Get value of that section of the raw data
 		let sections = Object.keys(d);
-		let idx = sections.indexOf(section);
-		// TODO: compare and place in result[] if meets requirement
+		let sectionValues = Object.values(d);
+		let idx = sections.indexOf(rawDataSection);
+		// Compare and place in result[] if meets requirement
+		if (sectionValues[idx] > v) {
+			result.push(d);
+		}
 	}
-	return [];
+	// console.log("RESULT ARRAY: ", result);
+	return result;
 }
 
 export function filterLT(instruction: object): object[] {
@@ -64,7 +68,23 @@ export function filterLT(instruction: object): object[] {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
-	let v = values[0];
+	let v: number = values[0];
+	// Get the substring for what specific section I need to compare
+	let underscoreIdx = k.indexOf("_");
+	let section = k.substring(underscoreIdx + 1);
+	// Get the correct corresponding string for that section in raw data
+	let rawDataSection = getDataKeyString(section);
+	for (const d of data) {
+		// Get value of that section of the raw data
+		let sections = Object.keys(d);
+		let sectionValues = Object.values(d);
+		let idx = sections.indexOf(rawDataSection);
+		// Compare and place in result[] if meets requirement
+		if (sectionValues[idx] < v) {
+			result.push(d);
+		}
+	}
+	// console.log("RESULT ARRAY: ", result);
 	return result;
 }
 
@@ -73,7 +93,23 @@ export function filterEQ(instruction: object): object[] {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
-	let v = values[0];
+	let v: number = values[0];
+	// Get the substring for what specific section I need to compare
+	let underscoreIdx = k.indexOf("_");
+	let section = k.substring(underscoreIdx + 1);
+	// Get the correct corresponding string for that section in raw data
+	let rawDataSection = getDataKeyString(section);
+	for (const d of data) {
+		// Get value of that section of the raw data
+		let sections = Object.keys(d);
+		let sectionValues = Object.values(d);
+		let idx = sections.indexOf(rawDataSection);
+		// Compare and place in result[] if meets requirement
+		if (sectionValues[idx] === v) {
+			result.push(d);
+		}
+	}
+	// console.log("RESULT ARRAY: ", result);
 	return result;
 }
 
@@ -138,4 +174,27 @@ function getDataKeyString(str: string): string {
 		default:
 			return "";
 	}
+}
+
+export function createInsightResult(result: object, columnKeys: string[]): InsightResult {
+	let keys: string[] = [];
+	for (const k of columnKeys) {
+		let underscoreIdx = k.indexOf("_");
+		let substring = k.substring(underscoreIdx + 1);
+		keys.push(getDataKeyString(substring));
+	}
+	let indices: number[] = [];
+	let properties: string[] = Object.keys(result);
+	for (const k of keys) {
+		indices.push(properties.indexOf(k));
+	}
+	let propertyValues = Object.values(result);
+	let insightResult: InsightResult = {};
+	for (let i = 0; i < columnKeys.length; i++) {
+		let value = propertyValues[indices[i]];
+		let k: string = columnKeys[i];
+		insightResult[k] = value;
+	}
+	console.log("INSIGHT RESULT OBJECT: ", insightResult);
+	return insightResult;
 }

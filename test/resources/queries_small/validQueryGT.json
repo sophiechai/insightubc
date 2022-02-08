@@ -1,0 +1,25 @@
+{
+	"title": "Valid GT query with few results",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"courses_avg": 72
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_avg"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+		[
+			{
+				"courses_avg": 72.21
+			},
+			{
+				"courses_avg": 72.21
+			}
+		]
+}

@@ -11,7 +11,9 @@ import {checkValidSection, writeToData, removeItem} from "./DatasetHelperFunctio
 
 import JSZip from "jszip";
 import fse from "fs-extra";
+import * as fs from "fs-extra";
 import {isQueryValid} from "./ValidateQuery";
+import {createInsightResult, filter} from "./Filter";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -22,6 +24,8 @@ let jsZip: JSZip;
 let addedIds: string[];
 let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
+
+export let contentArray: object[];
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
@@ -125,36 +129,46 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		console.log("THIS IS THE QUERY INPUT: ", query);
+		// console.log("THIS IS THE QUERY INPUT: ", query);
 		let q: any = query;
-		// console.log("THIS IS THE QUERY OBJECT CAST TO ANY: ");
-		// console.log(q);
 		let isValid = isQueryValid(q, addedIds);
-		console.log("ISVALID IS OF TYPE: ", typeof isValid);
+		// console.log("ISVALID IS OF TYPE: ", typeof isValid);
 		if (typeof isValid !== "boolean") {
 			return Promise.reject(isValid);
 		}
 
-		// figure out which dataset to query
-		let whereOptionsValues: object[] = Object.values(q);
-		console.log("ARRAY WITH WHERE AND OPTION VALUES: ", whereOptionsValues);
-		let optionsValue: object = whereOptionsValues[1];
-		console.log("OPTIONS VALUE: ", optionsValue);
-		let columnsValue: object[] = Object.values(optionsValue);
-		console.log("COLUMNS VALUE: ", columnsValue);
-		let keysArray: any = columnsValue[0];
-		console.log("THE KEYS ARRAY: ", keysArray);
-		let key: string = keysArray[0];
-		console.log("THE KEY: ", key);
+		// Figure out which dataset to query
+		let optionsValue = q.OPTIONS;
+		// console.log("OPTIONS VALUE: ", optionsValue);
+		let columnsValue = optionsValue.COLUMNS;
+		// console.log("COLUMNS VALUE: ", columnsValue);
+		let key: string = columnsValue[0];
+		// console.log("THE KEY: ", key);
 		let underscoreIdx = key.indexOf("_");
 		let idSubstring = key.substring(0,underscoreIdx);
-		console.log(idSubstring);
-		// get the data from json file... grab the content array store in a local variable
-		let data = [];
-		// Then call filter() which returns resulting array...?
-		// Then create the InsightResult objects and put in array
-		// Then need helper function? that will sort in the order specified (if any)
-		return Promise.resolve([]);
+		// console.log(idSubstring);
+
+		// Get the data from json file... grab the content array
+		let jsonContent = fs.readFileSync("data/" + idSubstring + ".json").toString("utf8");
+		let parsedJsonContent = JSON.parse(jsonContent);
+		let values: any[] = Object.values(parsedJsonContent);
+		contentArray = values[1];
+		// console.log("CONTENT ARRAY: ", contentArray);
+
+		// Call filter() which returns resulting array...
+		let insightResultArray: InsightResult[] = [];
+		let result = filter(q.WHERE, contentArray);
+		// console.log("RESULT: ", result);
+		if (result.length === 0) {
+			return Promise.resolve(insightResultArray);
+		}
+		// Create the InsightResult objects and put in insightResultArray
+		for (const res of result) {
+			let ir = createInsightResult(result[0], columnsValue);
+			insightResultArray.push(ir);
+		}
+		// TODO: need helper function that will sort in the order specified (if any)
+		return Promise.resolve(insightResultArray);
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
