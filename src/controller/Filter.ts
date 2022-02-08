@@ -25,7 +25,9 @@ export function filter(instruction: object, dataArray: object[]): object[] {
 			data = filterIS(v);
 			break;
 		case "AND":
-			data = filterAND(v);
+			for (const inst of v) {
+				data = filter(inst, data);
+			}
 			break;
 		case "OR":
 			data = filterOR(v);
@@ -182,15 +184,6 @@ function endAsteriskOnly(inputString: string, sectionValue: string): boolean {
 	// Check if the value has the substring
 	let idx = sectionValue.indexOf(inputSubstr);
 	return !(idx === -1 || idx !== 0);
-}
-
-export function filterAND(instruction: object): object[] {
-	let result: object[] = [];
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v = values[0];
-	return result;
 }
 
 export function filterOR(instruction: object): object[] {
