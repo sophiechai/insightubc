@@ -164,7 +164,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// Create the InsightResult objects and put in insightResultArray
 		for (const res of result) {
-			let ir = createInsightResult(result[0], columnsValue);
+			let ir = createInsightResult(res, columnsValue);
 			insightResultArray.push(ir);
 		}
 		// TODO: need helper function that will sort in the order specified (if any)

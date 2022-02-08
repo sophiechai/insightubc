@@ -1,4 +1,5 @@
 import {InsightResult} from "./IInsightFacade";
+import {contentArray} from "./InsightFacade";
 
 let data: object[];
 
@@ -30,6 +31,7 @@ export function filter(instruction: object, dataArray: object[]): object[] {
 			data = filterOR(v);
 			break;
 		case "NOT":
+			data = filter(v, data);
 			data = filterNOT(v);
 			break;
 		default:
@@ -141,12 +143,18 @@ export function filterOR(instruction: object): object[] {
 }
 
 export function filterNOT(instruction: object): object[] {
-	let result: object[] = [];
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v = values[0];
-	return result;
+	let original = contentArray;
+	for (const d of data) {
+		for (const o of original) {
+			if (JSON.stringify(d) === JSON.stringify(o)) {
+				let idx = original.indexOf(o);
+				original.splice(idx, 1);
+				// console.log("I AM REMOVING ELEMENT OF IDX: ", idx);
+			}
+		}
+	}
+	// console.log("RESULTING ARRAY: ", contentArray);
+	return original;
 }
 
 function getDataKeyString(str: string): string {
