@@ -1,0 +1,47 @@
+{
+  "title": "valid query result exactly 5001 throws ResultTooLargeError",
+  "input":
+  {
+    "WHERE": {
+      "OR": [
+        {
+          "GT": {
+            "courses_avg": 88.75
+          }
+        },
+        {
+          "OR": [
+            {
+              "LT": {
+                "courses_avg": 51.5
+              }
+            },
+            {
+              "AND": [
+                {
+                  "IS": {
+                    "courses_dept": "math"
+                  }
+                },
+                {
+                  "EQ": {
+                    "courses_avg": 51.5
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_avg"
+      ],
+      "ORDER": "courses_avg"
+    }
+  },
+  "errorExpected": true,
+  "expected": "ResultTooLargeError"
+}
