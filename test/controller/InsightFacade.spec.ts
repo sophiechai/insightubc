@@ -363,6 +363,7 @@ describe("InsightFacade", function () {
 });
 
 describe("Dynamic folder test for performQuery", function () {
+	this.timeout(10000);
 	let courses: string;
 	let facade: IInsightFacade;
 	before(async function () {

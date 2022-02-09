@@ -30,7 +30,7 @@ export function filter(instruction: object, dataArray: object[]): object[] {
 			}
 			break;
 		case "OR":
-			data = filterOR(v);
+			data = filterOR(v, data);
 			break;
 		case "NOT":
 			data = filter(v, data);
@@ -186,13 +186,27 @@ function endAsteriskOnly(inputString: string, sectionValue: string): boolean {
 	return !(idx === -1 || idx !== 0);
 }
 
-export function filterOR(instruction: object): object[] {
+export function filterOR(instruction: object[], ogData: object[]): object[] {
 	let result: object[] = [];
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v = values[0];
-	return result;
+	for (const inst of instruction) {
+		data = filter(inst, ogData);
+		result = result.concat(data);
+	}
+	// let stringified: string[] = [];
+	// // console.log("LENGTH OF STRINGIFIED: ", stringified.length);
+	// for (const r of result) {
+	// 	stringified.push(JSON.stringify(r));
+	// }
+	// let res = stringified.filter(function(element, index,array) {
+	// 	return array.indexOf(element) === index;
+	// });
+	// let newResult = [];
+	// for (const r of res) {
+	// 	newResult.push(JSON.parse(r));
+	// }
+	// return newResult;
+	let set = new Set(result);
+	return Array.from(set);
 }
 
 export function filterNOT(instruction: object): object[] {
