@@ -21,14 +21,14 @@ let jsZip: JSZip;
 let addedIds: string[];
 let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
-let map: Map<string, number | string>;
+let mapForEachFormattedSection: Map<string, number | string>;
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
-		map = new Map<string, number | string>();
+		mapForEachFormattedSection = new Map<string, number | string>();
 		console.log("InsightFacadeImpl::init()");
 		console.log(dataPath);
 		fse.mkdir(dataPath, function (err) {
@@ -75,9 +75,9 @@ export default class InsightFacade implements IInsightFacade {
 							// console.log("section is " + JSON.stringify(section));
 							const validSection = checkValidSection(section);
 							if (validSection) {
-								formatSection(map, section);
-								let eachSection = Object.fromEntries(map);
-								tempList.push(eachSection);
+								formatSection(mapForEachFormattedSection, section);
+								let modifiedSection = Object.fromEntries(mapForEachFormattedSection);
+								tempList.push(modifiedSection);
 							}
 						});
 					}
