@@ -118,7 +118,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		const fileName = dataPath + "/" + id + ".json";
 		try {
-			fse.unlinkSync(fileName);
+			// fse.unlinkSync(fileName);
 			let index = addedIds.indexOf(id);
 			addedIds = removeItem(addedIds, id);
 			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
