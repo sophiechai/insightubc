@@ -34,7 +34,7 @@ export function filter(instruction: object, dataArray: object[]): object[] {
 			break;
 		case "NOT":
 			data = filter(v, data);
-			data = filterNOT(v);
+			data = filterNOT();
 			break;
 		default:
 			console.log("UNEXPECTED CASE");
@@ -209,7 +209,7 @@ export function filterOR(instruction: object[], ogData: object[]): object[] {
 	return Array.from(set);
 }
 
-export function filterNOT(instruction: object): object[] {
+export function filterNOT(): object[] {
 	let original = contentArray;
 	for (const d of data) {
 		for (const o of original) {
