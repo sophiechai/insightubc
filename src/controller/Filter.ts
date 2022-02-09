@@ -273,3 +273,23 @@ export function createInsightResult(result: object, columnKeys: string[]): Insig
 	console.log("INSIGHT RESULT OBJECT: ", insightResult);
 	return insightResult;
 }
+
+export function sortResult(array: object[], orderKey: string): object[] {
+	let underscoreIdx = orderKey.indexOf("_");
+	let substring = orderKey.substring(underscoreIdx + 1);
+	let key = getDataKeyString(substring);
+	array.sort(function(a, b) {
+		let propIdxA = Object.keys(a).indexOf(key);
+		let propIdxB = Object.keys(b).indexOf(key);
+		let valueA = Object.values(a)[propIdxA];
+		let valueB = Object.values(b)[propIdxB];
+		if (valueA < valueB) {
+			return -1;
+		}
+		if (valueA > valueB) {
+			return 1;
+		}
+		return 0;
+	});
+	return array;
+}

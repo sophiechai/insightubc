@@ -15,9 +15,6 @@ type Input = unknown;
 type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
-// NEED TO GET THE DATA ARRAY ACK
-let data: object[] = []; // stub
-
 describe("Dynamic folder test for performQuery", function () {
 	this.timeout(10000);
 	let courses: string;
@@ -50,16 +47,4 @@ describe("Dynamic folder test for performQuery", function () {
 			assertOnError: assertError,
 		}
 	);
-});
-
-describe("Filter Tests", function () {
-	it("should ...", function () {
-		let f =
-			{
-				GT: {
-					courses_avg: "92"
-				}
-			};
-		expect(filter(f, data)).to.deep.equal([]); // stub
-	});
 });
