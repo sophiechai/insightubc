@@ -19,6 +19,26 @@ function checkValidSection(section: object): boolean {
 	);
 }
 
+function formatSection(map: Map<string, number | string>, section: object){
+	let keys: string[] = Object.keys(section);
+	let values: Array<string| number> = Object.values(section);
+	let idxOfID = keys.indexOf("id");
+	let idxOfYear = keys.indexOf("Year");
+	let idxOfSection = keys.indexOf("Section");
+	values[idxOfID] = "" + values[idxOfID];
+
+	if (values[idxOfSection] === "overall") {
+		values[idxOfYear] = 1900;
+	} else {
+		values[idxOfYear] = Number(values[idxOfYear]);
+	}
+
+	map.clear();
+	for (let i = 0; i < keys.length; i++) {
+		map.set(keys[i], values[i]);
+	}
+}
+
 function writeToData(fileName: string, myJSON: string): void {
 	fse.writeFile(fileName, myJSON, (err) => {
 		if (err) {
@@ -30,13 +50,13 @@ function writeToData(fileName: string, myJSON: string): void {
 }
 
 function removeItem<T>(arr: T[], value: T): T[] {
-	console.log("before: " + arr.length);
+	// console.log("before: " + arr.length);
 	const index = arr.indexOf(value);
 	if (index > -1) {
 		arr.splice(index, 1);
 	}
-	console.log("after: " + arr.length);
+	// console.log("after: " + arr.length);
 	return arr;
 }
 
-export {checkValidSection, writeToData, removeItem};
+export {checkValidSection, formatSection, writeToData, removeItem};
