@@ -126,7 +126,7 @@ describe("InsightFacade", function () {
 						numRows: 64612,
 					});
 				});
-		});
+		}).timeout(10000);
 	});
 
 	describe("Add Dataset", function () {
@@ -160,7 +160,7 @@ describe("InsightFacade", function () {
 				expect(oneId).to.exist;
 				const otherId = addedIds.find((id) => id === "courses-2");
 				expect(otherId).to.exist;
-			});
+			}).timeout(10000);
 		});
 
 		describe("Reject With InsightError", function () {
@@ -311,7 +311,7 @@ describe("InsightFacade", function () {
 						numRows: 64612,
 					},
 				]);
-			});
+			}).timeout(10000);
 
 			it("should remove dataset with given id (valid with whitespace)", async function () {
 				await facade.addDataset("ubc courses", courses, InsightDatasetKind.Courses);
@@ -328,7 +328,7 @@ describe("InsightFacade", function () {
 				insightDatasets = await facade.listDatasets();
 				expect(insightDatasets).to.deep.equal([]);
 			});
-		});
+		}).timeout(10000);
 
 		describe("Reject With Error", function () {
 			it("should reject with InsightError if id has underscore", async function () {

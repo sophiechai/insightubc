@@ -7,7 +7,7 @@ import {
 	NotFoundError,
 } from "./IInsightFacade";
 
-import {checkValidSection, writeToData, removeItem} from "./DatasetHelperFunctions";
+import {checkValidSection, formatSection, writeToData, removeItem} from "./DatasetHelperFunctions";
 
 import JSZip from "jszip";
 import fse from "fs-extra";
@@ -21,12 +21,14 @@ let jsZip: JSZip;
 let addedIds: string[];
 let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
+let map: Map<string, number | string>;
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
+		map = new Map<string, number | string>();
 		console.log("InsightFacadeImpl::init()");
 		console.log(dataPath);
 		fse.mkdir(dataPath, function (err) {
@@ -68,14 +70,14 @@ export default class InsightFacade implements IInsightFacade {
 				const promise = file.async("string");
 				promise.then(function (fileData) {
 					const dataObj = JSON.parse(fileData)["result"];
-					if (dataObj.length === 0) {
-						// console.log("empty");
-					} else {
-						dataObj.forEach((section: any) => {
+					if (dataObj.length !== 0) {
+						dataObj.forEach((section: object) => {
 							// console.log("section is " + JSON.stringify(section));
 							const validSection = checkValidSection(section);
 							if (validSection) {
-								tempList.push(section);
+								formatSection(map, section);
+								let eachSection = Object.fromEntries(map);
+								tempList.push(eachSection);
 							}
 						});
 					}
@@ -115,7 +117,7 @@ export default class InsightFacade implements IInsightFacade {
 			let index = addedIds.indexOf(id);
 			addedIds = removeItem(addedIds, id);
 			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
-			console.log("File successfully deleted.");
+			// console.log("File successfully deleted.");
 			return Promise.resolve(id);
 		} catch (err) {
 			console.error(err);
