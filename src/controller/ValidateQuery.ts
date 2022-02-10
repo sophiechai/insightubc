@@ -64,8 +64,8 @@ export function isBodyValid(obj: object): boolean {
 		return isMComparisonValid(v);
 	} else if (k === "IS") {
 		return isSComparisonValid(v);
-	// } else if (k === "NOT") {
-	// 	return isNegationValid(v);
+	} else if (k === "NOT") {
+		return isNegationValid(v);
 	}
 	return false;
 }
