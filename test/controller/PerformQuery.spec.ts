@@ -9,7 +9,7 @@ import {getContentFromArchives} from "../TestUtil";
 import InsightFacade from "../../src/controller/InsightFacade";
 import {expect} from "chai";
 import {folderTest} from "@ubccpsc310/folder-test";
-import {filter} from "../../src/controller/Filter";
+// import {filter} from "../../src/controller/Filter";
 
 type Input = unknown;
 type Output = Promise<InsightResult[]>;
