@@ -9,8 +9,8 @@ export function filter(instruction: object, dataArray: object[]): object[] {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let v = values[0];
-	console.log("THIS IS THE KEYS ARRAY: ", keys);
-	console.log("THIS IS THE KEY: ", keys[0]);
+	// console.log("THIS IS THE KEYS ARRAY: ", keys);
+	// console.log("THIS IS THE KEY: ", keys[0]);
 	switch (keys[0]) {
 		case "GT":
 			data = filterGT(v);
@@ -123,7 +123,7 @@ export function filterIS(instruction: object): object[] {
 	let values = Object.values(instruction);
 	let k = keys[0];
 	let v: string = values[0];
-	console.log("THE STRING TO MATCH: ", v);
+	// console.log("THE STRING TO MATCH: ", v);
 	// Get the substring for what specific section I need to compare
 	let underscoreIdx = k.indexOf("_");
 	let section = k.substring(underscoreIdx + 1);
@@ -142,7 +142,7 @@ export function filterIS(instruction: object): object[] {
 		let sectionValues = Object.values(d);
 		let sectionIdx = sections.indexOf(rawDataSection);
 		let sectionValue = sectionValues[sectionIdx];
-		console.log("SECTION VALUE I CHECK: ", sectionValue);
+		// console.log("SECTION VALUE I CHECK: ", sectionValue);
 		// Beginning only asterisk
 		if (beginAsteriskIdx !== -1 && endAsteriskIdx === -1) {
 			if (beginningAsteriskOnly(v, sectionValue)) {
@@ -180,7 +180,7 @@ function beginningAsteriskOnly(inputString: string, sectionValue: string): boole
 
 function endAsteriskOnly(inputString: string, sectionValue: string): boolean {
 	let inputSubstr = inputString.substring(0, inputString.length - 1);
-	console.log("HOPE I INDEXED CORRECTLY SUBSTRING: ", inputSubstr);
+	// console.log("HOPE I INDEXED CORRECTLY SUBSTRING: ", inputSubstr);
 	// Check if the value has the substring
 	let idx = sectionValue.indexOf(inputSubstr);
 	return !(idx === -1 || idx !== 0);
@@ -270,7 +270,7 @@ export function createInsightResult(result: object, columnKeys: string[]): Insig
 		let k: string = columnKeys[i];
 		insightResult[k] = value;
 	}
-	console.log("INSIGHT RESULT OBJECT: ", insightResult);
+	// console.log("INSIGHT RESULT OBJECT: ", insightResult);
 	return insightResult;
 }
 

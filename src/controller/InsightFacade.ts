@@ -162,7 +162,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// Check if it has ORDER property and then sort
 		let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
-		console.log("HAS ORDER? ", hasOrder);
+		// console.log("HAS ORDER? ", hasOrder);
 		if (hasOrder) {
 			let orderKey = optionsValue.ORDER;
 			result = sortResult(result, orderKey);
