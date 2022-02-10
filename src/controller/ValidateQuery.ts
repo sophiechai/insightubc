@@ -60,12 +60,13 @@ export function isBodyValid(obj: object): boolean {
 	// if (k === "AND" || k === "OR") {
 	// 	return isLogicComparisonValid(v);
 	// } else if (k === "LT" || k === "GT" || k === "EQ") {
-	// 	return isMComparisonValid(v);
+	if (k === "LT" || k === "GT" || k === "EQ") {
+		return isMComparisonValid(v);
 	// } else if (k === "IS") {
 	// 	return isSComparisonValid(v);
 	// } else if (k === "NOT") {
 	// 	return isNegationValid(v);
-	// }
+	}
 	return false;
 }
 
