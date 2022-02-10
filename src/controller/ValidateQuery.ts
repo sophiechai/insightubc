@@ -60,12 +60,11 @@ export function isBodyValid(obj: object): boolean {
 	if (k === "AND" || k === "OR") {
 		return isLogicComparisonValid(v);
 	} else if (k === "LT" || k === "GT" || k === "EQ") {
-	// if (k === "LT" || k === "GT" || k === "EQ") {
 		return isMComparisonValid(v);
 	} else if (k === "IS") {
 		return isSComparisonValid(v);
-	// } else if (k === "NOT") {
-	// 	return isNegationValid(v);
+	} else if (k === "NOT") {
+		return isNegationValid(v);
 	}
 	return false;
 }
@@ -86,12 +85,11 @@ export function isLogicComparisonValid(array: object[]): boolean {
 		}
 		let k = keys[0];
 		let v = values[0];
-		// if (k === "AND" || k === "OR") {
-		// 	if (!isLogicComparisonValid(v)) {
-		// 		return false;
-		// 	}
-		// } else if (k === "LT" || k === "GT" || k === "EQ") {
-		if (k === "LT" || k === "GT" || k === "EQ") {
+		if (k === "AND" || k === "OR") {
+			if (!isLogicComparisonValid(v)) {
+				return false;
+			}
+		} else if (k === "LT" || k === "GT" || k === "EQ") {
 			if (!isMComparisonValid(v)) {
 				return false;
 			}
@@ -178,8 +176,8 @@ export function isNegationValid(obj: object): boolean {
 		return isMComparisonValid(v);
 	} else if (k === "IS") {
 		return isSComparisonValid(v);
-	// } else if (k === "NOT") {
-	// 	return isNegationValid(v);
+	} else if (k === "NOT") {
+		return isNegationValid(v);
 	}
 	return false;
 }
