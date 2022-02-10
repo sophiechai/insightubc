@@ -13,7 +13,7 @@ import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
 import {isQueryValid} from "./ValidateQuery";
-// import {createInsightResult, filter, sortResult} from "./Filter";
+import {createInsightResult, filter, sortResult} from "./Filter";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -153,26 +153,26 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Call filter() which returns resulting array...
 		let insightResultArray: InsightResult[] = [];
-		// let result = filter(q.WHERE, contentArray);
-		// if (result.length === 0) {
-		// 	return Promise.resolve(insightResultArray);
-		// }
-		// if (result.length > 5000) {
-		// 	return Promise.reject(new ResultTooLargeError("Result over 5000"));
-		// }
-		// // Check if it has ORDER property and then sort
-		// let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
-		// // console.log("HAS ORDER? ", hasOrder);
-		// if (hasOrder) {
-		// 	let orderKey = optionsValue.ORDER;
-		// 	result = sortResult(result, orderKey);
-		// 	// console.log("SORTED RESULT: ", result);
-		// }
-		// // Create the InsightResult objects and put in insightResultArray
-		// for (const res of result) {
-		// 	let ir = createInsightResult(res, columnsValue);
-		// 	insightResultArray.push(ir);
-		// }
+		let result = filter(q.WHERE, contentArray);
+		if (result.length === 0) {
+			return Promise.resolve(insightResultArray);
+		}
+		if (result.length > 5000) {
+			return Promise.reject(new ResultTooLargeError("Result over 5000"));
+		}
+		// Check if it has ORDER property and then sort
+		let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
+		// console.log("HAS ORDER? ", hasOrder);
+		if (hasOrder) {
+			let orderKey = optionsValue.ORDER;
+			result = sortResult(result, orderKey);
+			// console.log("SORTED RESULT: ", result);
+		}
+		// Create the InsightResult objects and put in insightResultArray
+		for (const res of result) {
+			let ir = createInsightResult(res, columnsValue);
+			insightResultArray.push(ir);
+		}
 		return Promise.resolve(insightResultArray);
 	}
 
