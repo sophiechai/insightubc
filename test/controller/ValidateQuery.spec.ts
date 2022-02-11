@@ -11,21 +11,9 @@ import {
 	isSComparisonValid,
 } from "../../src/controller/ValidateQuery";
 import {expect} from "chai";
-import {
-	IInsightFacade,
-	InsightDatasetKind,
-	InsightError, InsightResult,
-	ResultTooLargeError
-} from "../../src/controller/IInsightFacade";
-import {getContentFromArchives} from "../TestUtil";
-import InsightFacade from "../../src/controller/InsightFacade";
-import {folderTest} from "@ubccpsc310/folder-test";
+import {InsightError} from "../../src/controller/IInsightFacade";
 
 let ids = ["courses", "courses2"];
-
-type Input = unknown;
-type Output = Promise<InsightResult[]>;
-type Error = "InsightError" | "ResultTooLargeError";
 
 describe("ValidateQuery", function () {
 	describe("isQueryValid", function () {
@@ -236,6 +224,20 @@ describe("ValidateQuery", function () {
 			};
 			expect(isMComparisonValid(mcomp)).to.equal(true);
 		});
+
+		it("should return false if wrong query key type", function () {
+			let mcomp = {
+				courses_id: 12345,
+			};
+			expect(isMComparisonValid(mcomp)).to.equal(false);
+		});
+
+		it("should return false if wrong input type", function () {
+			let mcomp = {
+				courses_year: "2000",
+			};
+			expect(isMComparisonValid(mcomp)).to.equal(false);
+		});
 	});
 
 	describe("isSComparisonValid", function () {
@@ -325,6 +327,37 @@ describe("ValidateQuery", function () {
 			};
 			expect(isNegationValid(neg)).to.equal(true);
 		});
+
+		it("should return true if valid nested negation filter", function () {
+			let neg = {
+				NOT: {
+					NOT: {
+						NOT: {
+							GT: {
+								courses_avg: 90
+							}
+						}
+					}
+				},
+			};
+			expect(isNegationValid(neg)).to.equal(true);
+		});
+
+		it("should return true if valid nested negation filter", function () {
+			let neg = {
+				NOT: {
+					NOT: {
+						NOT: {
+							GT: {
+								courses_avg: 90
+							}
+						}
+					}
+				},
+			};
+			expect(isNegationValid(neg)).to.equal(true);
+		});
+
 	});
 
 	describe("isOptionsValid", function () {
@@ -436,41 +469,3 @@ describe("ValidateQuery", function () {
 	});
 });
 
-describe("Dynamic folder test for performQuery", function () {
-	this.timeout(10000);
-	let courses: string;
-	let facade: IInsightFacade;
-	before(async function () {
-		courses = getContentFromArchives("courses.zip");
-		facade = new InsightFacade();
-		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
-	});
-
-	// Assert actual error is of expected type
-	function assertError(actual: any, expected: Error): void {
-		if (expected === "InsightError") {
-			expect(actual).to.be.an.instanceOf(InsightError);
-		} else if (expected === "ResultTooLargeError") {
-			expect(actual).to.be.an.instanceOf(ResultTooLargeError);
-		} else {
-			expect.fail("UNEXPECTED ERROR");
-		}
-	}
-
-	function assertResult(actual: any, expected: Awaited<Output>): void {
-		expect(actual).to.deep.members(expected);
-		expect(actual).to.have.length(expected.length);
-	}
-
-	folderTest<Input, Output, Error>(
-		"performQuery tests",
-		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/validateQuery",
-		{
-			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
-			assertOnError: assertError,
-			// assertOnResult: assertResult
-		}
-	);
-});
