@@ -302,6 +302,20 @@ describe("ValidateQuery", function () {
 			};
 			expect(isSComparisonValid(scomp)).to.equal(true);
 		});
+
+		it("should return false if wrong query key type", function () {
+			let scomp = {
+				courses_avg: "1234",
+			};
+			expect(isSComparisonValid(scomp)).to.equal(false);
+		});
+
+		it("should return false if wrong input type", function () {
+			let scomp = {
+				courses_id: 12345,
+			};
+			expect(isSComparisonValid(scomp)).to.equal(false);
+		});
 	});
 
 	describe("isNegationValid", function () {

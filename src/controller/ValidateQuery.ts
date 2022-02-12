@@ -71,41 +71,42 @@ export function isBodyValid(obj: object): boolean {
 
 // Checks LOGICCOMPARISON
 export function isLogicComparisonValid(array: object[]): boolean {
-	// Check if there is at least one FILTER in array
-	if (array.length === 0) {
-		return false;
-	}
-	// Loop through array checking if valid filters
-	for (const obj of array) {
-		let keys = Object.keys(obj);
-		let values = Object.values(obj);
-		// Check there's only one key and value
-		if (keys.length !== 1 || values.length !== 1) {
-			return false;
-		}
-		let k = keys[0];
-		let v = values[0];
-		if (k === "AND" || k === "OR") {
-			if (!isLogicComparisonValid(v)) {
-				return false;
-			}
-		} else if (k === "LT" || k === "GT" || k === "EQ") {
-			if (!isMComparisonValid(v)) {
-				return false;
-			}
-		} else if (k === "IS") {
-			if (!isSComparisonValid(v)) {
-				return false;
-			}
-		} else if (k === "NOT") {
-			if (!isNegationValid(v)) {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-	return true;
+	// // Check if there is at least one FILTER in array
+	// if (array.length === 0) {
+	// 	return false;
+	// }
+	// // Loop through array checking if valid filters
+	// for (const obj of array) {
+	// 	let keys = Object.keys(obj);
+	// 	let values = Object.values(obj);
+	// 	// Check there's only one key and value
+	// 	if (keys.length !== 1 || values.length !== 1) {
+	// 		return false;
+	// 	}
+	// 	let k = keys[0];
+	// 	let v = values[0];
+	// 	if (k === "AND" || k === "OR") {
+	// 		if (!isLogicComparisonValid(v)) {
+	// 			return false;
+	// 		}
+	// 	} else if (k === "LT" || k === "GT" || k === "EQ") {
+	// 		if (!isMComparisonValid(v)) {
+	// 			return false;
+	// 		}
+	// 	} else if (k === "IS") {
+	// 		if (!isSComparisonValid(v)) {
+	// 			return false;
+	// 		}
+	// 	} else if (k === "NOT") {
+	// 		if (!isNegationValid(v)) {
+	// 			return false;
+	// 		}
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
+	// return true;
+	return false;
 }
 
 // Checks MCOMPARISON
@@ -161,24 +162,24 @@ export function isSComparisonValid(obj: object): boolean {
 
 // Checks NEGATION
 export function isNegationValid(obj: object): boolean {
-	// Check it has only one FILTER
-	let keys = Object.keys(obj);
-	if (keys.length === 0 || keys.length > 1) {
-		return false;
-	}
-	// Figure out what FILTER it is and check it
-	let k = keys[0];
-	let values = Object.values(obj);
-	let v = values[0];
-	if (k === "AND" || k === "OR") {
-		return isLogicComparisonValid(v);
-	} else if (k === "LT" || k === "GT" || k === "EQ") {
-		return isMComparisonValid(v);
-	} else if (k === "IS") {
-		return isSComparisonValid(v);
-	} else if (k === "NOT") {
-		return isNegationValid(v);
-	}
+	// // Check it has only one FILTER
+	// let keys = Object.keys(obj);
+	// if (keys.length === 0 || keys.length > 1) {
+	// 	return false;
+	// }
+	// // Figure out what FILTER it is and check it
+	// let k = keys[0];
+	// let values = Object.values(obj);
+	// let v = values[0];
+	// if (k === "AND" || k === "OR") {
+	// 	return isLogicComparisonValid(v);
+	// } else if (k === "LT" || k === "GT" || k === "EQ") {
+	// 	return isMComparisonValid(v);
+	// } else if (k === "IS") {
+	// 	return isSComparisonValid(v);
+	// } else if (k === "NOT") {
+	// 	return isNegationValid(v);
+	// }
 	return false;
 }
 // END BODY VALIDITY CHECK
