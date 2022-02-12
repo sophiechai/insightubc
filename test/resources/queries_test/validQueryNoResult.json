@@ -1,0 +1,19 @@
+{
+  "title": "valid query but no result",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_dept": "MATH"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_pass",
+        "courses_fail"
+      ],
+      "ORDER": "courses_pass"
+    }
+  },
+  "errorExpected": false,
+  "expected": []
+}

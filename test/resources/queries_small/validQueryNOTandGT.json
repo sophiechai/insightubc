@@ -1,0 +1,45 @@
+{
+	"title": "Valid NOT GT query with few results",
+	"input": {
+		"WHERE": {
+			"NOT": {
+				"GT": {
+					"courses_avg": 72
+				}
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_avg"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"courses_avg": 70.96
+		},
+		{
+			"courses_avg": 70.96
+		},
+		{
+			"courses_avg": 71.92
+		},
+		{
+			"courses_avg": 71.92
+		},
+		{
+			"courses_avg": 71.48
+		},
+		{
+			"courses_avg": 71.48
+		},
+		{
+			"courses_avg": 71.6
+		},
+		{
+			"courses_avg": 71.6
+		}
+	]
+}

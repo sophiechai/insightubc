@@ -1,0 +1,58 @@
+{
+	"title": "Valid OR with GT and EQ query with few results",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"GT": {
+						"courses_avg": 72
+					}
+				},
+				{
+					"EQ": {
+						"courses_pass": 51
+					}
+				},
+				{
+					"EQ": {
+						"courses_pass": 80
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_avg",
+				"courses_pass"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"courses_avg": 72.21,
+			"courses_pass": 80
+		},
+		{
+			"courses_avg": 72.21,
+			"courses_pass": 80
+		},
+		{
+			"courses_avg": 71.92,
+			"courses_pass": 51
+		},
+		{
+			"courses_avg": 71.92,
+			"courses_pass": 51
+		},
+		{
+			"courses_avg": 70.96,
+			"courses_pass": 80
+		},
+		{
+			"courses_avg": 70.96,
+			"courses_pass": 80
+		}
+	]
+}

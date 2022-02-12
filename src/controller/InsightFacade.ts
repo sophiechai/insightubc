@@ -4,13 +4,16 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError,
+	NotFoundError, ResultTooLargeError,
 } from "./IInsightFacade";
 
 import {checkValidSection, formatSection, writeToData, removeItem} from "./DatasetHelperFunctions";
 
 import JSZip from "jszip";
 import fse from "fs-extra";
+import * as fs from "fs-extra";
+import {isQueryValid} from "./ValidateQuery";
+import {createInsightResult, filter, sortResult} from "./Filter";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -22,6 +25,8 @@ let addedIds: string[];
 let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
 let mapForEachFormattedSection: Map<string, number | string>;
+
+export let contentArray: object[];
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
@@ -113,7 +118,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		const fileName = dataPath + "/" + id + ".json";
 		try {
-			fse.unlinkSync(fileName);
+			// fse.unlinkSync(fileName);
 			let index = addedIds.indexOf(id);
 			addedIds = removeItem(addedIds, id);
 			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
@@ -126,7 +131,49 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		return Promise.reject("Not implemented.");
+		// console.log("THIS IS THE QUERY INPUT: ", query);
+		let q: any = query;
+		let isValid = isQueryValid(q, addedIds);
+		if (typeof isValid !== "boolean") {
+			return Promise.reject(isValid);
+		}
+		// Figure out which dataset to query
+		let optionsValue = q.OPTIONS;
+		let columnsValue = optionsValue.COLUMNS;
+		let key: string = columnsValue[0];
+		let underscoreIdx = key.indexOf("_");
+		let idSubstring = key.substring(0,underscoreIdx);
+
+		// Get the data from json file... grab the content array
+		let jsonContent = fs.readFileSync("data/" + idSubstring + ".json").toString("utf8");
+		let parsedJsonContent = JSON.parse(jsonContent);
+		let values: any[] = Object.values(parsedJsonContent);
+		contentArray = values[1];
+		// console.log("CONTENT ARRAY: ", contentArray);
+
+		// Call filter() which returns resulting array...
+		let insightResultArray: InsightResult[] = [];
+		let result = filter(q.WHERE, contentArray);
+		if (result.length === 0) {
+			return Promise.resolve(insightResultArray);
+		}
+		if (result.length > 5000) {
+			return Promise.reject(new ResultTooLargeError("Result over 5000"));
+		}
+		// Check if it has ORDER property and then sort
+		let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
+		// console.log("HAS ORDER? ", hasOrder);
+		if (hasOrder) {
+			let orderKey = optionsValue.ORDER;
+			result = sortResult(result, orderKey);
+			// console.log("SORTED RESULT: ", result);
+		}
+		// Create the InsightResult objects and put in insightResultArray
+		for (const res of result) {
+			let ir = createInsightResult(res, columnsValue);
+			insightResultArray.push(ir);
+		}
+		return Promise.resolve(insightResultArray);
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {

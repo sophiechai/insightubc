@@ -19,6 +19,7 @@ type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
 describe("InsightFacade", function () {
+	this.timeout(10000);
 	let courses: string;
 	let facade: IInsightFacade;
 
@@ -362,6 +363,7 @@ describe("InsightFacade", function () {
 });
 
 describe("Dynamic folder test for performQuery", function () {
+	this.timeout(10000);
 	let courses: string;
 	let facade: IInsightFacade;
 	before(async function () {
@@ -385,7 +387,7 @@ describe("Dynamic folder test for performQuery", function () {
 	folderTest<Input, Output, Error>(
 		"performQuery tests",
 		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/queries",
+		"./test/resources/queries_test",
 		{
 			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
 			assertOnError: assertError,

@@ -1,0 +1,19 @@
+{
+  "title": "referencing nonexistent dataset throws InsightError",
+  "input": {
+    "WHERE": {
+      "GT": {
+        "bleh_avg": 95
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "bleh_dept",
+        "bleh_avg"
+      ],
+      "ORDER": "bleh_avg"
+    }
+  },
+  "errorExpected": true,
+  "expected": "InsightError"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "swap id and dataset key throws InsightError",
+  "input": {
+    "WHERE": {
+      "EQ": {
+        "fail_courses": 50
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_pass",
+        "courses_fail"
+      ],
+      "ORDER": "courses_fail"
+    }
+  },
+  "errorExpected": true,
+  "expected": "InsightError"
+}

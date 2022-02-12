@@ -1,0 +1,19 @@
+{
+  "title": "valid query result over 5000 throws ResultTooLargeError",
+  "input": {
+    "WHERE": {
+      "GT": {
+        "courses_avg": 80
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_avg"
+      ],
+      "ORDER": "courses_avg"
+    }
+  },
+  "errorExpected": true,
+  "expected": "ResultTooLargeError"
+}
