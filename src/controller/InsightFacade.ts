@@ -123,6 +123,33 @@ export default class InsightFacade implements IInsightFacade {
 			console.error(err);
 			return Promise.reject(new InsightError("unlinkSync failed"));
 		}
+
+		// fse.unlink(fileName, function(err) {
+		// 	if (err) {
+		// 		// throw err;
+		// 		return Promise.reject(new InsightError("unlinkSync failed"));
+		// 	} else {
+		// 		console.log("Successfully deleted the file.");
+		// 		let index = addedIds.indexOf(id);
+		// 		addedIds = removeItem(addedIds, id);
+		// 		addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+		//
+		// 		return Promise.resolve(id);
+		// 	}
+		// });
+		return Promise.resolve(id);
+		//
+		// try {
+		// 	fse.unlinkSync(fileName);
+		// 	let index = addedIds.indexOf(id);
+		// 	addedIds = removeItem(addedIds, id);
+		// 	addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+		// 	// console.log("File successfully deleted.");
+		// 	return Promise.resolve(id);
+		// } catch (err) {
+		// 	console.error(err);
+		// 	return Promise.reject(new InsightError("unlinkSync failed"));
+		// }
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
