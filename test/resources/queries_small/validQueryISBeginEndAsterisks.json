@@ -1,0 +1,60 @@
+{
+	"title": "Valid IS query with *nt* input string",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"courses_dept": "*nt*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_avg"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"courses_dept": "anth",
+			"courses_avg": 70.96
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 70.96
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 72.21
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 72.21
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.92
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.92
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.48
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.48
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.6
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.6
+		}
+	]
+}

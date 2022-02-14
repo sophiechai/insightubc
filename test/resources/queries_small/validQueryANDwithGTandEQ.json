@@ -1,0 +1,37 @@
+{
+	"title": "Valid AND with GT and EQ query with few results",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"courses_avg": 71
+					}
+				},
+				{
+					"EQ": {
+						"courses_pass": 51
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_avg",
+				"courses_pass"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"courses_avg": 71.92,
+			"courses_pass": 51
+		},
+		{
+			"courses_avg": 71.92,
+			"courses_pass": 51
+		}
+	]
+}
