@@ -168,7 +168,7 @@ export default class InsightFacade implements IInsightFacade {
 			if (!addedIds.includes(id)) {
 				throw new InsightError("Dataset ID does not exist");
 			}
-		}catch (err) {
+		} catch (err) {
 			return Promise.reject(err);
 		}
 		// console.log("validate query passes");

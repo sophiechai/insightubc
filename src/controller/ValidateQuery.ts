@@ -77,7 +77,8 @@ export function isLogicComparisonValid(array: object[]) {
 			let keys = Object.keys(obj);
 			let values = Object.values(obj);
 			// Check there's only one key and value
-			if (keys.length !== 1 || values.length !== 1) {
+			// console.log(typeof values[0]);
+			if (keys.length !== 1 || values.length !== 1 || !Array.isArray(values[0])) {
 				throw new InsightError("Length Invalid");
 			}
 			let k = keys[0];
