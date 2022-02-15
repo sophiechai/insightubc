@@ -4,7 +4,8 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError, ResultTooLargeError,
+	NotFoundError,
+	ResultTooLargeError,
 } from "./IInsightFacade";
 
 import {checkValidSection, formatSection, writeToData, removeItem} from "./DatasetHelperFunctions";
@@ -118,7 +119,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		const fileName = dataPath + "/" + id + ".json";
 		try {
-			// fse.unlinkSync(fileName);
+			fse.unlinkSync(fileName);
 			let index = addedIds.indexOf(id);
 			addedIds = removeItem(addedIds, id);
 			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
@@ -142,7 +143,7 @@ export default class InsightFacade implements IInsightFacade {
 		// 		return Promise.resolve(id);
 		// 	}
 		// });
-		return Promise.resolve(id);
+		// return Promise.resolve(id);
 		//
 		// try {
 		// 	fse.unlinkSync(fileName);
@@ -160,19 +161,30 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		// console.log("THIS IS THE QUERY INPUT: ", query);
 		let q: any = query;
-		let isValid = isQueryValid(q, addedIds);
-		if (typeof isValid !== "boolean") {
-			return Promise.reject(isValid);
+		let id = "";
+		try {
+			id = isQueryValid(q);
+			// console.log("id: " + id);
+			if (!addedIds.includes(id)) {
+				throw new InsightError("Dataset ID does not exist");
+			}
+		}catch (err) {
+			return Promise.reject(err);
 		}
+		console.log("validate query passes");
 		// Figure out which dataset to query
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
-		let key: string = columnsValue[0];
-		let underscoreIdx = key.indexOf("_");
-		let idSubstring = key.substring(0,underscoreIdx);
 
 		// Get the data from json file... grab the content array
-		let jsonContent = fs.readFileSync("data/" + idSubstring + ".json").toString("utf8");
+		let jsonContent;
+		try {
+			console.log("id: " + id);
+			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
+		} catch (err) {
+			console.log("File not found");
+			return Promise.reject(new InsightError("File not found"));
+		}
 		let parsedJsonContent = JSON.parse(jsonContent);
 		let values: any[] = Object.values(parsedJsonContent);
 		contentArray = values[1];

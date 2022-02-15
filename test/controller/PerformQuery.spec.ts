@@ -20,7 +20,7 @@ describe("Dynamic folder test for performQuery", function () {
 	let courses: string;
 	let facade: IInsightFacade;
 	before(async function () {
-		courses = getContentFromArchives("one valid.zip");
+		courses = getContentFromArchives("courses.zip");
 		// let coursesSmaller = getContentFromArchives("courses_smaller.zip");
 		facade = new InsightFacade();
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
@@ -41,7 +41,7 @@ describe("Dynamic folder test for performQuery", function () {
 	folderTest<Input, Output, Error>(
 		"performQuery tests",
 		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/queries_small",
+		"./test/resources/queries",
 		{
 			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
 			assertOnError: assertError,
