@@ -19,9 +19,9 @@ function checkValidSection(section: object): boolean {
 	);
 }
 
-function formatSection(map: Map<string, number | string>, section: object){
+function formatSection(map: Map<string, number | string>, section: object) {
 	let keys: string[] = Object.keys(section);
-	let values: Array<string| number> = Object.values(section);
+	let values: Array<string | number> = Object.values(section);
 	let idxOfID = keys.indexOf("id");
 	let idxOfYear = keys.indexOf("Year");
 	let idxOfSection = keys.indexOf("Section");

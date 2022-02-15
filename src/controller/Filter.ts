@@ -278,7 +278,7 @@ export function sortResult(array: object[], orderKey: string): object[] {
 	let underscoreIdx = orderKey.indexOf("_");
 	let substring = orderKey.substring(underscoreIdx + 1);
 	let key = getDataKeyString(substring);
-	array.sort(function(a, b) {
+	array.sort(function (a, b) {
 		let propIdxA = Object.keys(a).indexOf(key);
 		let propIdxB = Object.keys(b).indexOf(key);
 		let valueA = Object.values(a)[propIdxA];
