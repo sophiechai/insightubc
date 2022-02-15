@@ -4,7 +4,8 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError, ResultTooLargeError,
+	NotFoundError,
+	ResultTooLargeError,
 } from "./IInsightFacade";
 
 import {checkValidSection, formatSection, writeToData, removeItem} from "./DatasetHelperFunctions";
@@ -118,7 +119,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		const fileName = dataPath + "/" + id + ".json";
 		try {
-			// fse.unlinkSync(fileName);
+			fse.unlinkSync(fileName);
 			let index = addedIds.indexOf(id);
 			addedIds = removeItem(addedIds, id);
 			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
@@ -128,51 +129,90 @@ export default class InsightFacade implements IInsightFacade {
 			console.error(err);
 			return Promise.reject(new InsightError("unlinkSync failed"));
 		}
+
+		// fse.unlink(fileName, function(err) {
+		// 	if (err) {
+		// 		// throw err;
+		// 		return Promise.reject(new InsightError("unlinkSync failed"));
+		// 	} else {
+		// 		console.log("Successfully deleted the file.");
+		// 		let index = addedIds.indexOf(id);
+		// 		addedIds = removeItem(addedIds, id);
+		// 		addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+		//
+		// 		return Promise.resolve(id);
+		// 	}
+		// });
+		// return Promise.resolve(id);
+		//
+		// try {
+		// 	fse.unlinkSync(fileName);
+		// 	let index = addedIds.indexOf(id);
+		// 	addedIds = removeItem(addedIds, id);
+		// 	addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+		// 	// console.log("File successfully deleted.");
+		// 	return Promise.resolve(id);
+		// } catch (err) {
+		// 	console.error(err);
+		// 	return Promise.reject(new InsightError("unlinkSync failed"));
+		// }
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		// console.log("THIS IS THE QUERY INPUT: ", query);
 		let q: any = query;
-		let isValid = isQueryValid(q, addedIds);
-		if (typeof isValid !== "boolean") {
-			return Promise.reject(isValid);
+		let id = "";
+		try {
+			id = isQueryValid(q);
+			// console.log("id: " + id);
+			if (!addedIds.includes(id)) {
+				throw new InsightError("Dataset ID does not exist");
+			}
+		} catch (err) {
+			return Promise.reject(err);
 		}
-		// Figure out which dataset to query
-		let optionsValue = q.OPTIONS;
-		let columnsValue = optionsValue.COLUMNS;
-		let key: string = columnsValue[0];
-		let underscoreIdx = key.indexOf("_");
-		let idSubstring = key.substring(0,underscoreIdx);
-
-		// Get the data from json file... grab the content array
-		let jsonContent = fs.readFileSync("data/" + idSubstring + ".json").toString("utf8");
-		let parsedJsonContent = JSON.parse(jsonContent);
-		let values: any[] = Object.values(parsedJsonContent);
-		contentArray = values[1];
-		// console.log("CONTENT ARRAY: ", contentArray);
-
-		// Call filter() which returns resulting array...
+		// console.log("validate query passes");
+		// // Figure out which dataset to query
+		// let optionsValue = q.OPTIONS;
+		// let columnsValue = optionsValue.COLUMNS;
+		//
+		// // Get the data from json file... grab the content array
+		// let jsonContent;
+		// try {
+		// 	console.log("id: " + id);
+		// 	jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
+		// } catch (err) {
+		// 	console.log("File not found");
+		// 	return Promise.reject(new InsightError("File not found"));
+		// }
+		// console.log("validate query passes");
+		// let parsedJsonContent = JSON.parse(jsonContent);
+		// let values: any[] = Object.values(parsedJsonContent);
+		// contentArray = values[1];
+		// // console.log("CONTENT ARRAY: ", contentArray);
+		//
+		// // Call filter() which returns resulting array...
 		let insightResultArray: InsightResult[] = [];
-		let result = filter(q.WHERE, contentArray);
-		if (result.length === 0) {
-			return Promise.resolve(insightResultArray);
-		}
-		if (result.length > 5000) {
-			return Promise.reject(new ResultTooLargeError("Result over 5000"));
-		}
-		// Check if it has ORDER property and then sort
-		let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
-		// console.log("HAS ORDER? ", hasOrder);
-		if (hasOrder) {
-			let orderKey = optionsValue.ORDER;
-			result = sortResult(result, orderKey);
-			// console.log("SORTED RESULT: ", result);
-		}
-		// Create the InsightResult objects and put in insightResultArray
-		for (const res of result) {
-			let ir = createInsightResult(res, columnsValue);
-			insightResultArray.push(ir);
-		}
+		// let result = filter(q.WHERE, contentArray);
+		// if (result.length === 0) {
+		// 	return Promise.resolve(insightResultArray);
+		// }
+		// if (result.length > 5000) {
+		// 	return Promise.reject(new ResultTooLargeError("Result over 5000"));
+		// }
+		// // Check if it has ORDER property and then sort
+		// let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
+		// // console.log("HAS ORDER? ", hasOrder);
+		// if (hasOrder) {
+		// 	let orderKey = optionsValue.ORDER;
+		// 	result = sortResult(result, orderKey);
+		// 	// console.log("SORTED RESULT: ", result);
+		// }
+		// // Create the InsightResult objects and put in insightResultArray
+		// for (const res of result) {
+		// 	let ir = createInsightResult(res, columnsValue);
+		// 	insightResultArray.push(ir);
+		// }
 		return Promise.resolve(insightResultArray);
 	}
 
