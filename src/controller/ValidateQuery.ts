@@ -225,7 +225,9 @@ function checkID(inputID: string) {
 		// console.log("in");
 		currentQuery = inputID;
 	}
-	return inputID === currentQuery;
+	if (inputID !== currentQuery) {
+		throw new InsightError("multiple datasets");
+	}
 }
 
 function checkCommand(key: string, value: any) {
