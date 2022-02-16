@@ -55,14 +55,14 @@ describe("InsightFacade", function () {
 		});
 
 		it("should list one datasets", async function () {
-			// return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
+			// return facade.addDataset("courses", courses, InsightDatasetKind.Sections)
 			//     .then((addedIds) => {
 			//        return facade.listDatasets();
 			//     })
 			//     .then((insightDatasets) => {
 			//        expect(insightDatasets).to.deep.equal([{
 			//           id: "courses",
-			//           kind: InsightDatasetKind.Courses,
+			//           kind: InsightDatasetKind.Sections,
 			//           numRows: 64612
 			//        }]);
 			//
@@ -99,12 +99,12 @@ describe("InsightFacade", function () {
 					// const expectedDatasets: InsightDataset[] = [
 					//    {
 					//       id: "courses",
-					//       kind: InsightDatasetKind.Courses,
+					//       kind: InsightDatasetKind.Sections,
 					//       numRows: 64612
 					//    },
 					//    {
 					//       id: "courses-2",
-					//       kind: InsightDatasetKind.Courses,
+					//       kind: InsightDatasetKind.Sections,
 					//       numRows: 64612
 					//    }
 					// ];
@@ -387,7 +387,7 @@ describe("Dynamic folder test for performQuery", function () {
 	folderTest<Input, Output, Error>(
 		"performQuery tests",
 		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/queries_test",
+		"./test/resources/queries",
 		{
 			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
 			assertOnError: assertError,

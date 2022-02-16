@@ -9,12 +9,14 @@ import {
 } from "./IInsightFacade";
 
 import {checkValidSection, formatSection, writeToData, removeItem} from "./DatasetHelperFunctions";
+import {Sections} from "./Sections";
 
 import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
 import {isQueryValid} from "./ValidateQuery";
-import {createInsightResult, filter, sortResult} from "./Filter";
+import {filter, createInsightResult, sortResult} from "./Filter";
+// import {} from "./FilterV2";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -27,7 +29,7 @@ let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
 let mapForEachFormattedSection: Map<string, number | string>;
 
-export let contentArray: object[];
+export let sectionArray: Sections[];
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
@@ -159,7 +161,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		// console.log("THIS IS THE QUERY INPUT: ", query);
+		sectionArray = [];
 		let q: any = query;
 		let id = "";
 		try {
@@ -171,48 +173,47 @@ export default class InsightFacade implements IInsightFacade {
 		} catch (err) {
 			return Promise.reject(err);
 		}
-		// console.log("validate query passes");
-		// // Figure out which dataset to query
-		// let optionsValue = q.OPTIONS;
-		// let columnsValue = optionsValue.COLUMNS;
-		//
-		// // Get the data from json file... grab the content array
-		// let jsonContent;
-		// try {
-		// 	console.log("id: " + id);
-		// 	jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
-		// } catch (err) {
-		// 	console.log("File not found");
-		// 	return Promise.reject(new InsightError("File not found"));
-		// }
-		// console.log("validate query passes");
-		// let parsedJsonContent = JSON.parse(jsonContent);
-		// let values: any[] = Object.values(parsedJsonContent);
-		// contentArray = values[1];
-		// // console.log("CONTENT ARRAY: ", contentArray);
-		//
-		// // Call filter() which returns resulting array...
+		// Get the data from json file... grab the content array
+		let jsonContent;
+		try {
+			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
+		} catch (err) {
+			return Promise.reject(new InsightError("Reading file not found"));
+		}
+		console.log("validate query passes");
+		let parsedJsonContent = JSON.parse(jsonContent);
+		let kind: InsightDatasetKind = parsedJsonContent.kind;
+		let content: any[] = parsedJsonContent.contents;
+		for (const item of content) {
+			let section: Sections = new Sections(item);
+			sectionArray.push(section);
+		}
+		console.log("length: " + sectionArray.length);
+		// Call filter() which returns resulting array...
 		let insightResultArray: InsightResult[] = [];
-		// let result = filter(q.WHERE, contentArray);
-		// if (result.length === 0) {
-		// 	return Promise.resolve(insightResultArray);
-		// }
-		// if (result.length > 5000) {
-		// 	return Promise.reject(new ResultTooLargeError("Result over 5000"));
-		// }
-		// // Check if it has ORDER property and then sort
-		// let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
-		// // console.log("HAS ORDER? ", hasOrder);
-		// if (hasOrder) {
-		// 	let orderKey = optionsValue.ORDER;
-		// 	result = sortResult(result, orderKey);
-		// 	// console.log("SORTED RESULT: ", result);
-		// }
-		// // Create the InsightResult objects and put in insightResultArray
-		// for (const res of result) {
-		// 	let ir = createInsightResult(res, columnsValue);
-		// 	insightResultArray.push(ir);
-		// }
+
+		filter(q.WHERE, "");
+
+		if (sectionArray.length === 0) {
+			return Promise.resolve(insightResultArray);
+		}
+		if (sectionArray.length > 5000) {
+			return Promise.reject(new ResultTooLargeError("Result over 5000"));
+		}
+
+		// Figure out which dataset to query
+		let optionsValue = q.OPTIONS;
+		let columnsValue = optionsValue.COLUMNS;
+
+		// Check if it has ORDER property and then sort
+		let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
+		if (hasOrder) {
+			let orderKey = optionsValue.ORDER;
+			sortResult(orderKey);
+		}
+		// Create the InsightResult objects and put in insightResultArray
+		createInsightResult(columnsValue, id, insightResultArray);
+
 		return Promise.resolve(insightResultArray);
 	}
 

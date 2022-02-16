@@ -72,13 +72,16 @@ export function isLogicComparisonValid(array: object[]) {
 		if (array.length === 0) {
 			throw new InsightError("Length Invalid");
 		}
+		if (!Array.isArray(array)) {
+			throw new InsightError("Must be an array");
+		}
 		// Loop through array checking if valid filters
 		for (const obj of array) {
 			let keys = Object.keys(obj);
 			let values = Object.values(obj);
 			// Check there's only one key and value
 			// console.log(typeof values[0]);
-			if (keys.length !== 1 || values.length !== 1 || !Array.isArray(values[0])) {
+			if (keys.length !== 1 || values.length !== 1) {
 				throw new InsightError("Length Invalid");
 			}
 			let k = keys[0];
@@ -205,12 +208,11 @@ export function isColumnsValid(list: string[]) {
 			throw err;
 		}
 	}
-
 }
 
 export function isOrderValid(orderKey: string, columnKeys: string[]) {
 	try {
-		if(!columnKeys.includes(orderKey)) {
+		if (!columnKeys.includes(orderKey)) {
 			throw new InsightError("Order key Invalid");
 		}
 	} catch (err) {
