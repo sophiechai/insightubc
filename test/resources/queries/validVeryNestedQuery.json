@@ -1,0 +1,93 @@
+{
+	"title": "performs complex query from c1 example",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"AND": [
+						{
+							"OR": [
+								{
+									"AND": [
+										{
+											"LT": {
+												"courses_pass": 3
+											}
+										},
+										{
+											"OR": [
+												{
+													"EQ": {
+														"courses_avg": 30
+													}
+												},
+												{
+													"NOT": {
+														"IS": {
+															"courses_instructor": "*a*"
+														}
+													}
+												}
+											]
+										},
+										{
+											"IS": {
+												"courses_id": "599"
+											}
+										}
+									]
+								},
+								{
+									"IS": {
+										"courses_dept": "*th"
+									}
+								}
+							]
+						},
+						{
+							"IS": {
+								"courses_dept": "adhe"
+							}
+						},
+						{
+							"LT": {
+								"courses_avg": 91
+							}
+						}
+					]
+				},
+				{
+					"GT": {
+						"courses_avg": 99
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_id",
+				"courses_avg"
+			],
+			"ORDER": "courses_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"courses_dept": "cnps",
+			"courses_id": "574",
+			"courses_avg": 99.19
+		},
+		{
+			"courses_dept": "math",
+			"courses_id": "527",
+			"courses_avg": 99.78
+		},
+		{
+			"courses_dept": "math",
+			"courses_id": "527",
+			"courses_avg": 99.78
+		}
+	]
+}

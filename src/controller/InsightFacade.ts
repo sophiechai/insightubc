@@ -205,13 +205,15 @@ export default class InsightFacade implements IInsightFacade {
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
 
+		// Create the InsightResult objects and put in insightResultArray
+		createInsightResult(columnsValue, id, insightResultArray);
+
 		// Check if it has ORDER property and then sort
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;
-			sortResult(orderKey);
+			sortResult(orderKey, insightResultArray);
 		}
-		// Create the InsightResult objects and put in insightResultArray
-		createInsightResult(columnsValue, id, insightResultArray);
+
 		return Promise.resolve(insightResultArray);
 	}
 

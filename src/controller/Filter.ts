@@ -138,12 +138,12 @@ export function createInsightResult(columnKeys: string[], id: string, resultArra
 	}
 }
 
-export function sortResult(orderKey: string) {
-	let sortOn: string = getProperty(orderKey);
+export function sortResult(orderKey: string, resultArray: InsightResult[]) {
+	// let sortOn: string = getProperty(orderKey);
 
-	section.sort((a: Sections, b: Sections) => {
-		let fa = a.map.get(sortOn)!;
-		let fb = b.map.get(sortOn)!;
+	resultArray.sort((a, b) => {
+		let fa = a[orderKey];
+		let fb = b[orderKey];
 
 		if (fa < fb) {
 			return -1;
