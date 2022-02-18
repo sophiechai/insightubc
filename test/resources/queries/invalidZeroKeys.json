@@ -1,0 +1,25 @@
+{
+	"title": "no Keys in GT",
+	"input":
+	{
+	"WHERE": {
+		"OR": [
+			{
+				"AND": {
+
+				}
+			}
+		]
+	},
+	"OPTIONS": {
+		"COLUMNS": [
+			"courses_dept",
+			"courses_id",
+			"courses_avg"
+		],
+		"ORDER": "courses_avg"
+	}
+},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

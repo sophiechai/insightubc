@@ -15,7 +15,7 @@ import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
 import {isQueryValid} from "./ValidateQuery";
-import {filter, createInsightResult, sortResult} from "./Filter";
+import {filter, createInsightResult, sortResult, checkSectionArrayFinalLength} from "./Filter";
 // import {} from "./FilterV2";
 
 /**
@@ -182,23 +182,23 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		console.log("validate query passes");
 		let parsedJsonContent = JSON.parse(jsonContent);
-		let kind: InsightDatasetKind = parsedJsonContent.kind;
 		let content: any[] = parsedJsonContent.contents;
 		for (const item of content) {
 			let section: Sections = new Sections(item);
 			sectionArray.push(section);
 		}
-		console.log("length: " + sectionArray.length);
 		// Call filter() which returns resulting array...
 		let insightResultArray: InsightResult[] = [];
+		filter(q.WHERE, "INIT");
 
-		filter(q.WHERE, "");
-
-		if (sectionArray.length === 0) {
-			return Promise.resolve(insightResultArray);
-		}
-		if (sectionArray.length > 5000) {
-			return Promise.reject(new ResultTooLargeError("Result over 5000"));
+		try {
+			checkSectionArrayFinalLength();
+		} catch (err) {
+			if (err instanceof InsightError) {
+				return Promise.resolve(insightResultArray);
+			} else if (err instanceof ResultTooLargeError) {
+				return Promise.reject(err);
+			}
 		}
 
 		// Figure out which dataset to query
@@ -206,14 +206,12 @@ export default class InsightFacade implements IInsightFacade {
 		let columnsValue = optionsValue.COLUMNS;
 
 		// Check if it has ORDER property and then sort
-		let hasOrder = Object.prototype.hasOwnProperty.call(optionsValue, "ORDER");
-		if (hasOrder) {
+		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;
 			sortResult(orderKey);
 		}
 		// Create the InsightResult objects and put in insightResultArray
 		createInsightResult(columnsValue, id, insightResultArray);
-
 		return Promise.resolve(insightResultArray);
 	}
 
