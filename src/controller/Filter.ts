@@ -1,9 +1,7 @@
 import {InsightError, InsightResult, ResultTooLargeError} from "./IInsightFacade";
 import {Sections} from "./Sections";
 import {sectionArray} from "./InsightFacade";
-import mapSort from "mapsort";
-// import timSort from "timsort";
-import {access} from "fs";
+// import {access} from "fs";
 
 let section: Sections[];
 
