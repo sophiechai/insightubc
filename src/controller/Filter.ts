@@ -1,11 +1,14 @@
 import {InsightResult} from "./IInsightFacade";
-import {contentArray} from "./InsightFacade";
+import {Sections} from "./Sections";
+import {sectionArray} from "./InsightFacade";
+import {access} from "fs";
 
-let data: object[];
+let section: Sections[];
 
 // TRUST THE NATURAL RECURSION...
-export function filter(instruction: object, dataArray: object[]): object[] {
-	data = dataArray;
+export function filter(instruction: object, message: string) {
+	section = sectionArray;
+
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let v = values[0];
@@ -13,283 +16,199 @@ export function filter(instruction: object, dataArray: object[]): object[] {
 	// console.log("THIS IS THE KEY: ", keys[0]);
 	switch (keys[0]) {
 		case "GT":
-			data = filterGT(v);
+			filterGT(v, message);
 			break;
 		case "LT":
-			data = filterLT(v);
+			filterLT(v, message);
 			break;
 		case "EQ":
-			data = filterEQ(v);
+			filterEQ(v, message);
 			break;
 		case "IS":
-			data = filterIS(v);
+			filterIS(v, message);
 			break;
 		case "AND":
-			for (const inst of v) {
-				data = filter(inst, data);
-			}
+			filterAND(v);
 			break;
 		case "OR":
-			data = filterOR(v, data);
+			filterOR(v);
 			break;
-		case "NOT":
-			data = filter(v, data);
-			data = filterNOT();
-			break;
+		// case "NOT":
+		// 	filterNOT(v, message);
+		// 	break;
 		default:
 			console.log("UNEXPECTED CASE");
 	}
-	return data;
 }
 
-export function filterGT(instruction: object): object[] {
-	let result: object[] = [];
+function getProperty(input: string): string {
+	let idx = input.indexOf("_");
+	let str = input.substring(idx + 1);
+	return str;
+}
+
+export function filterGT(instruction: object, message: string) {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
 	let v: number = values[0];
 	// Get the substring for what specific section I need to compare
-	let underscoreIdx = k.indexOf("_");
-	let section = k.substring(underscoreIdx + 1);
-	// Get the correct corresponding string for that section in raw data
-	let rawDataSection = getDataKeyString(section);
-	for (const d of data) {
-		// Get value of that section of the raw data
-		let sections = Object.keys(d);
-		let sectionValues = Object.values(d);
-		let idx = sections.indexOf(rawDataSection);
-		// Compare and place in result[] if meets requirement
-		if (sectionValues[idx] > v) {
-			result.push(d);
+	let property = getProperty(k);
+	if (message === "OR") {
+		for (const item of section) {
+			let x: string | number = item.map.get(property)!;
+			if (x > v) {
+				item.flag = 1;
+			}
 		}
+	} else {
+		section = section.filter((x) => x.map.get(property)! > v);
 	}
-	// console.log("RESULT ARRAY: ", result);
-	return result;
 }
 
-export function filterLT(instruction: object): object[] {
-	let result: object[] = [];
+export function filterLT(instruction: object, message: string) {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
 	let v: number = values[0];
 	// Get the substring for what specific section I need to compare
-	let underscoreIdx = k.indexOf("_");
-	let section = k.substring(underscoreIdx + 1);
-	// Get the correct corresponding string for that section in raw data
-	let rawDataSection = getDataKeyString(section);
-	for (const d of data) {
-		// Get value of that section of the raw data
-		let sections = Object.keys(d);
-		let sectionValues = Object.values(d);
-		let idx = sections.indexOf(rawDataSection);
-		// Compare and place in result[] if meets requirement
-		if (sectionValues[idx] < v) {
-			result.push(d);
+	let property = getProperty(k);
+	if (message === "OR") {
+		for (const item of section) {
+			let x: string | number = item.map.get(property)!;
+			if (x < v) {
+				item.flag = 1;
+			}
 		}
+	} else {
+		section = section.filter((x) => x.map.get(property)! < v);
 	}
-	// console.log("RESULT ARRAY: ", result);
-	return result;
 }
 
-export function filterEQ(instruction: object): object[] {
-	let result: object[] = [];
+export function filterEQ(instruction: object, message: string) {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
 	let v: number = values[0];
 	// Get the substring for what specific section I need to compare
-	let underscoreIdx = k.indexOf("_");
-	let section = k.substring(underscoreIdx + 1);
-	// Get the correct corresponding string for that section in raw data
-	let rawDataSection = getDataKeyString(section);
-	for (const d of data) {
-		// Get value of that section of the raw data
-		let sections = Object.keys(d);
-		let sectionValues = Object.values(d);
-		let idx = sections.indexOf(rawDataSection);
-		// Compare and place in result[] if meets requirement
-		if (sectionValues[idx] === v) {
-			result.push(d);
+	let property = getProperty(k);
+	if (message === "OR") {
+		for (const item of section) {
+			let x: string | number = item.map.get(property)!;
+			if (x === v) {
+				item.flag = 1;
+			}
 		}
+	} else {
+		section = section.filter((x) => x.map.get(property)! === v);
 	}
-	// console.log("RESULT ARRAY: ", result);
-	return result;
 }
 
-export function filterIS(instruction: object): object[] {
-	let result: object[] = [];
+export function filterIS(instruction: object, message: string) {
 	let keys = Object.keys(instruction);
 	let values = Object.values(instruction);
 	let k = keys[0];
 	let v: string = values[0];
-	// console.log("THE STRING TO MATCH: ", v);
 	// Get the substring for what specific section I need to compare
-	let underscoreIdx = k.indexOf("_");
-	let section = k.substring(underscoreIdx + 1);
-	// Get the correct corresponding string for that section in raw data
-	let rawDataSection = getDataKeyString(section);
-	// All strings are OK so return entire data
-	if (v === "*") {
-		return data;
-	}
-	// Check if input string has asterisk at beginning and/or end
-	let beginAsteriskIdx = v.indexOf("*");
-	let endAsteriskIdx = v.indexOf("*", 1);
-	for (const d of data) {
-		// Get value of that section of the raw data
-		let sections = Object.keys(d);
-		let sectionValues = Object.values(d);
-		let sectionIdx = sections.indexOf(rawDataSection);
-		let sectionValue = sectionValues[sectionIdx];
-		// console.log("SECTION VALUE I CHECK: ", sectionValue);
-		// Beginning only asterisk
-		if (beginAsteriskIdx !== -1 && endAsteriskIdx === -1) {
-			if (beginningAsteriskOnly(v, sectionValue)) {
-				result.push(d);
-			}
-		} else if (beginAsteriskIdx === -1 && endAsteriskIdx !== -1) {
-			if (endAsteriskOnly(v, sectionValue)) {
-				result.push(d);
-			}
-		} else if (beginAsteriskIdx !== -1 && endAsteriskIdx !== -1) {
-			let inputSubstr = v.substring(1, v.length - 1);
-			let idx = sectionValue.indexOf(inputSubstr);
-			if (idx !== -1) {
-				result.push(d);
+	let property = getProperty(k);
+	if (v.charAt(0) === "*" && v.charAt(v.length - 1) === "*") {
+		v = v.substring(1, v.length - 1);
+		if (message === "OR") {
+			section.forEach((x) => (x.flag = 1));
+		}
+	} else if (v.charAt(0) === "*") {
+		v = v.substring(1);
+		if (message === "OR") {
+			for (const item of section) {
+				let x: string | number = item.map.get(property)!;
+				if (String(x).endsWith(v)) {
+					item.flag = 1;
+				}
 			}
 		} else {
-			if (v === sectionValue) {
-				result.push(d);
+			section = section.filter((x) => String(x.map.get(property)!).endsWith(v));
+		}
+	} else if (v.charAt(v.length - 1) === "*") {
+		v = v.substring(0, v.length - 1);
+		if (message === "OR") {
+			for (const item of section) {
+				let x: string | number = item.map.get(property)!;
+				if (String(x).startsWith(v)) {
+					item.flag = 1;
+				}
 			}
+		} else {
+			section = section.filter((x) => String(x.map.get(property)!).startsWith(v));
+		}
+	} else {
+		if (message === "OR") {
+			for (const item of section) {
+				let x: string | number = item.map.get(property)!;
+				if (x === v) {
+					item.flag = 1;
+				}
+			}
+		} else {
+			section = section.filter((x) => x.map.get(property)! === v);
 		}
 	}
-	return result;
 }
 
-function beginningAsteriskOnly(inputString: string, sectionValue: string): boolean {
-	let inputSubstr = inputString.substring(1);
-	// Check if the value has the substring
-	let idx = sectionValue.indexOf(inputSubstr);
-	if (idx === -1) {
-		return false;
+export function filterAND(instruction: object[]) {
+	for (const item of instruction) {
+		filter(item, "");
 	}
-	let valSubstr = sectionValue.substring(idx);
-	return valSubstr === inputSubstr;
 }
 
-function endAsteriskOnly(inputString: string, sectionValue: string): boolean {
-	let inputSubstr = inputString.substring(0, inputString.length - 1);
-	// console.log("HOPE I INDEXED CORRECTLY SUBSTRING: ", inputSubstr);
-	// Check if the value has the substring
-	let idx = sectionValue.indexOf(inputSubstr);
-	return !(idx === -1 || idx !== 0);
-}
-
-export function filterOR(instruction: object[], ogData: object[]): object[] {
-	let result: object[] = [];
-	for (const inst of instruction) {
-		data = filter(inst, ogData);
-		result = result.concat(data);
+export function filterOR(instruction: object[]) {
+	for (const item of instruction) {
+		filter(item, "OR");
 	}
-	// let stringified: string[] = [];
-	// // console.log("LENGTH OF STRINGIFIED: ", stringified.length);
-	// for (const r of result) {
-	// 	stringified.push(JSON.stringify(r));
-	// }
-	// let res = stringified.filter(function(element, index,array) {
-	// 	return array.indexOf(element) === index;
-	// });
-	// let newResult = [];
-	// for (const r of res) {
-	// 	newResult.push(JSON.parse(r));
-	// }
-	// return newResult;
-	let set = new Set(result);
-	return Array.from(set);
+	section = section.filter((x) => x.flag === 1);
+	section.forEach((x) => (x.flag = 0));
 }
 
-export function filterNOT(): object[] {
-	let original = contentArray;
-	for (const d of data) {
-		for (const o of original) {
-			if (JSON.stringify(d) === JSON.stringify(o)) {
-				let idx = original.indexOf(o);
-				original.splice(idx, 1);
-				// console.log("I AM REMOVING ELEMENT OF IDX: ", idx);
-			}
+export function filterNOT() {
+	// let original = contentArray;
+	// for (const d of data) {
+	// 	for (const o of original) {
+	// 		if (JSON.stringify(d) === JSON.stringify(o)) {
+	// 			let idx = original.indexOf(o);
+	// 			original.splice(idx, 1);
+	// 			// console.log("I AM REMOVING ELEMENT OF IDX: ", idx);
+	// 		}
+	// 	}
+	// }
+	// // console.log("RESULTING ARRAY: ", contentArray);
+	// return original;
+}
+
+export function createInsightResult(columnKeys: string[], id: string, resultArray: InsightResult[]) {
+	let output: any = {};
+	// let resultArray: InsightResult[] = [];
+	for (const item of section) {
+		for (const item1 of columnKeys) {
+			console.log("column: ", item1);
+			console.log("item: ", item.map.get(getProperty(item1)));
+			output[item1] = item.map.get(getProperty(item1));
 		}
-	}
-	// console.log("RESULTING ARRAY: ", contentArray);
-	return original;
-}
-
-function getDataKeyString(str: string): string {
-	switch (str) {
-		case "dept":
-			return "Subject";
-		case "id":
-			return "Course";
-		case "avg":
-			return "Avg";
-		case "instructor":
-			return "Professor";
-		case "title":
-			return "Title";
-		case "pass":
-			return "Pass";
-		case "fail":
-			return "Fail";
-		case "audit":
-			return "Audit";
-		case "uuid":
-			return "id";
-		case "year":
-			return "Year";
-		default:
-			return "";
+		resultArray.push({...output});
 	}
 }
 
-export function createInsightResult(result: object, columnKeys: string[]): InsightResult {
-	let keys: string[] = [];
-	for (const k of columnKeys) {
-		let underscoreIdx = k.indexOf("_");
-		let substring = k.substring(underscoreIdx + 1);
-		keys.push(getDataKeyString(substring));
-	}
-	let indices: number[] = [];
-	let properties: string[] = Object.keys(result);
-	for (const k of keys) {
-		indices.push(properties.indexOf(k));
-	}
-	let propertyValues = Object.values(result);
-	let insightResult: InsightResult = {};
-	for (let i = 0; i < columnKeys.length; i++) {
-		let value = propertyValues[indices[i]];
-		let k: string = columnKeys[i];
-		insightResult[k] = value;
-	}
-	// console.log("INSIGHT RESULT OBJECT: ", insightResult);
-	return insightResult;
-}
+export function sortResult(orderKey: string) {
+	let sortOn: string = getProperty(orderKey);
 
-export function sortResult(array: object[], orderKey: string): object[] {
-	let underscoreIdx = orderKey.indexOf("_");
-	let substring = orderKey.substring(underscoreIdx + 1);
-	let key = getDataKeyString(substring);
-	array.sort(function (a, b) {
-		let propIdxA = Object.keys(a).indexOf(key);
-		let propIdxB = Object.keys(b).indexOf(key);
-		let valueA = Object.values(a)[propIdxA];
-		let valueB = Object.values(b)[propIdxB];
-		if (valueA < valueB) {
+	section.sort((a: Sections, b: Sections) => {
+		let fa = a.map.get(sortOn)!;
+		let fb = b.map.get(sortOn)!;
+
+		if (fa < fb) {
 			return -1;
 		}
-		if (valueA > valueB) {
+		if (fa > fb) {
 			return 1;
 		}
 		return 0;
 	});
-	return array;
 }
