@@ -13,7 +13,9 @@
 		"express": "4.17.2",
 		"fs-extra": "10.0.0",
 		"jszip": "3.7.1",
-		"parse5": "6.0.1"
+		"mapsort": "^1.0.6",
+		"parse5": "6.0.1",
+		"timsort": "^0.3.0"
 	},
 	"devDependencies": {
 		"@tsconfig/node16": "1.0.2",
@@ -24,6 +26,7 @@
 		"@types/mocha": "9.0.0",
 		"@types/node": "16.11.7",
 		"@types/parse5": "6.0.3",
+		"@types/timsort": "^0.3.0",
 		"@typescript-eslint/eslint-plugin": "5.9.0",
 		"@typescript-eslint/parser": "5.9.0",
 		"@ubccpsc310/folder-test": "2.0.0",

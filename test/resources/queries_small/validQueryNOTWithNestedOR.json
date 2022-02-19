@@ -1,0 +1,54 @@
+{
+	"title": "Valid NOT with nested OR",
+	"input": {
+		"WHERE": {
+			"NOT": {
+				"OR": [
+					{
+						"EQ": {
+							"courses_avg": 70.96
+						}
+					},
+					{
+						"EQ": {
+							"courses_avg": 72.21
+						}
+					}
+				]
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_avg"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.92
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.92
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.48
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.48
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.6
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 71.6
+		}
+	]
+}

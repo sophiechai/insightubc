@@ -1,0 +1,49 @@
+{
+	"title": "Valid OR with nested AND",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"AND": [
+						{
+							"EQ": {
+								"courses_avg": 70.96
+							}
+						}
+					]
+				},
+				{
+					"EQ": {
+						"courses_avg": 72.21
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_avg"
+			],
+			"ORDER": "courses_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"courses_dept": "anth",
+			"courses_avg": 70.96
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 70.96
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 72.21
+		},
+		{
+			"courses_dept": "anth",
+			"courses_avg": 72.21
+		}
+	]
+}
