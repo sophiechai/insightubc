@@ -92,7 +92,7 @@ export default class InsightFacade implements IInsightFacade {
 				});
 				promises.push(promise);
 			});
-			return Promise.all(promises).then((list) => {
+			return Promise.all(promises).then(() => {
 				// console.log("tempList length 2: " + tempList.length);
 
 				if (tempList.length === 0) {
@@ -119,34 +119,7 @@ export default class InsightFacade implements IInsightFacade {
 		if (!addedIds.includes(id)) {
 			return Promise.reject(new NotFoundError("Dataset not found"));
 		}
-		const fileName = dataPath + "/" + id + ".json";
-		try {
-			fse.unlinkSync(fileName);
-			let index = addedIds.indexOf(id);
-			addedIds = removeItem(addedIds, id);
-			addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
-			// console.log("File successfully deleted.");
-			return Promise.resolve(id);
-		} catch (err) {
-			console.error(err);
-			return Promise.reject(new InsightError("unlinkSync failed"));
-		}
-
-		// fse.unlink(fileName, function(err) {
-		// 	if (err) {
-		// 		// throw err;
-		// 		return Promise.reject(new InsightError("unlinkSync failed"));
-		// 	} else {
-		// 		console.log("Successfully deleted the file.");
-		// 		let index = addedIds.indexOf(id);
-		// 		addedIds = removeItem(addedIds, id);
-		// 		addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
-		//
-		// 		return Promise.resolve(id);
-		// 	}
-		// });
-		// return Promise.resolve(id);
-		//
+		// const fileName = dataPath + "/" + id + ".json";
 		// try {
 		// 	fse.unlinkSync(fileName);
 		// 	let index = addedIds.indexOf(id);
@@ -158,6 +131,28 @@ export default class InsightFacade implements IInsightFacade {
 		// 	console.error(err);
 		// 	return Promise.reject(new InsightError("unlinkSync failed"));
 		// }
+
+		const deleteFile = async (fileName: string) => {
+			try {
+				let index = addedIds.indexOf(id);
+				addedIds = removeItem(addedIds, id);
+				addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+				await fse.unlink(fileName);
+				console.log("Successfully removed file!");
+				// console.log("File successfully deleted.");
+				return Promise.resolve(id);
+			} catch (err) {
+				console.log(err);
+			}
+		};
+
+		// Try it
+		const fileName = dataPath + "/" + id + ".json";
+		deleteFile(fileName).catch((err) => {
+			console.log(err);
+			return Promise.reject(new InsightError("unlinkSync failed"));
+		});
+		return Promise.resolve(id);
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
