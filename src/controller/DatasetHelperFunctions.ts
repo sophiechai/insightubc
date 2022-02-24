@@ -59,4 +59,22 @@ function removeItem<T>(arr: T[], value: T): T[] {
 	return arr;
 }
 
-export {checkValidSection, formatSection, writeToData, removeItem};
+function parseResult(promise: Promise<string>,
+	mapForEachFormattedSection: Map<string, number | string>, tempList: any[]) {
+	promise.then(function (fileData) {
+		const dataObj = JSON.parse(fileData)["result"];
+		if (dataObj.length !== 0) {
+			dataObj.forEach((section: object) => {
+				// console.log("section is " + JSON.stringify(section));
+				const validSection = checkValidSection(section);
+				if (validSection) {
+					formatSection(mapForEachFormattedSection, section);
+					let modifiedSection = Object.fromEntries(mapForEachFormattedSection);
+					tempList.push(modifiedSection);
+				}
+			});
+		}
+	});
+}
+
+export {writeToData, removeItem, parseResult};
