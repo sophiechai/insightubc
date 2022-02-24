@@ -8,7 +8,7 @@ import {
 	ResultTooLargeError,
 } from "./IInsightFacade";
 
-import {checkValidSection, formatSection, writeToData, removeItem} from "./DatasetHelperFunctions";
+import {writeToData, removeItem, parseResult} from "./DatasetHelperFunctions";
 import {Sections} from "./Sections";
 
 import JSZip from "jszip";
@@ -76,20 +76,7 @@ export default class InsightFacade implements IInsightFacade {
 				}
 				// console.log("file is " + file);
 				const promise = file.async("string");
-				promise.then(function (fileData) {
-					const dataObj = JSON.parse(fileData)["result"];
-					if (dataObj.length !== 0) {
-						dataObj.forEach((section: object) => {
-							// console.log("section is " + JSON.stringify(section));
-							const validSection = checkValidSection(section);
-							if (validSection) {
-								formatSection(mapForEachFormattedSection, section);
-								let modifiedSection = Object.fromEntries(mapForEachFormattedSection);
-								tempList.push(modifiedSection);
-							}
-						});
-					}
-				});
+				parseResult(promise, mapForEachFormattedSection, tempList);
 				promises.push(promise);
 			});
 			return Promise.all(promises).then(() => {

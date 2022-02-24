@@ -1,4 +1,5 @@
 export class Sections {
+
 	public get map(): Map<string, number | string> {
 		return this._map;
 	}
@@ -6,6 +7,7 @@ export class Sections {
 	public set map(value: Map<string, number | string>) {
 		this._map = value;
 	}
+
 	private _map: Map<string, number | string>;
 
 	public constructor(jsonStringInput: string) {
