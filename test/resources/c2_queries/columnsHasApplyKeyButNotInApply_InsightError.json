@@ -1,0 +1,26 @@
+{
+	"title": "COLUMNS has an applykey that is not defined in the APPLY section in TRANSFORMATIONS --> InsightError",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"asdf"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"courses_avg"
+			],
+			"APPLY": [
+				{
+					"asd": { "MAX": "courses_pass" }
+				},
+				{
+					"asdfg": { "MIN": "courses_fail" }
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
