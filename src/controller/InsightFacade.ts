@@ -37,8 +37,8 @@ export default class InsightFacade implements IInsightFacade {
 		addedIds = [];
 		addedDatasets = [];
 		mapForEachFormattedSection = new Map<string, number | string>();
-		console.log("InsightFacadeImpl::init()");
-		console.log(dataPath);
+		// console.log("InsightFacadeImpl::init()");
+		// console.log(dataPath);
 		try {
 			if (!fs.existsSync(dataPath)) {
 				fse.mkdir(dataPath, function (err) {
