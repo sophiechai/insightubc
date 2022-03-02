@@ -39,13 +39,19 @@ export default class InsightFacade implements IInsightFacade {
 		mapForEachFormattedSection = new Map<string, number | string>();
 		console.log("InsightFacadeImpl::init()");
 		console.log(dataPath);
-		fse.mkdir(dataPath, function (err) {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log("New directory successfully created.");
+		try {
+			if (!fs.existsSync(dataPath)) {
+				fse.mkdir(dataPath, function (err) {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log("New directory successfully created.");
+					}
+				});
 			}
-		});
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
