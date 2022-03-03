@@ -1,10 +1,10 @@
 import {InsightError} from "./IInsightFacade";
 
-export class ValidateQueryMain {
-	private currentQuery: string | undefined;
-	private readonly query: object;
+export abstract class ValidateQueryMain {
+	protected currentQuery: string | undefined;
+	protected readonly query: object;
 
-	public constructor(query: object) {
+	protected constructor(query: object) {
 		this.query = query;
 	}
 
@@ -182,48 +182,15 @@ export class ValidateQueryMain {
 		}
 	}
 
-	private checkKeys(key: string, typeOfKey: string) {
+	private checkKeys(key: string, typeOfKey: string): void {
 		if (!key.includes("_")) {
 			throw new InsightError("Query Keys Invalid");
 		}
 		let underscoreIdx = key.indexOf("_");
 		let keyProperty = key.substring(underscoreIdx + 1);
 		this.checkID(key.substring(0, underscoreIdx));
-		if (typeOfKey === "string") {
-			if (
-				keyProperty !== "dept" &&
-				keyProperty !== "id" &&
-				keyProperty !== "instructor" &&
-				keyProperty !== "title" &&
-				keyProperty !== "uuid"
-			) {
-				throw new InsightError("Query Properties Invalid");
-			}
-		} else if (typeOfKey === "number") {
-			if (
-				keyProperty !== "avg" &&
-				keyProperty !== "pass" &&
-				keyProperty !== "fail" &&
-				keyProperty !== "audit" &&
-				keyProperty !== "year"
-			) {
-				throw new InsightError("Query Properties Invalid");
-			}
-		} else {
-			if (
-				keyProperty !== "dept" &&
-				keyProperty !== "id" &&
-				keyProperty !== "instructor" &&
-				keyProperty !== "title" &&
-				keyProperty !== "avg" &&
-				keyProperty !== "pass" &&
-				keyProperty !== "fail" &&
-				keyProperty !== "audit" &&
-				keyProperty !== "year" &&
-				keyProperty !== "uuid"
-			) {
-				throw new InsightError("Query Properties Invalid");
-			}
-		}
+		this.checkKeyProperty(typeOfKey, keyProperty);
 	}
+
+	protected abstract checkKeyProperty(typeOfKey: string, keyProperty: string): void;
 }

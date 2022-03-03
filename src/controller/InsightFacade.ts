@@ -14,10 +14,9 @@ import {Sections} from "./Sections";
 import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
-// import {isQueryValid} from "./ValidateQuery";
 import {filter, createInsightResult, sortResult, checkSectionArrayFinalLength} from "./Filter";
 import {ValidateQueryMain} from "./ValidateQueryMain";
-// import {} from "./FilterV2";
+import {ValidateQueryCourses} from "./ValidateQueryCourses";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -154,10 +153,8 @@ export default class InsightFacade implements IInsightFacade {
 		let q: any = query;
 		let id = "";
 		try {
-			let validateQueryObject = new ValidateQueryMain(q);
-			// id = isQueryValid(q);
+			let validateQueryObject: ValidateQueryMain = new ValidateQueryCourses(q);
 			id = validateQueryObject.isQueryValid();
-			// console.log("id: " + id);
 			if (!addedIds.includes(id)) {
 				throw new InsightError("Dataset ID does not exist");
 			}
