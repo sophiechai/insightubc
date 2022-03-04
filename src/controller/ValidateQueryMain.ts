@@ -231,6 +231,7 @@ export abstract class ValidateQueryMain {
 		if (!Array.isArray(values[1])) {
 			throw new InsightError("APPLY value is not an array");
 		}
+		this.checkApply(values[1]);
 	}
 
 	private checkGroup(groupArray: string[]) {
@@ -243,7 +244,51 @@ export abstract class ValidateQueryMain {
 		}
 	}
 
+	// INPUT: [ (APPLYRULE (, APPLYRULE )* )? ]
 	private checkApply(applyArray: object[]) {
 		// TODO: Implement Apply check
+		// applyRule: { applykey : { APPLYTOKEN : key }}
+		for (const applyRule of applyArray) {
+			let ruleKeys = Object.keys(applyRule);
+			let ruleValues = Object.values(applyRule);
+			if (ruleKeys.length !== 1) {
+				throw new InsightError("APPLYRULE should have 1 key applykey but has " + ruleKeys.length);
+			}
+			this.checkApplyKey(ruleKeys[0]);
+			this.checkApplyRuleValue(ruleValues[0]);
+
+		}
+	}
+
+	private checkApplyKey(applyKey: string) {
+		if (applyKey === "" || applyKey.includes("_")) {
+			throw new InsightError(applyKey + " is an invalid applykey");
+		}
+		// TODO: check if applykey already exists
+	}
+
+	// INPUT: { APPLYTOKEN : key }
+	private checkApplyRuleValue(applyRuleValue: object) {
+		let applyTokens = Object.keys(applyRuleValue);
+		if (applyTokens.length !== 1) {
+			throw new InsightError("applykey should have 1 APPLYTOKEN but has " + applyTokens.length);
+		}
+		let tokenType: string = this.getTokenType(applyTokens[0]);
+		let applyTokenValues: string[] = Object.values(applyRuleValue);
+		this.checkKeys(applyTokenValues[0], tokenType);
+	}
+
+	private getTokenType(token: string) {
+		switch (token) {
+			case "MAX":
+			case "MIN":
+			case "AVG":
+			case "SUM":
+				return "number";
+			case "COUNT":
+				return "any";
+			default:
+				throw new InsightError(token + " is not a valid APPLYTOKEN");
+		}
 	}
 }
