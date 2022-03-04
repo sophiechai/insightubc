@@ -20,7 +20,7 @@ export abstract class ValidateQueryMain {
 
 		// TODO: TRANSFORMATIONS CHECK FIRST (to store apply keys in a global? to check COLUMNS later)
 		if (hasTransformations) {
-			this.isTransformationsValid();
+			this.isTransformationsValid(values[2]);
 		}
 		this.isBodyValid(values[0]);
 		this.isOptionsValid(values[1]);
@@ -214,7 +214,36 @@ export abstract class ValidateQueryMain {
 
 	protected abstract checkKeyProperty(typeOfKey: string, keyProperty: string): void;
 
-	private isTransformationsValid() {
-		// TODO: Implement this
+	private isTransformationsValid(obj: object) {
+		// TODO: Implement this!!!
+		let keys = Object.keys(obj);
+		if (keys.length !== 2 || keys[0] !== "GROUP" || keys[1] !== "APPLY") {
+			throw new InsightError("Must have only GROUP and APPLY in TRANSFORMATIONS");
+		}
+		let values = Object.values(obj);
+		// TODO: Check GROUP
+		if (!Array.isArray(values[0])) {
+			throw new InsightError("GROUP value is not an array");
+		}
+		this.checkGroup(values[0]);
+
+		// TODO: Check APPLY
+		if (!Array.isArray(values[1])) {
+			throw new InsightError("APPLY value is not an array");
+		}
+	}
+
+	private checkGroup(groupArray: string[]) {
+		// TODO: Implement Group check
+		if (groupArray.length === 0) {
+			throw new InsightError("GROUP needs at least one key");
+		}
+		for (const key of groupArray) {
+			this.checkKeys(key, "");
+		}
+	}
+
+	private checkApply(applyArray: object[]) {
+		// TODO: Implement Apply check
 	}
 }
