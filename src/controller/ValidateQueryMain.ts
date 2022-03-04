@@ -1,11 +1,14 @@
 import {InsightError} from "./IInsightFacade";
 
 export abstract class ValidateQueryMain {
-	protected currentQuery: string | undefined;
 	protected readonly query: object;
+	protected currentQuery: string;
+	protected applyKeys: string[];
 
 	protected constructor(query: object) {
 		this.query = query;
+		this.currentQuery = "";
+		this.applyKeys = [];
 	}
 
 	public isQueryValid(): string {
@@ -24,7 +27,7 @@ export abstract class ValidateQueryMain {
 		}
 		this.isBodyValid(values[0]);
 		this.isOptionsValid(values[1]);
-		return this.currentQuery ? this.currentQuery : "";
+		return this.currentQuery;
 	}
 
 	private checkHasWhereAndOptions() {
@@ -179,8 +182,7 @@ export abstract class ValidateQueryMain {
 	}
 
 	private checkID(inputID: string) {
-		if (this.currentQuery === undefined) {
-			// console.log("in");
+		if (this.currentQuery === "") {
 			this.currentQuery = inputID;
 		}
 		if (inputID !== this.currentQuery) {
