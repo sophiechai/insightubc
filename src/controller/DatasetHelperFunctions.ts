@@ -23,6 +23,7 @@ function checkValidSection(section: object): boolean {
 	);
 }
 
+// create map for each section
 function formatSection(map: Map<string, number | string>, section: object) {
 	let keys: string[] = Object.keys(section);
 	let values: Array<string | number> = Object.values(section);
@@ -63,6 +64,7 @@ function removeItem<T>(arr: T[], value: T): T[] {
 	return arr;
 }
 
+// iterate a file and push each formatted section into tempList
 function parseResult(
 	promise: Promise<string>,
 	mapForEachFormattedSection: Map<string, number | string>,
@@ -84,6 +86,7 @@ function parseResult(
 	});
 }
 
+// iterate through each file in zip and return an array of addedIds.
 function jszipCourses(
 	jsZip: JSZip,
 	id: string,
@@ -107,12 +110,11 @@ function jszipCourses(
 			promises.push(promise);
 		});
 		return Promise.all(promises).then(() => {
-			// console.log("tempList length 2: " + tempList.length);
-
+			// no sections in all the files in zip
 			if (tempList.length === 0) {
 				return Promise.reject(new InsightError("Invalid sections"));
 			} else {
-				// console.log("tempList length: " + tempList.length);
+				// create a json object that contains all sections in all the files under the zip file
 				let data: InsightDataset = {id, kind, numRows: tempList.length};
 				const myJSON = JSON.stringify({header: data, contents: tempList});
 
