@@ -9,28 +9,48 @@ export abstract class ValidateQueryMain {
 	}
 
 	public isQueryValid(): string {
-		let hasWhere: boolean = Object.prototype.hasOwnProperty.call(this.query, "WHERE");
-		let hasOptions: boolean = Object.prototype.hasOwnProperty.call(this.query, "OPTIONS");
-		if (!hasWhere) {
-			throw new InsightError("Invalid query: No WHERE property found");
-		}
-		if (!hasOptions) {
-			throw new InsightError("Invalid query: No OPTIONS property found");
-		}
+		this.checkHasWhereAndOptions();
 
+		let hasTransformations: boolean = Object.prototype.hasOwnProperty.call(this.query, "TRANSFORMATIONS");
 		let keys = Object.keys(this.query);
-		if (keys.length > 2) {
-			throw new InsightError("Invalid query: Has properties other than WHERE and OPTIONS");
-		}
-		if (keys[0] !== "WHERE" || keys[1] !== "OPTIONS") {
-			throw new InsightError("Invalid query: Incorrect placement of WHERE and/or OPTIONS");
-		}
-		// Check if BODY and OPTIONS are valid
+		this.checkLength(keys.length, hasTransformations);
+		this.checkOrderOfWhereOptionsTransform(keys);
+
 		let values = Object.values(this.query);
 
+		// TODO: TRANSFORMATIONS CHECK FIRST (to store apply keys in a global? to check COLUMNS later)
+		if (hasTransformations) {
+			this.isTransformationsValid();
+		}
 		this.isBodyValid(values[0]);
 		this.isOptionsValid(values[1]);
 		return this.currentQuery ? this.currentQuery : "";
+	}
+
+	private checkHasWhereAndOptions() {
+		let hasWhere: boolean = Object.prototype.hasOwnProperty.call(this.query, "WHERE");
+		let hasOptions: boolean = Object.prototype.hasOwnProperty.call(this.query, "OPTIONS");
+		if (!hasWhere) {
+			throw new InsightError("No WHERE property found");
+		}
+		if (!hasOptions) {
+			throw new InsightError("No OPTIONS property found");
+		}
+	}
+
+	private checkLength(length: number, hasTransformations: boolean) {
+		if (hasTransformations && length !== 3) {
+			throw new InsightError("Has properties other than WHERE, OPTIONS, and TRANSFORMATIONS");
+		}
+		if (!hasTransformations && length !== 2) {
+			throw new InsightError("Has properties other than WHERE, OPTIONS, and TRANSFORMATIONS");
+		}
+	}
+
+	private checkOrderOfWhereOptionsTransform(keys: string[]) {
+		if (keys[0] !== "WHERE" || keys[1] !== "OPTIONS") {
+			throw new InsightError("Incorrect placement of WHERE, OPTIONS, and/or TRANSFORMATIONS");
+		}
 	}
 
 	private isBodyValid(obj: object): void {
@@ -193,4 +213,8 @@ export abstract class ValidateQueryMain {
 	}
 
 	protected abstract checkKeyProperty(typeOfKey: string, keyProperty: string): void;
+
+	private isTransformationsValid() {
+		// TODO: Implement this
+	}
 }
