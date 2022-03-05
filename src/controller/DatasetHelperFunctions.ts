@@ -128,4 +128,4 @@ function jszipCourses(
 	});
 }
 
-export {removeItem, jszipCourses};
+export {removeItem, jszipCourses, writeToData};
