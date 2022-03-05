@@ -17,6 +17,7 @@ import fse from "fs-extra";
 import * as fs from "fs-extra";
 import {isQueryValid} from "./ValidateQuery";
 import {filter, createInsightResult, sortResult, checkSectionArrayFinalLength} from "./Filter";
+// import {} from "./FilterV2";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -27,6 +28,7 @@ let jsZip: JSZip;
 let addedIds: string[];
 let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
+let mapForEachFormattedSection: Map<string, number | string>;
 
 export let sectionArray: Sections[];
 
@@ -35,16 +37,22 @@ export default class InsightFacade implements IInsightFacade {
 		jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
-		// mapForEachFormattedSection = new Map<string, number | string>();
-		console.log("InsightFacadeImpl::init()");
-		console.log(dataPath);
-		fse.mkdir(dataPath, function (err) {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log("New directory successfully created.");
+		mapForEachFormattedSection = new Map<string, number | string>();
+		// console.log("InsightFacadeImpl::init()");
+		// console.log(dataPath);
+		try {
+			if (!fs.existsSync(dataPath)) {
+				fse.mkdir(dataPath, function (err) {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log("New directory successfully created.");
+					}
+				});
 			}
-		});
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
