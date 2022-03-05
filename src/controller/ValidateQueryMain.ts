@@ -217,19 +217,18 @@ export abstract class ValidateQueryMain {
 	protected abstract checkKeyProperty(typeOfKey: string, keyProperty: string): void;
 
 	private isTransformationsValid(obj: object) {
-		// TODO: Implement this!!!
 		let keys = Object.keys(obj);
+		let values = Object.values(obj);
+
 		if (keys.length !== 2 || keys[0] !== "GROUP" || keys[1] !== "APPLY") {
 			throw new InsightError("Must have only GROUP and APPLY in TRANSFORMATIONS");
 		}
-		let values = Object.values(obj);
-		// TODO: Check GROUP
+
 		if (!Array.isArray(values[0])) {
 			throw new InsightError("GROUP value is not an array");
 		}
 		this.checkGroup(values[0]);
 
-		// TODO: Check APPLY
 		if (!Array.isArray(values[1])) {
 			throw new InsightError("APPLY value is not an array");
 		}
@@ -237,18 +236,16 @@ export abstract class ValidateQueryMain {
 	}
 
 	private checkGroup(groupArray: string[]) {
-		// TODO: Implement Group check
 		if (groupArray.length === 0) {
 			throw new InsightError("GROUP needs at least one key");
 		}
 		for (const key of groupArray) {
-			this.checkKeys(key, "");
+			this.checkKeys(key, "any");
 		}
 	}
 
 	// INPUT: [ (APPLYRULE (, APPLYRULE )* )? ]
 	private checkApply(applyArray: object[]) {
-		// TODO: Implement Apply check
 		// applyRule: { applykey : { APPLYTOKEN : key }}
 		for (const applyRule of applyArray) {
 			let ruleKeys = Object.keys(applyRule);
@@ -258,7 +255,6 @@ export abstract class ValidateQueryMain {
 			}
 			this.checkApplyKey(ruleKeys[0]);
 			this.checkApplyRuleValue(ruleValues[0]);
-
 		}
 	}
 
