@@ -4,25 +4,28 @@ export abstract class ValidateQueryMain {
 	protected readonly query: object;
 	protected currentQuery: string;
 	protected applyKeys: string[];
+	protected groupKeys: string[];
+	protected hasTransformations: boolean;
 
 	protected constructor(query: object) {
 		this.query = query;
 		this.currentQuery = "";
 		this.applyKeys = [];
+		this.groupKeys = [];
+		this.hasTransformations = false;
 	}
 
 	public isQueryValid(): string {
 		this.checkHasWhereAndOptions();
 
-		let hasTransformations: boolean = Object.prototype.hasOwnProperty.call(this.query, "TRANSFORMATIONS");
+		this.hasTransformations = Object.prototype.hasOwnProperty.call(this.query, "TRANSFORMATIONS");
 		let keys = Object.keys(this.query);
-		this.checkLength(keys.length, hasTransformations);
+		this.checkLength(keys.length, this.hasTransformations);
 		this.checkOrderOfWhereOptionsTransform(keys);
 
 		let values = Object.values(this.query);
 
-		// TODO: TRANSFORMATIONS CHECK FIRST (to store apply keys in a global? to check COLUMNS later)
-		if (hasTransformations) {
+		if (this.hasTransformations) {
 			this.isTransformationsValid(values[2]);
 		}
 		this.isBodyValid(values[0]);
@@ -73,7 +76,6 @@ export abstract class ValidateQueryMain {
 	}
 
 	private isLogicComparisonValid(array: object[]) {
-		// Check if there is at least one FILTER in array
 		if (array.length === 0) {
 			throw new InsightError("Length Invalid");
 		}
@@ -85,7 +87,6 @@ export abstract class ValidateQueryMain {
 			let keys = Object.keys(obj);
 			let values = Object.values(obj);
 			// Check there's only one key and value
-			// console.log(typeof values[0]);
 			if (keys.length !== 1 || values.length !== 1) {
 				throw new InsightError("Length Invalid");
 			}
@@ -101,26 +102,21 @@ export abstract class ValidateQueryMain {
 		if (keys.length !== 1 || values.length !== 1) {
 			throw new InsightError("Length Invalid");
 		}
-		// Check semantics for the key...
 		this.checkKeys(keys[0], "number");
 
-		// Check semantics of the value
 		if (!(typeof values[0] === "number")) {
 			throw new InsightError("Type Invalid");
 		}
 	}
 
 	private isSComparisonValid(obj: object) {
-		// Check there's only one skey and input string
 		let keys = Object.keys(obj);
 		let values = Object.values(obj);
 		if (keys.length !== 1 || values.length !== 1) {
 			throw new InsightError("Length Invalid");
 		}
-		// Check semantics of the key
 		this.checkKeys(keys[0], "string");
 
-		// Check semantics of the value
 		if (typeof values[0] !== "string") {
 			throw new InsightError("Type Invalid");
 		}
@@ -135,12 +131,10 @@ export abstract class ValidateQueryMain {
 	}
 
 	private isNegationValid(obj: object) {
-		// Check it has only one FILTER
 		let keys = Object.keys(obj);
 		if (keys.length === 0 || keys.length > 1) {
 			throw new InsightError("Length Invalid");
 		}
-		// Figure out what FILTER it is and check it
 		let k = keys[0];
 		let values = Object.values(obj);
 		let v = values[0];
@@ -148,14 +142,12 @@ export abstract class ValidateQueryMain {
 	}
 
 	private isOptionsValid(obj: object) {
-		// Check if COLUMNS property is present
 		if (!Object.prototype.hasOwnProperty.call(obj, "COLUMNS")) {
-			throw new InsightError("Command Invalid");
+			throw new InsightError("Missing COLUMNS");
 		}
-		// Check if COLUMNS keys are valid
 		let values = Object.values(obj);
 		this.isColumnsValid(values[0]);
-		// Check if there is ORDER property and if it is valid
+
 		if (Object.prototype.hasOwnProperty.call(obj, "ORDER")) {
 			if (typeof values[1] !== "string") {
 				throw new InsightError("Type Invalid");
@@ -165,13 +157,19 @@ export abstract class ValidateQueryMain {
 	}
 
 	private isColumnsValid(list: string[]) {
-		// Check if COLUMNS array is empty
 		if (list.length === 0) {
-			throw new InsightError("Length Invalid");
+			throw new InsightError("COLUMNS requires at least one key");
 		}
-		for (const key of list) {
-			// Check if COLUMNS keys are valid
-			this.checkKeys(key, "all");
+		if (this.hasTransformations) {
+			for (const key in list) {
+				if (!this.groupKeys.includes(key) && !this.applyKeys.includes(key)) {
+					throw new InsightError("COLUMN key " + key + " is not in GROUP or APPLY");
+				}
+			}
+		} else {
+			for (const key of list) {
+				this.checkKeys(key, "all");
+			}
 		}
 	}
 
@@ -241,6 +239,7 @@ export abstract class ValidateQueryMain {
 		}
 		for (const key of groupArray) {
 			this.checkKeys(key, "any");
+			this.groupKeys.push(key);
 		}
 	}
 
@@ -281,10 +280,7 @@ export abstract class ValidateQueryMain {
 
 	private getTokenType(token: string) {
 		switch (token) {
-			case "MAX":
-			case "MIN":
-			case "AVG":
-			case "SUM":
+			case "MAX": case "MIN": case "AVG": case "SUM":
 				return "number";
 			case "COUNT":
 				return "any";
