@@ -8,7 +8,8 @@ import {
 	ResultTooLargeError,
 } from "./IInsightFacade";
 
-import {writeToData, removeItem, parseResult} from "./DatasetHelperFunctions";
+import {removeItem, jszipCourses} from "./DatasetHelperFunctions";
+import {jszipRooms} from "./RoomsHelperFunctions";
 import {Sections} from "./Sections";
 
 import JSZip from "jszip";
@@ -55,54 +56,15 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// content - fs.readFileSync("test/resources/archives/courses.zip").toString("base64")
-
-		if (kind === InsightDatasetKind.Rooms) {
-			return Promise.reject(new InsightError("Rooms dataset is not supported"));
-		}
 		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
-		// if (addedIds.includes(id)) {
-		// 	return Promise.reject(new InsightError("Dataset already added"));
-		// }
-		// OR
-		// const idExisted = await fse.pathExists("data/" + id);
-		// if (idExisted) {
-		// 	return Promise.reject(new InsightError("Dataset already added"));
-		// }
-		const promises: Array<Promise<string>> = [];
 
-		let tempList: any[] = [];
-
-		return jsZip.loadAsync(content, {base64: true}).then((zip) => {
-			zip.forEach((relativePath, file) => {
-				if (!relativePath.includes("courses/")) {
-					promises.push(Promise.reject(new InsightError("invalid directory")));
-				}
-				// console.log("file is " + file);
-				const promise = file.async("string");
-				parseResult(promise, mapForEachFormattedSection, tempList);
-				promises.push(promise);
-			});
-			return Promise.all(promises).then(() => {
-				// console.log("tempList length 2: " + tempList.length);
-
-				if (tempList.length === 0) {
-					return Promise.reject(new InsightError("Invalid sections"));
-				} else {
-					// console.log("tempList length: " + tempList.length);
-					let data: InsightDataset = {id, kind, numRows: tempList.length};
-					const myJSON = JSON.stringify({header: data, contents: tempList});
-
-					const fileName = dataPath + "/" + id + ".json";
-					writeToData(fileName, myJSON);
-					addedIds.push(id);
-					addedDatasets.push(data);
-					return Promise.resolve(addedIds);
-				}
-			});
-		});
+		if (kind === InsightDatasetKind.Courses) {
+			return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
+		} else {
+			return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+		}
 	}
 
 	public removeDataset(id: string): Promise<string> {

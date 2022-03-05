@@ -1,5 +1,4 @@
 export class Sections {
-
 	public get map(): Map<string, number | string> {
 		return this._map;
 	}
