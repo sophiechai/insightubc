@@ -266,7 +266,10 @@ export abstract class ValidateQueryMain {
 		if (applyKey === "" || applyKey.includes("_")) {
 			throw new InsightError(applyKey + " is an invalid applykey");
 		}
-		// TODO: check if applykey already exists
+		if (this.applyKeys.includes(applyKey)) {
+			throw new InsightError("Duplicate applykey: " + applyKey);
+		}
+		this.applyKeys.push(applyKey);
 	}
 
 	// INPUT: { APPLYTOKEN : key }
