@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {InsightError} from "./IInsightFacade";
 
 export abstract class ValidateQueryMain {
@@ -152,7 +153,7 @@ export abstract class ValidateQueryMain {
 			if (typeof values[1] !== "string") {
 				throw new InsightError("Type Invalid");
 			}
-			this.isOrderValid(values[1], values[0]);
+			this.isOrderValid(values[1], values[0], typeof values[1]);
 		}
 	}
 
@@ -173,9 +174,38 @@ export abstract class ValidateQueryMain {
 		}
 	}
 
-	private isOrderValid(orderKey: string, columnKeys: string[]) {
-		if (!columnKeys.includes(orderKey)) {
-			throw new InsightError("Order key Invalid");
+	private isOrderValid(orderValue: any, columnKeys: string[], type: string) {
+		if (type === "object") {
+			let dirAndKeysKey = Object.keys(orderValue);
+			let dirAndKeysValues: any = Object.values(orderValue);
+			if (dirAndKeysKey.length !== 2 &&
+				dirAndKeysKey[0] !== "dir" &&
+				dirAndKeysKey[1] !== "keys" &&
+				typeof dirAndKeysValues[0] !== "string" &&
+				!Array.isArray(dirAndKeysValues[1])) {
+				throw new InsightError("ORDER value invalid");
+			}
+			this.checkDirectionAndKeys(dirAndKeysValues[0], dirAndKeysValues[1], columnKeys);
+		} else if (type === "string") {
+			if (!columnKeys.includes(orderValue)) {
+				throw new InsightError("ORDER key Invalid");
+			}
+		} else {
+			console.log("UNEXPECTED TYPE FOR ORDER VALUE");
+		}
+	}
+
+	private checkDirectionAndKeys(dirValue: string, keysValue: string[], columnsKeys: string[]) {
+		if (dirValue !== "UP" && dirValue !== "DOWN") {
+			throw new InsightError("Invalid DIRECTION");
+		}
+		if (keysValue.length === 0) {
+			throw new InsightError("Requires at least one key to SORT");
+		}
+		for (const key of keysValue) {
+			if (!columnsKeys.includes(key)) {
+				throw new InsightError("SORT key " + key + " is not in COLUMNS");
+			}
 		}
 	}
 
@@ -243,9 +273,7 @@ export abstract class ValidateQueryMain {
 		}
 	}
 
-	// INPUT: [ (APPLYRULE (, APPLYRULE )* )? ]
 	private checkApply(applyArray: object[]) {
-		// applyRule: { applykey : { APPLYTOKEN : key }}
 		for (const applyRule of applyArray) {
 			let ruleKeys = Object.keys(applyRule);
 			let ruleValues = Object.values(applyRule);
@@ -267,7 +295,6 @@ export abstract class ValidateQueryMain {
 		this.applyKeys.push(applyKey);
 	}
 
-	// INPUT: { APPLYTOKEN : key }
 	private checkApplyRuleValue(applyRuleValue: object) {
 		let applyTokens = Object.keys(applyRuleValue);
 		if (applyTokens.length !== 1) {
