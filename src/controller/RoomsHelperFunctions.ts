@@ -1,9 +1,8 @@
 import JSZip, {JSZipObject} from "jszip";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import parse5 from "parse5";
+import parse5, {Document} from "parse5";
 import http from "http";
-let dataPath = __dirname + "/../../data";
-import {searchTreeByID, searchTreeByTag} from "./RoomHelperFunction2";
+import {searchTreeByID, searchTreeByTag, createJSONAndAddToData} from "./RoomHelperFunction2";
 import {writeToData} from "./DatasetHelperFunctions";
 
 function parseTable(table: object, codeArray: string[]) {
@@ -113,55 +112,79 @@ function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
 		buildingInfoArray.push(valueValues[valueKeys.indexOf("value")]);
 	}
 	// get building geolocation
-	// getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
+	return getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
 }
 
-// function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {
-// 	let formattedAddress = address.replaceAll(" ", "%20");
-// 	console.log("format address: " + formattedAddress);
-// 	let url: string = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team558/" + address;
-//
-// 	Promise.resolve(function () {
-// 		return http
-// 			.get(url, (res) => {
-// 				res.setEncoding("utf8");
-// 				let rawData = "";
-// 				res.on("data", (chunk) => {
-// 					rawData += chunk;
-// 				});
-// 				res.on("end", () => {
-// 					try {
-// 						const parsedData = JSON.parse(rawData);
-// 						console.log("parsedData: " + parsedData);
-// 					} catch (e) {
-// 						console.error("error!");
-// 					}
-// 				});
-// 			})
-// 			.on("error", (e) => {
-// 				console.error(`Got error: ${e.message}`);
-// 			});
-//
-// 		// http.get(url, (res) => {
-// 		// 	console.log("in!");
-// 		// 	let body = "";
-// 		// 	res.on("data", (chunk) => {
-// 		// 		body += chunk;
-// 		// 	});
-// 		// 	res.on("end", () => {
-// 		// 		let json = JSON.parse(body);
-// 		// 		let lat = json.lat;
-// 		// 		let lng = json.lng;
-// 		// 		buildingInfoArray.push(lat);
-// 		// 		buildingInfoArray.push(lng);
-// 		// 		// console.log("buildingInfoArray: " + buildingInfoArray);
-// 		// 		console.log("lat: " + lat + " lng: " + lng);
-// 		// 	});
-// 		// });
-// 	}).then(() => {
-// 		console.log("resolved!");
-// 	});
-// }
+function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {
+	let formattedAddress = address.replace(/\s/g, "%20");
+	console.log("format address: " + formattedAddress);
+	let url: string = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team558/" + formattedAddress;
+
+	return new Promise(function (resolve, reject) {
+		http.get(url, (res) => {
+			console.log("in");
+			const {statusCode} = res;
+			const contentType = res.headers["content-type"];
+
+			let error;
+			// Any 2xx status code signals a successful response but
+			// here we're only checking for 200.
+			if (statusCode !== 200) {
+				error = new Error("Request Failed.\n" + `Status Code: ${statusCode}`);
+			} else if (!/^application\/json/.test(typeof contentType === "string" ? contentType : "")) {
+				error = new Error("Invalid content-type.\n" + `Expected application/json but received ${contentType}`);
+			}
+			if (error) {
+				console.error(error.message);
+				// Consume response data to free up memory
+				res.resume();
+				return;
+			}
+
+			res.setEncoding("utf8");
+			let rawData = "";
+			res.on("data", (chunk) => {
+				rawData += chunk;
+			});
+			res.on("end", () => {
+				try {
+					const parsedData = JSON.parse(rawData);
+					console.log(parsedData);
+					resolve("success!!!");
+				} catch (e) {
+					console.log("ERROR :(");
+					reject("fail!!!");
+				}
+			});
+		}).on("error", (e) => {
+			console.error(`Got error: ${e.message}`);
+			reject("fail!!!");
+		});
+
+		// return http
+		// 	.get(url, (res) => {
+		// 		res.setEncoding("utf8");
+		// 		let rawData = "";
+		// 		res.on("data", (chunk) => {
+		// 			rawData += chunk;
+		// 		});
+		// 		res.on("end", () => {
+		// 			try {
+		// 				const parsedData = JSON.parse(rawData);
+		// 				console.log("parsedData: " + parsedData);
+		// 				resolve("success!!!");
+		// 			} catch (e) {
+		// 				console.error("error!");
+		// 				reject("fail!!!");
+		// 			}
+		// 		});
+		// 	})
+		// 	.on("error", (e) => {
+		// 		console.error(`Got error: ${e.message}`);
+		// 		reject("fail !!!");
+		// 	});
+	});
+}
 
 function convertToJSON(roomInfoList: string[], buildingInfoArray: string[], tempList: object[]) {
 	// console.log("roomInfoList: " + roomInfoList);
@@ -184,22 +207,30 @@ function convertToJSON(roomInfoList: string[], buildingInfoArray: string[], temp
 
 // parse each file with valid building code to get room data.
 function parseResult(promise: Promise<string>, buildingCode: string, tempList: object[]) {
-	// let roomsJSONArray: object[] = [];
-	promise.then(function (fileData) {
-		const doc = parse5.parse(fileData);
-		if (searchTreeByTag(doc.childNodes[6], "html") === null) {
-			return Promise.reject(new InsightError("file is not in HTML format"));
-		}
-		let tableObj: object = searchTreeByTag(doc.childNodes[6], "table");
-		if (tableObj !== null) {
-			// console.log("find table");
-			let buildingInfoArray: string[] = [];
-			buildingInfoArray.push(buildingCode);
-			parseBuildingInfo(doc.childNodes[6], buildingInfoArray);
-			console.log("buildingInfoArray: " + buildingInfoArray);
-			parseTableRooms(tableObj, buildingInfoArray, tempList);
-		}
-	});
+	let doc: Document;
+	let tableObj: object;
+	let buildingInfoArray: string[] = [];
+	promise
+		.then(function (fileData) {
+			doc = parse5.parse(fileData);
+			if (searchTreeByTag(doc.childNodes[6], "html") === null) {
+				return Promise.reject(new InsightError("file is not in HTML format"));
+			}
+			tableObj = searchTreeByTag(doc.childNodes[6], "table");
+		})
+		.then(function () {
+			if (tableObj !== null) {
+				// console.log("find table");
+				buildingInfoArray.push(buildingCode);
+				return parseBuildingInfo(doc.childNodes[6], buildingInfoArray);
+			}
+		})
+		.then(function () {
+			if (tableObj !== null) {
+				console.log("buildingInfoArray: " + buildingInfoArray);
+				parseTableRooms(tableObj, buildingInfoArray, tempList);
+			}
+		});
 }
 
 function getCodeArray(indexFile: JSZipObject[], codeArray: string[]) {
@@ -226,6 +257,7 @@ function getCodeArray(indexFile: JSZipObject[], codeArray: string[]) {
 
 let globalZip: JSZip;
 let codeArray: string[] = [];
+const promises: Array<Promise<string>> = [];
 
 function jszipRooms(
 	jsZip: JSZip,
@@ -235,11 +267,8 @@ function jszipRooms(
 	addedIds: string[],
 	addedDatasets: InsightDataset[]
 ): Promise<string[]> {
-	const promises: Array<Promise<string>> = [];
-
 	let tempList: any[] = [];
-	return jsZip
-		.loadAsync(content, {base64: true})
+	return jsZip.loadAsync(content, {base64: true})
 		.then((zip) => {
 			let indexFile = zip.file(/index.htm/);
 			globalZip = zip;
@@ -247,8 +276,7 @@ function jszipRooms(
 			if (indexFile.length === 1) {
 				return getCodeArray(indexFile, codeArray);
 			}
-		})
-		.then(() => {
+		}).then(() => {
 			// iterate each file with valid building code to get room data.
 			globalZip.forEach((relativePath, file) => {
 				if (!relativePath.includes("rooms/")) {
@@ -265,20 +293,7 @@ function jszipRooms(
 		}).then(() => {
 			return Promise.all(promises);
 		}).then(() => {
-			// no sections in all the files in zip
-			// console.log("tempList: " + tempList.length);
-			if (tempList.length === 0) {
-				return Promise.reject(new InsightError("No Valid Rooms"));
-			} else {
-				// create a json object that contains all sections in all the files under the zip file
-				let data: InsightDataset = {id, kind, numRows: tempList.length};
-				const myJSON = JSON.stringify({header: data, contents: tempList});
-				const fileName = dataPath + "/" + id + ".json";
-				writeToData(fileName, myJSON);
-				addedIds.push(id);
-				addedDatasets.push(data);
-				return Promise.resolve(addedIds);
-			}
+			return createJSONAndAddToData(tempList, addedIds, addedDatasets, id, kind);
 		});
 }
 

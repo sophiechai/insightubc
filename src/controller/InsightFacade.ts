@@ -74,18 +74,6 @@ export default class InsightFacade implements IInsightFacade {
 		if (!addedIds.includes(id)) {
 			return Promise.reject(new NotFoundError("Dataset not found"));
 		}
-		// const fileName = dataPath + "/" + id + ".json";
-		// try {
-		// 	fse.unlinkSync(fileName);
-		// 	let index = addedIds.indexOf(id);
-		// 	addedIds = removeItem(addedIds, id);
-		// 	addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
-		// 	// console.log("File successfully deleted.");
-		// 	return Promise.resolve(id);
-		// } catch (err) {
-		// 	console.error(err);
-		// 	return Promise.reject(new InsightError("unlinkSync failed"));
-		// }
 
 		const deleteFile = async (fileName: string) => {
 			try {
