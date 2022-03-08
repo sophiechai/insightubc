@@ -8,15 +8,15 @@ import {
 	ResultTooLargeError,
 } from "./IInsightFacade";
 
-import {writeToData, removeItem, parseResult} from "./DatasetHelperFunctions";
+import {parseResult, removeItem, writeToData} from "./DatasetHelperFunctions";
 import {Sections} from "./Sections";
 
 import JSZip from "jszip";
-import fse from "fs-extra";
-import * as fs from "fs-extra";
-import {filter, createInsightResult, sortResult, checkSectionArrayFinalLength} from "./Filter";
+import fse, * as fs from "fs-extra";
+import {checkSectionArrayFinalLength, createInsightResult, filter, sortResult} from "./Filter";
 import {ValidateQueryMain} from "./ValidateQueryMain";
 import {ValidateQueryCourses} from "./ValidateQueryCourses";
+import {ValidateQueryRooms} from "./ValidateQueryRooms";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -37,8 +37,6 @@ export default class InsightFacade implements IInsightFacade {
 		addedIds = [];
 		addedDatasets = [];
 		mapForEachFormattedSection = new Map<string, number | string>();
-		// console.log("InsightFacadeImpl::init()");
-		// console.log(dataPath);
 		try {
 			if (!fs.existsSync(dataPath)) {
 				fse.mkdir(dataPath, function (err) {
@@ -63,14 +61,7 @@ export default class InsightFacade implements IInsightFacade {
 		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
-		// if (addedIds.includes(id)) {
-		// 	return Promise.reject(new InsightError("Dataset already added"));
-		// }
-		// OR
-		// const idExisted = await fse.pathExists("data/" + id);
-		// if (idExisted) {
-		// 	return Promise.reject(new InsightError("Dataset already added"));
-		// }
+
 		const promises: Array<Promise<string>> = [];
 
 		let tempList: any[] = [];
@@ -112,18 +103,6 @@ export default class InsightFacade implements IInsightFacade {
 		if (!addedIds.includes(id)) {
 			return Promise.reject(new NotFoundError("Dataset not found"));
 		}
-		// const fileName = dataPath + "/" + id + ".json";
-		// try {
-		// 	fse.unlinkSync(fileName);
-		// 	let index = addedIds.indexOf(id);
-		// 	addedIds = removeItem(addedIds, id);
-		// 	addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
-		// 	// console.log("File successfully deleted.");
-		// 	return Promise.resolve(id);
-		// } catch (err) {
-		// 	console.error(err);
-		// 	return Promise.reject(new InsightError("unlinkSync failed"));
-		// }
 
 		const deleteFile = async (fileName: string) => {
 			try {
@@ -152,8 +131,10 @@ export default class InsightFacade implements IInsightFacade {
 		sectionArray = [];
 		let q: any = query;
 		let id = "";
+		let kind = "";
 		try {
-			let validateQueryObject: ValidateQueryMain = new ValidateQueryCourses(q);
+			kind = this.decideKind(q);
+			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
 			id = validateQueryObject.isQueryValid();
 			if (!addedIds.includes(id)) {
 				throw new InsightError("Dataset ID does not exist");
@@ -161,24 +142,23 @@ export default class InsightFacade implements IInsightFacade {
 		} catch (err) {
 			return Promise.reject(err);
 		}
-		// Get the data from json file... grab the content array
 		let jsonContent;
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
 		} catch (err) {
 			return Promise.reject(new InsightError("Reading file not found"));
 		}
-		console.log("validate query passes");
 		let parsedJsonContent = JSON.parse(jsonContent);
+		let header: object = parsedJsonContent.header;
+		if (Object.values(header)[1] !== kind) {
+			return Promise.reject(new InsightError("Mismatched dataset kind and keys"));
+		}
 		let content: any[] = parsedJsonContent.contents;
 		for (const item of content) {
-			let section: Sections = new Sections(item);
-			sectionArray.push(section);
+			sectionArray.push(new Sections(item));
 		}
-		// Call filter() which returns resulting array...
 		let insightResultArray: InsightResult[] = [];
 		filter(q.WHERE, "INIT");
-
 		try {
 			checkSectionArrayFinalLength();
 		} catch (err) {
@@ -188,18 +168,53 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
-		// Figure out which dataset to query
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
-		// Create the InsightResult objects and put in insightResultArray
 		createInsightResult(columnsValue, id, insightResultArray);
-		// Check if it has ORDER property and then sort
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;
 			sortResult(orderKey, insightResultArray);
 		}
-
 		return Promise.resolve(insightResultArray);
+	}
+
+	private instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
+		if (kind === InsightDatasetKind.Courses) {
+			return new ValidateQueryCourses(q);
+		} else {
+			return new ValidateQueryRooms(q);
+		}
+	}
+
+	private decideKind(query: object): string {
+		let keys = Object.keys(query);
+		if (keys.length < 2 || keys[1] !== "OPTIONS") {
+			throw new InsightError("asdfghjkl");
+		}
+		let optionsValue = Object.values(query)[1];
+		let optionsKeys = Object.keys(optionsValue);
+		if (optionsKeys.length === 0 || optionsKeys[0] !== "COLUMNS") {
+			throw new InsightError("asdfghjkl");
+		}
+		let columnsValue: any = Object.values(optionsValue)[0];
+		if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
+			throw new InsightError("asdfghjkl");
+		}
+		let key: string = columnsValue[0];
+		if (!key.includes("_")) {
+			throw new InsightError("asdfghjkl");
+		}
+		let property: string = key.substring(key.indexOf("_") + 1);
+		switch (property) {
+			case "dept": case "id": case "instructor": case "title":
+			case "avg": case "pass": case "fail": case "audit": case "year": case "uuid":
+				return "courses";
+			case "fullname": case "shortname": case "number": case "name": case "address":
+			case "type": case "furniture": case "href": case "lat": case "lon": case "seats":
+				return "rooms";
+			default:
+				throw new InsightError("asdfghjkl");
+		}
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
