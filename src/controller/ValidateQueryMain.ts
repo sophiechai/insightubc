@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {InsightError} from "./IInsightFacade";
 
 export abstract class ValidateQueryMain {
@@ -18,14 +17,13 @@ export abstract class ValidateQueryMain {
 
 	public isQueryValid(): string {
 		this.checkHasWhereAndOptions();
-
 		this.hasTransformations = Object.prototype.hasOwnProperty.call(this.query, "TRANSFORMATIONS");
 		let keys = Object.keys(this.query);
 		this.checkLength(keys.length, this.hasTransformations);
-		this.checkOrderOfWhereOptionsTransform(keys);
-
+		if (keys[0] !== "WHERE" || keys[1] !== "OPTIONS") {
+			throw new InsightError("Incorrect placement of WHERE, OPTIONS, and/or TRANSFORMATIONS");
+		}
 		let values = Object.values(this.query);
-
 		if (this.hasTransformations) {
 			this.isTransformationsValid(values[2]);
 		}
@@ -54,14 +52,7 @@ export abstract class ValidateQueryMain {
 		}
 	}
 
-	private checkOrderOfWhereOptionsTransform(keys: string[]) {
-		if (keys[0] !== "WHERE" || keys[1] !== "OPTIONS") {
-			throw new InsightError("Incorrect placement of WHERE, OPTIONS, and/or TRANSFORMATIONS");
-		}
-	}
-
 	private isBodyValid(obj: object): void {
-		// Check number of filters; 0 or 1 filter is valid; >1 is invalid
 		let keys = Object.keys(obj);
 		if (keys.length === 0) {
 			return;
@@ -69,7 +60,6 @@ export abstract class ValidateQueryMain {
 		if (keys.length > 1) {
 			throw new InsightError("Length Invalid");
 		}
-		// Check syntax and semantic of Logic, MComp, SComp, Neg
 		let values = Object.values(obj);
 		let k = keys[0];
 		let v = values[0];
@@ -83,11 +73,9 @@ export abstract class ValidateQueryMain {
 		if (!Array.isArray(array)) {
 			throw new InsightError("Must be an array");
 		}
-		// Loop through array checking if valid filters
 		for (const obj of array) {
 			let keys = Object.keys(obj);
 			let values = Object.values(obj);
-			// Check there's only one key and value
 			if (keys.length !== 1 || values.length !== 1) {
 				throw new InsightError("Length Invalid");
 			}
@@ -117,15 +105,11 @@ export abstract class ValidateQueryMain {
 			throw new InsightError("Length Invalid");
 		}
 		this.checkKeys(keys[0], "string");
-
 		if (typeof values[0] !== "string") {
 			throw new InsightError("Type Invalid");
 		}
-		// Check if input string is empty or only asterisk or only one character
 		let value = values[0];
 		let asteriskIdx = values[0].indexOf("*", 1);
-
-		// Check inputstring has no asterisk inside
 		if (value === undefined || !(asteriskIdx === -1 || asteriskIdx === value.length - 1)) {
 			throw new InsightError("Values Invalid");
 		}
@@ -247,16 +231,13 @@ export abstract class ValidateQueryMain {
 	private isTransformationsValid(obj: object) {
 		let keys = Object.keys(obj);
 		let values = Object.values(obj);
-
 		if (keys.length !== 2 || keys[0] !== "GROUP" || keys[1] !== "APPLY") {
 			throw new InsightError("Must have only GROUP and APPLY in TRANSFORMATIONS");
 		}
-
 		if (!Array.isArray(values[0])) {
 			throw new InsightError("GROUP value is not an array");
 		}
 		this.checkGroup(values[0]);
-
 		if (!Array.isArray(values[1])) {
 			throw new InsightError("APPLY value is not an array");
 		}
@@ -307,12 +288,9 @@ export abstract class ValidateQueryMain {
 
 	private getTokenType(token: string) {
 		switch (token) {
-			case "MAX": case "MIN": case "AVG": case "SUM":
-				return "number";
-			case "COUNT":
-				return "any";
-			default:
-				throw new InsightError(token + " is not a valid APPLYTOKEN");
+			case "MAX": case "MIN": case "AVG": case "SUM": return "number";
+			case "COUNT": return "any";
+			default: throw new InsightError(token + " is not a valid APPLYTOKEN");
 		}
 	}
 }
