@@ -38,7 +38,7 @@ export function filter(instruction: object, message: string) {
 			filterNOT(v);
 			break;
 		default:
-			console.log("UNEXPECTED CASE");
+			console.log("NO FILTER");
 	}
 }
 

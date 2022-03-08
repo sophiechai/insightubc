@@ -14,9 +14,9 @@ import {Sections} from "./Sections";
 import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
-import {isQueryValid} from "./ValidateQuery";
 import {filter, createInsightResult, sortResult, checkSectionArrayFinalLength} from "./Filter";
-// import {} from "./FilterV2";
+import {ValidateQueryMain} from "./ValidateQueryMain";
+import {ValidateQueryCourses} from "./ValidateQueryCourses";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -153,8 +153,8 @@ export default class InsightFacade implements IInsightFacade {
 		let q: any = query;
 		let id = "";
 		try {
-			id = isQueryValid(q);
-			// console.log("id: " + id);
+			let validateQueryObject: ValidateQueryMain = new ValidateQueryCourses(q);
+			id = validateQueryObject.isQueryValid();
 			if (!addedIds.includes(id)) {
 				throw new InsightError("Dataset ID does not exist");
 			}
@@ -188,14 +188,11 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
-
 		// Figure out which dataset to query
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
-
 		// Create the InsightResult objects and put in insightResultArray
 		createInsightResult(columnsValue, id, insightResultArray);
-
 		// Check if it has ORDER property and then sort
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;

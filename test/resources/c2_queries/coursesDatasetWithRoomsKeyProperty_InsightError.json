@@ -1,0 +1,23 @@
+{
+	"title": "Query keys with courses dataset but room key property --> InsightError",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"courses_shortname": "*A*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_shortname"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"courses_shortname"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
