@@ -3,9 +3,7 @@ import {Sections} from "./Sections";
 import {datasetArray} from "./InsightFacade";
 import {Rooms} from "./Rooms";
 import {Dataset} from "./Dataset";
-// import {access} from "fs";
 
-// let section: Sections[];
 let dataset: Dataset[];
 
 // TRUST THE NATURAL RECURSION...
@@ -48,8 +46,7 @@ export function filter(instruction: object, message: string) {
 
 function getProperty(input: string): string {
 	let idx = input.indexOf("_");
-	let str = input.substring(idx + 1);
-	return str;
+	return input.substring(idx + 1);
 }
 
 export function filterGT(instruction: object) {
@@ -151,6 +148,113 @@ export function checkSectionArrayFinalLength() {
 	}
 }
 
-export function applyTransformation(instruction: object) {
-	// hello
+export function applyTransformation(instruction: object, columnKeys: string[]) {
+	// GROUP
+	let newMap: Map<string, Dataset[]> = new Map();
+	newMap = applyGroup(Object.values(instruction)[0], newMap);
+	// APPLY
+	// aggregateMap stores the transformation under APPLY
+	let aggregateMap: Map<string, number[]> = new Map();
+	if (Object.keys(instruction).length === 2) {
+		applyApply(Object.values(instruction)[1], newMap, columnKeys, aggregateMap);
+	}
+}
+
+function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>) {
+	let property: string = getProperty(groupArray[0]);
+	for (const item of dataset) {
+		let roomValue: any = item.map.get(property);
+		if (!newMap.has(roomValue)) {
+			let value: Dataset[] = [];
+			value.push(item);
+			newMap.set(roomValue, value);
+		} else {
+			let value: Dataset[] = newMap.get(roomValue)!;
+			value.push(item);
+			newMap.set(roomValue, value);
+		}
+	}
+
+	if (groupArray.length > 1) {
+		for (let i = 1; i < groupArray.length; i++) {
+			let tempMap: Map<string, Dataset[]> = new Map();
+			for (let entry of newMap.entries()) {
+				for (let j of entry[1]) {
+					let property2: string = getProperty(groupArray[i]);
+					let roomValue: any = j.map.get(property2);
+					let key = entry[0] + "_" + roomValue;
+					if (!tempMap.has(key)) {
+						let value: Dataset[] = [];
+						value.push(j);
+						tempMap.set(key, value);
+					} else {
+						let value: Dataset[] = tempMap.get(key)!;
+						value.push(j);
+						tempMap.set(key, value);
+					}
+				}
+			}
+			newMap = tempMap;
+		}
+	}
+	return newMap;
+}
+
+function applyApply(
+	applyArray: object[],
+	newMap: Map<string, Dataset[]>,
+	columnKeys: string[],
+	aggregateMap: Map<string, number[]>
+) {
+	for (const item of applyArray) {
+		let key = Object.keys(item)[0];
+		if (columnKeys.includes(key)) {
+			let value = Object.values(item)[0];
+			let command: string = Object.keys(value)[0];
+			let commandValue = Object.values(value)[0];
+			let property: string = "";
+			if (typeof commandValue === "string") {
+				property = getProperty(commandValue);
+			}
+			aggregate(command, newMap, property, aggregateMap);
+		}
+	}
+}
+
+function aggregate(
+	command: string,
+	newMap: Map<string, Dataset[]>,
+	property: string,
+	aggregateMap: Map<string, number[]>
+) {
+	for (let entry of newMap.entries()) {
+		let key = entry[0];
+		let value = entry[1];
+		let tracker: number = 0;
+		for (let data of value) {
+			let num: number = Number(data.map.get(property));
+			if (command === "MAX") {
+				if (num > tracker) {
+					tracker = num;
+				}
+			} else if (command === "MIN") {
+				if (num < tracker) {
+					tracker = num;
+				}
+			} else {
+				tracker += num;
+			}
+		}
+		if (command === "AVG") {
+			tracker = tracker / value.length;
+		}
+		let mapValue: number[];
+		if (!aggregateMap.has(key)) {
+			mapValue = [];
+		} else {
+			mapValue = aggregateMap.get(key)!;
+		}
+		mapValue.push(tracker);
+		aggregateMap.set(key, mapValue);
+	}
 }

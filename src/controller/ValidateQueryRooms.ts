@@ -21,11 +21,7 @@ export class ValidateQueryRooms extends ValidateQueryMain {
 				throw new InsightError("Query Properties Invalid");
 			}
 		} else if (typeOfKey === "number") {
-			if (
-				keyProperty !== "lat" &&
-				keyProperty !== "lon" &&
-				keyProperty !== "seats"
-			) {
+			if (keyProperty !== "lat" && keyProperty !== "lon" && keyProperty !== "seats") {
 				throw new InsightError("Query Properties Invalid");
 			}
 		} else {

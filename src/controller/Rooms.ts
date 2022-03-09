@@ -19,6 +19,5 @@ export class Rooms extends Dataset {
 			let key = keys[i].toLowerCase();
 			this.map.set(key, values[i]);
 		}
-
 	}
 }

@@ -10,7 +10,6 @@ import {
 
 import {removeItem, jszipCourses} from "./DatasetHelperFunctions";
 import {jszipRooms} from "./RoomsHelperFunctions";
-import {Sections} from "./Sections";
 
 import JSZip from "jszip";
 import fse from "fs-extra";
@@ -62,10 +61,6 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
-		const promises: Array<Promise<string>> = [];
-
-		let tempList: any[] = [];
-
 		if (kind === InsightDatasetKind.Courses) {
 			return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
 		} else {
@@ -107,18 +102,18 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		datasetArray = [];
 		let q: any = query;
-		let id = "";
-		let kind = "";
-		try {
-			kind = this.decideKind(q);
-			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
-			id = validateQueryObject.isQueryValid();
-			if (!addedIds.includes(id)) {
-				throw new InsightError("Dataset ID does not exist");
-			}
-		} catch (err) {
-			return Promise.reject(err);
-		}
+		let id = "rooms";
+		let kind = "rooms";
+		// try {
+		// 	kind = this.decideKind(q);
+		// 	let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
+		// 	id = validateQueryObject.isQueryValid();
+		// 	if (!addedIds.includes(id)) {
+		// 		throw new InsightError("Dataset ID does not exist");
+		// 	}
+		// } catch (err) {
+		// 	return Promise.reject(err);
+		// }
 		let jsonContent;
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
@@ -132,10 +127,9 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		let content: any[] = parsedJsonContent.contents;
 		for (const item of content) {
-			datasetArray.push(new Sections(item));
+			datasetArray.push(new Rooms(item));
 		}
 		return this.query(q, id);
-
 	}
 
 	private query(q: any, id: string) {
@@ -150,13 +144,13 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
-		// apply transformation
-		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
-			applyTransformation(q.TRANSFORMATIONS);
-		}
-		// Figure out which dataset to query
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
+		// apply transformation
+		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
+			applyTransformation(q.TRANSFORMATIONS, columnsValue);
+		}
+		// Figure out which dataset to query
 		createInsightResult(columnsValue, id, insightResultArray);
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;
@@ -193,11 +187,28 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		let property: string = key.substring(key.indexOf("_") + 1);
 		switch (property) {
-			case "dept": case "id": case "instructor": case "title":
-			case "avg": case "pass": case "fail": case "audit": case "year": case "uuid":
+			case "dept":
+			case "id":
+			case "instructor":
+			case "title":
+			case "avg":
+			case "pass":
+			case "fail":
+			case "audit":
+			case "year":
+			case "uuid":
 				return "courses";
-			case "fullname": case "shortname": case "number": case "name": case "address":
-			case "type": case "furniture": case "href": case "lat": case "lon": case "seats":
+			case "fullname":
+			case "shortname":
+			case "number":
+			case "name":
+			case "address":
+			case "type":
+			case "furniture":
+			case "href":
+			case "lat":
+			case "lon":
+			case "seats":
 				return "rooms";
 			default:
 				throw new InsightError("asdfghjkl");

@@ -51,4 +51,3 @@ function heapify(arr: InsightResult[], n: number, i: number, orderKey: string) {
 		heapify(arr, n, largest, orderKey);
 	}
 }
-

@@ -3,7 +3,6 @@ import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade
 import parse5, {Document} from "parse5";
 import http from "http";
 import {searchTreeByID, searchTreeByTag, createJSONAndAddToData} from "./RoomHelperFunction2";
-import {writeToData} from "./DatasetHelperFunctions";
 
 function parseTable(table: object, codeArray: string[]) {
 	let tableKeys = Object.keys(table);
@@ -268,12 +267,12 @@ function jszipRooms(
 	addedDatasets: InsightDataset[]
 ): Promise<string[]> {
 	let tempList: any[] = [];
-	return jsZip.loadAsync(content, {base64: true})
+	return jsZip
+		.loadAsync(content, {base64: true})
 		.then((zip) => {
 			let indexFile = zip.file(/index.htm/);
 			globalZip = zip;
-			// iterate index.htm to get building codes.
-			if (indexFile.length === 1) {
+			if (indexFile.length === 1) { // iterate index.htm to get building codes.
 				return getCodeArray(indexFile, codeArray);
 			}
 		}).then(() => {
@@ -296,5 +295,4 @@ function jszipRooms(
 			return createJSONAndAddToData(tempList, addedIds, addedDatasets, id, kind);
 		});
 }
-
 export {jszipRooms, searchTreeByID};

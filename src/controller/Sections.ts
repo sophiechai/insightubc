@@ -1,6 +1,6 @@
 import {Dataset} from "./Dataset";
 
-export class Sections extends Dataset{
+export class Sections extends Dataset {
 	// public get map(): Map<string, number | string> {
 	// 	return this._map;
 	// }

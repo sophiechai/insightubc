@@ -92,7 +92,6 @@ export abstract class ValidateQueryMain {
 			throw new InsightError("Length Invalid");
 		}
 		this.checkKeys(keys[0], "number");
-
 		if (!(typeof values[0] === "number")) {
 			throw new InsightError("Type Invalid");
 		}
@@ -120,10 +119,8 @@ export abstract class ValidateQueryMain {
 		if (keys.length === 0 || keys.length > 1) {
 			throw new InsightError("Length Invalid");
 		}
-		let k = keys[0];
 		let values = Object.values(obj);
-		let v = values[0];
-		this.checkCommand(k, v);
+		this.checkCommand(keys[0], values[0]);
 	}
 
 	private isOptionsValid(obj: object) {
@@ -132,7 +129,6 @@ export abstract class ValidateQueryMain {
 		}
 		let values = Object.values(obj);
 		this.isColumnsValid(values[0]);
-
 		if (Object.prototype.hasOwnProperty.call(obj, "ORDER")) {
 			if (typeof values[1] !== "string") {
 				throw new InsightError("Type Invalid");
@@ -162,11 +158,13 @@ export abstract class ValidateQueryMain {
 		if (type === "object") {
 			let dirAndKeysKey = Object.keys(orderValue);
 			let dirAndKeysValues: any = Object.values(orderValue);
-			if (dirAndKeysKey.length !== 2 &&
+			if (
+				dirAndKeysKey.length !== 2 &&
 				dirAndKeysKey[0] !== "dir" &&
 				dirAndKeysKey[1] !== "keys" &&
 				typeof dirAndKeysValues[0] !== "string" &&
-				!Array.isArray(dirAndKeysValues[1])) {
+				!Array.isArray(dirAndKeysValues[1])
+			) {
 				throw new InsightError("ORDER value invalid");
 			}
 			this.checkDirectionAndKeys(dirAndKeysValues[0], dirAndKeysValues[1], columnKeys);
@@ -288,9 +286,15 @@ export abstract class ValidateQueryMain {
 
 	private getTokenType(token: string) {
 		switch (token) {
-			case "MAX": case "MIN": case "AVG": case "SUM": return "number";
-			case "COUNT": return "any";
-			default: throw new InsightError(token + " is not a valid APPLYTOKEN");
+			case "MAX":
+			case "MIN":
+			case "AVG":
+			case "SUM":
+				return "number";
+			case "COUNT":
+				return "any";
+			default:
+				throw new InsightError(token + " is not a valid APPLYTOKEN");
 		}
 	}
 }

@@ -11,7 +11,6 @@ import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../TestUtil";
 import {folderTest} from "@ubccpsc310/folder-test";
-import parse5 from "parse5";
 
 use(chaiAsPromised); // extends chai to use additional keywords (e.g. eventually)
 
@@ -19,7 +18,6 @@ type Input = unknown;
 type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
-import {searchTreeByID} from "../../src/controller/RoomsHelperFunctions";
 describe("InsightFacade", function () {
 	this.timeout(10000);
 	let courses: string;
@@ -59,23 +57,27 @@ describe("InsightFacade", function () {
 				await facade.performQuery({
 					WHERE: {},
 					OPTIONS: {
-						COLUMNS: [
-							"asdf"
-						]
+						COLUMNS: ["rooms_shortname", "sumSeats", "maxSeats"],
+						ORDER: {
+							dir: "DOWN",
+							keys: ["maxSeats"],
+						},
 					},
 					TRANSFORMATIONS: {
-						GROUP: [
-							"courses_dept"
-						],
+						GROUP: ["rooms_shortname", "rooms_seats", "rooms_type"],
 						APPLY: [
 							{
-								asd: {MAX: "courses_pass"}
+								sumSeats: {
+									SUM: "rooms_seats",
+								},
 							},
 							{
-								asdf: {AVG: "courses_fail"}
-							}
-						]
-					}
+								maxSeats: {
+									MAX: "rooms_seats",
+								},
+							},
+						],
+					},
 				});
 			});
 		});
