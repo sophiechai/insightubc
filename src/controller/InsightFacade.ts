@@ -208,6 +208,10 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			property = key.substring(key.indexOf("_") + 1);
 		}
+		return this.getKindString(property);
+	}
+
+	private getKindString(property: string) {
 		switch (property) {
 			case "dept":
 			case "id":
