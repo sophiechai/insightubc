@@ -103,18 +103,18 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		datasetArray = [];
 		let q: any = query;
-		let id = "";
-		let kind = "";
-		try {
-			kind = this.decideKind(q);
-			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
-			id = validateQueryObject.isQueryValid();
-			if (!addedIds.includes(id)) {
-				throw new InsightError("Dataset ID does not exist");
-			}
-		} catch (err) {
-			return Promise.reject(err);
-		}
+		let id = "rooms";
+		let kind = "rooms";
+		// try {
+		// 	kind = this.decideKind(q);
+		// 	let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
+		// 	id = validateQueryObject.isQueryValid();
+		// 	if (!addedIds.includes(id)) {
+		// 		throw new InsightError("Dataset ID does not exist");
+		// 	}
+		// } catch (err) {
+		// 	return Promise.reject(err);
+		// }
 		let jsonContent;
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
@@ -152,11 +152,13 @@ export default class InsightFacade implements IInsightFacade {
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
 		// apply transformation
+		let newMap: Map<string, Dataset[]> = new Map();
+		let aggregateMap: Map<string, number[]> = new Map();
 		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
-			applyTransformation(q.TRANSFORMATIONS, columnsValue);
+			applyTransformation(q.TRANSFORMATIONS, columnsValue, newMap, aggregateMap);
 		}
 		// Figure out which dataset to query
-		createInsightResult(columnsValue, id, insightResultArray);
+		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;
 			sortResult(orderKey, insightResultArray);

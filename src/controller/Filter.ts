@@ -127,7 +127,12 @@ export function filterNOT(instruction: object[]) {
 	dataset = beforeNOT.filter((n) => !dataset.includes(n));
 }
 
-export function createInsightResult(columnKeys: string[], id: string, resultArray: InsightResult[]) {
+export function createInsightResult(
+	columnKeys: string[],
+	id: string, resultArray: InsightResult[],
+	newMap: Map<string, Dataset[]>,
+	aggregateMap:  Map<string, number[]>) {
+
 	let output: any = {};
 	for (const item of dataset) {
 		for (const item1 of columnKeys) {
@@ -148,13 +153,16 @@ export function checkSectionArrayFinalLength() {
 	}
 }
 
-export function applyTransformation(instruction: object, columnKeys: string[]) {
+export function applyTransformation(
+	instruction: object,
+	columnKeys: string[],
+	newMap: Map<string, Dataset[]>,
+	aggregateMap:  Map<string, number[]>) {
+
 	// GROUP
-	let newMap: Map<string, Dataset[]> = new Map();
-	newMap = applyGroup(Object.values(instruction)[0], newMap);
+	newMap = new Map(applyGroup(Object.values(instruction)[0], newMap));
 	// APPLY
 	// aggregateMap stores the transformation under APPLY
-	let aggregateMap: Map<string, number[]> = new Map();
 	if (Object.keys(instruction).length === 2) {
 		applyApply(Object.values(instruction)[1], newMap, columnKeys, aggregateMap);
 	}
