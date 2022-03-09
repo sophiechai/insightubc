@@ -129,19 +129,35 @@ export function filterNOT(instruction: object[]) {
 
 export function createInsightResult(
 	columnKeys: string[],
-	id: string, resultArray: InsightResult[],
+	id: string,
+	resultArray: InsightResult[],
 	newMap: Map<string, Dataset[]>,
 	aggregateMap:  Map<string, number[]>) {
 
 	let output: any = {};
-	for (const item of dataset) {
-		for (const item1 of columnKeys) {
-			// console.log("column: ", item1);
-			// console.log("item: ", item.map.get(getProperty(item1)));
-			output[item1] = item.map.get(getProperty(item1));
+	if (newMap.size === 0) {
+		for (const item of dataset) {
+			for (const item1 of columnKeys) {
+				output[item1] = item.map.get(getProperty(item1));
+			}
+			resultArray.push({...output});
 		}
-		resultArray.push({...output});
+	} else {
+		for (const entry of newMap) {
+			let count = 0;
+			for (const item1 of columnKeys) {
+				let value = entry[1][0].map.get(getProperty(item1));
+				if (value === undefined) {
+					output[item1] = aggregateMap.get(entry[0] + "")![count];
+					count++;
+				} else {
+					output[item1] = value;
+				}
+			}
+			resultArray.push({...output});
+		}
 	}
+
 }
 
 export function checkSectionArrayFinalLength() {
@@ -166,6 +182,7 @@ export function applyTransformation(
 	if (Object.keys(instruction).length === 2) {
 		applyApply(Object.values(instruction)[1], newMap, columnKeys, aggregateMap);
 	}
+	return newMap;
 }
 
 function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>) {

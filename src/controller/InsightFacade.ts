@@ -155,7 +155,7 @@ export default class InsightFacade implements IInsightFacade {
 		let newMap: Map<string, Dataset[]> = new Map();
 		let aggregateMap: Map<string, number[]> = new Map();
 		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
-			applyTransformation(q.TRANSFORMATIONS, columnsValue, newMap, aggregateMap);
+			newMap = new Map(applyTransformation(q.TRANSFORMATIONS, columnsValue, newMap, aggregateMap));
 		}
 		// Figure out which dataset to query
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
