@@ -194,12 +194,33 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			property = key.substring(key.indexOf("_") + 1);
 		}
+		return this.getKindString(property);
+	}
+
+	private getKindString(property: string) {
 		switch (property) {
-			case "dept": case "id": case "instructor": case "title":
-			case "avg": case "pass": case "fail": case "audit": case "year": case "uuid":
+			case "dept":
+			case "id":
+			case "instructor":
+			case "title":
+			case "avg":
+			case "pass":
+			case "fail":
+			case "audit":
+			case "year":
+			case "uuid":
 				return "courses";
-			case "fullname": case "shortname": case "number": case "name": case "address":
-			case "type": case "furniture": case "href": case "lat": case "lon": case "seats":
+			case "fullname":
+			case "shortname":
+			case "number":
+			case "name":
+			case "address":
+			case "type":
+			case "furniture":
+			case "href":
+			case "lat":
+			case "lon":
+			case "seats":
 				return "rooms";
 			default:
 				throw new InsightError("Invalid key property");
