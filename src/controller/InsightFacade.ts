@@ -103,19 +103,19 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		datasetArray = [];
 		let q: any = query;
-		let id = "rooms";
-		let kind = "rooms";
-		// try {
-		// 	kind = this.decideKind(q);
-		// 	let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
-		// 	id = validateQueryObject.isQueryValid();
-		// 	if (!addedIds.includes(id)) {
-		// 		throw new InsightError("Dataset ID does not exist");
-		// 	}
-		// } catch (err) {
-		// 	return Promise.reject(err);
-		// }
-		let jsonContent;
+		let id = "";
+		let kind = "";
+		try {
+			kind = this.decideKind(q);
+			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
+			id = validateQueryObject.isQueryValid();
+			if (!addedIds.includes(id)) {
+				throw new InsightError("Dataset ID does not exist");
+			}
+		} catch (err) {
+			return Promise.reject(err);
+		}
+		let jsonContent: string;
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
 		} catch (err) {
@@ -159,6 +159,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// Figure out which dataset to query
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
+		console.log("YEY");
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			let orderKey = optionsValue.ORDER;
 			sortResult(orderKey, insightResultArray);

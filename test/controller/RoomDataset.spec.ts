@@ -28,7 +28,7 @@ describe("InsightFacade", function () {
 	});
 
 	beforeEach(function () {
-		// clearDisk();
+		clearDisk();
 		facade = new InsightFacade();
 	});
 
@@ -51,9 +51,9 @@ describe("InsightFacade", function () {
 	describe("Perform Query", function () {
 		describe("Successful Perform Query", function () {
 			it("should add one id", async function () {
-				// await facade.addDataset("rooms", courses, InsightDatasetKind.Rooms);
-				// expect(addedIds).to.deep.equal(["rooms"]);
-				// expect(addedIds).to.have.length(1);
+				const addedIds = await facade.addDataset("rooms", courses, InsightDatasetKind.Rooms);
+				expect(addedIds).to.deep.equal(["rooms"]);
+				expect(addedIds).to.have.length(1);
 				await facade.performQuery({
 					WHERE: {},
 					OPTIONS: {
