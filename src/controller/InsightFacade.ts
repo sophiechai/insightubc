@@ -21,6 +21,7 @@ import {ValidateQueryCourses} from "./ValidateQueryCourses";
 import {ValidateQueryRooms} from "./ValidateQueryRooms";
 import {Rooms} from "./Rooms";
 import {Dataset} from "./Dataset";
+import {Sections} from "./Sections";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -102,18 +103,18 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		datasetArray = [];
 		let q: any = query;
-		let id = "rooms";
-		let kind = "rooms";
-		// try {
-		// 	kind = this.decideKind(q);
-		// 	let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
-		// 	id = validateQueryObject.isQueryValid();
-		// 	if (!addedIds.includes(id)) {
-		// 		throw new InsightError("Dataset ID does not exist");
-		// 	}
-		// } catch (err) {
-		// 	return Promise.reject(err);
-		// }
+		let id = "";
+		let kind = "";
+		try {
+			kind = this.decideKind(q);
+			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
+			id = validateQueryObject.isQueryValid();
+			if (!addedIds.includes(id)) {
+				throw new InsightError("Dataset ID does not exist");
+			}
+		} catch (err) {
+			return Promise.reject(err);
+		}
 		let jsonContent;
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
@@ -127,7 +128,11 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		let content: any[] = parsedJsonContent.contents;
 		for (const item of content) {
-			datasetArray.push(new Rooms(item));
+			if (kind === "courses") {
+				datasetArray.push(new Sections(item));
+			} else {
+				datasetArray.push(new Rooms(item));
+			}
 		}
 		return this.query(q, id);
 	}
