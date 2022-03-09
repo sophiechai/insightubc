@@ -1,10 +1,9 @@
 import Server from "../../src/rest/Server";
 import InsightFacade from "../../src/controller/InsightFacade";
-import {expect, use} from "chai";
+import {use} from "chai";
 import chaiHttp from "chai-http";
 
 describe("Facade D3", function () {
-
 	let facade: InsightFacade;
 	let server: Server;
 

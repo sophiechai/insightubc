@@ -1,16 +1,18 @@
-export class Sections {
-	public get map(): Map<string, number | string> {
-		return this._map;
-	}
+import {Dataset} from "./Dataset";
 
-	public set map(value: Map<string, number | string>) {
-		this._map = value;
-	}
-
-	private _map: Map<string, number | string>;
+export class Sections extends Dataset {
+	// public get map(): Map<string, number | string> {
+	// 	return this._map;
+	// }
+	//
+	// public set map(value: Map<string, number | string>) {
+	// 	this._map = value;
+	// }
+	//
+	// private _map: Map<string, number | string>;
 
 	public constructor(jsonStringInput: string) {
-		this._map = new Map<string, number | string>();
+		super(jsonStringInput);
 
 		let keys: string[] = Object.keys(jsonStringInput);
 		let values: Array<string | number> = Object.values(jsonStringInput);
@@ -25,7 +27,7 @@ export class Sections {
 			} else if (key === "course") {
 				key = "id";
 			}
-			this._map.set(key, values[i]);
+			this.map.set(key, values[i]);
 		}
 	}
 }

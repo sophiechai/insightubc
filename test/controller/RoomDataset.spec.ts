@@ -11,7 +11,6 @@ import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../TestUtil";
 import {folderTest} from "@ubccpsc310/folder-test";
-import parse5 from "parse5";
 
 use(chaiAsPromised); // extends chai to use additional keywords (e.g. eventually)
 
@@ -19,7 +18,6 @@ type Input = unknown;
 type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
-import {searchTreeByID} from "../../src/controller/RoomsHelperFunctions";
 describe("InsightFacade", function () {
 	this.timeout(10000);
 	let courses: string;
@@ -30,7 +28,7 @@ describe("InsightFacade", function () {
 	});
 
 	beforeEach(function () {
-		clearDisk();
+		// clearDisk();
 		facade = new InsightFacade();
 	});
 
@@ -49,4 +47,71 @@ describe("InsightFacade", function () {
 			// });
 		});
 	});
+
+	describe("Perform Query", function () {
+		describe("Successful Perform Query", function () {
+			it("should add one id", async function () {
+				// await facade.addDataset("rooms", courses, InsightDatasetKind.Rooms);
+				// expect(addedIds).to.deep.equal(["rooms"]);
+				// expect(addedIds).to.have.length(1);
+				await facade.performQuery({
+					WHERE: {},
+					OPTIONS: {
+						COLUMNS: ["rooms_shortname", "sumSeats", "maxSeats"],
+						ORDER: {
+							dir: "DOWN",
+							keys: ["maxSeats"],
+						},
+					},
+					TRANSFORMATIONS: {
+						GROUP: ["rooms_shortname", "rooms_seats", "rooms_type"],
+						APPLY: [
+							{
+								sumSeats: {
+									SUM: "rooms_seats",
+								},
+							},
+							{
+								maxSeats: {
+									MAX: "rooms_seats",
+								},
+							},
+						],
+					},
+				});
+			});
+		});
+	});
+});
+
+describe("Dynamic folder test for performQuery", function () {
+	this.timeout(15000);
+	let rooms: string;
+	let facade: IInsightFacade;
+	before(async function () {
+		rooms = getContentFromArchives("rooms.zip");
+		facade = new InsightFacade();
+		await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+	});
+
+	// Assert actual error is of expected type
+	function assertError(actual: any, expected: Error): void {
+		if (expected === "InsightError") {
+			expect(actual).to.be.an.instanceOf(InsightError);
+		} else if (expected === "ResultTooLargeError") {
+			expect(actual).to.be.an.instanceOf(ResultTooLargeError);
+		} else {
+			expect.fail("UNEXPECTED ERROR");
+		}
+	}
+
+	folderTest<Input, Output, Error>(
+		"performQuery tests",
+		(input: Input): Output => facade.performQuery(input),
+		"./test/resources/c2_queries_sophie",
+		{
+			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
+			assertOnError: assertError,
+		}
+	);
 });

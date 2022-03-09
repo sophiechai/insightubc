@@ -1,0 +1,21 @@
+{
+	"title": "TRANSFORMATIONS has empty GROUP array --> InsightError",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"asdf"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [],
+			"APPLY": [
+				{
+					"asd": { "MAX": "courses_pass" }
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

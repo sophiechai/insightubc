@@ -1,3 +1,8 @@
+import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {writeToData} from "./DatasetHelperFunctions";
+
+let dataPath = __dirname + "/../../data";
+
 function searchTreeByTag(element: object, matchingTag: string): object {
 	// html -> body -> div -> div -> div -> section -> div -> div -> table
 	let keys = Object.keys(element);
@@ -53,4 +58,25 @@ function searchTreeByID(element: object, matchingID: string): object {
 	return null as any;
 }
 
-export {searchTreeByID, searchTreeByTag};
+function createJSONAndAddToData(
+	tempList: any[],
+	addedIds: string[],
+	addedDatasets: InsightDataset[],
+	id: string,
+	kind: InsightDatasetKind
+) {
+	// no sections in all the files in zip
+	if (tempList.length === 0) {
+		return Promise.reject(new InsightError("No Valid Rooms"));
+	} else {
+		// create a json object that contains all sections in all the files under the zip file
+		let data: InsightDataset = {id, kind, numRows: tempList.length};
+		const myJSON = JSON.stringify({header: data, contents: tempList});
+		const fileName = dataPath + "/" + id + ".json";
+		writeToData(fileName, myJSON);
+		addedIds.push(id);
+		addedDatasets.push(data);
+		return Promise.resolve(addedIds);
+	}
+}
+export {searchTreeByID, searchTreeByTag, createJSONAndAddToData};
