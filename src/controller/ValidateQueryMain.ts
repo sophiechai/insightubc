@@ -134,9 +134,6 @@ export abstract class ValidateQueryMain {
 		this.isColumnsValid(values[0]);
 
 		if (Object.prototype.hasOwnProperty.call(obj, "ORDER")) {
-			if (typeof values[1] !== "string") {
-				throw new InsightError("Type Invalid");
-			}
 			this.isOrderValid(values[1], values[0], typeof values[1]);
 		}
 	}
@@ -146,7 +143,7 @@ export abstract class ValidateQueryMain {
 			throw new InsightError("COLUMNS requires at least one key");
 		}
 		if (this.hasTransformations) {
-			for (const key in list) {
+			for (const key of list) {
 				if (!this.groupKeys.includes(key) && !this.applyKeys.includes(key)) {
 					throw new InsightError("COLUMN key " + key + " is not in GROUP or APPLY");
 				}
