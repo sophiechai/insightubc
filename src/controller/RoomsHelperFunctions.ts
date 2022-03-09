@@ -112,7 +112,7 @@ function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
 		buildingInfoArray.push(valueValues[valueKeys.indexOf("value")]);
 	}
 	// get building geolocation
-	return getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
+	// return getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
 }
 
 function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {

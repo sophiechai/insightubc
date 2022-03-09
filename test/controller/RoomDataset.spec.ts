@@ -30,7 +30,7 @@ describe("InsightFacade", function () {
 	});
 
 	beforeEach(function () {
-		clearDisk();
+		// clearDisk();
 		facade = new InsightFacade();
 	});
 
@@ -49,4 +49,67 @@ describe("InsightFacade", function () {
 			// });
 		});
 	});
+
+	describe("Perform Query", function () {
+		describe("Successful Perform Query", function () {
+			it("should add one id", async function () {
+				// await facade.addDataset("rooms", courses, InsightDatasetKind.Rooms);
+				// expect(addedIds).to.deep.equal(["rooms"]);
+				// expect(addedIds).to.have.length(1);
+				await facade.performQuery({
+					WHERE: {},
+					OPTIONS: {
+						COLUMNS: [
+							"asdf"
+						]
+					},
+					TRANSFORMATIONS: {
+						GROUP: [
+							"courses_dept"
+						],
+						APPLY: [
+							{
+								asd: {MAX: "courses_pass"}
+							},
+							{
+								asdf: {AVG: "courses_fail"}
+							}
+						]
+					}
+				});
+			});
+		});
+	});
+});
+
+describe("Dynamic folder test for performQuery", function () {
+	this.timeout(15000);
+	let rooms: string;
+	let facade: IInsightFacade;
+	before(async function () {
+		rooms = getContentFromArchives("rooms.zip");
+		facade = new InsightFacade();
+		await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+	});
+
+	// Assert actual error is of expected type
+	function assertError(actual: any, expected: Error): void {
+		if (expected === "InsightError") {
+			expect(actual).to.be.an.instanceOf(InsightError);
+		} else if (expected === "ResultTooLargeError") {
+			expect(actual).to.be.an.instanceOf(ResultTooLargeError);
+		} else {
+			expect.fail("UNEXPECTED ERROR");
+		}
+	}
+
+	folderTest<Input, Output, Error>(
+		"performQuery tests",
+		(input: Input): Output => facade.performQuery(input),
+		"./test/resources/c2_queries_sophie",
+		{
+			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
+			assertOnError: assertError,
+		}
+	);
 });

@@ -15,9 +15,12 @@ import {Sections} from "./Sections";
 import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
-import {filter, createInsightResult, sortResult, checkSectionArrayFinalLength} from "./Filter";
+import {filter, createInsightResult, checkSectionArrayFinalLength, applyTransformation} from "./Filter";
+import {sortResult} from "./Filter2";
 import {ValidateQueryMain} from "./ValidateQueryMain";
 import {ValidateQueryCourses} from "./ValidateQueryCourses";
+import {Rooms} from "./Rooms";
+import {Dataset} from "./Dataset";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -30,7 +33,8 @@ let addedDatasets: InsightDataset[];
 let dataPath = __dirname + "/../../data";
 let mapForEachFormattedSection: Map<string, number | string>;
 
-export let sectionArray: Sections[];
+export let datasetArray: Dataset[];
+// export let roomArray: Rooms[];
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
@@ -99,7 +103,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		sectionArray = [];
+		datasetArray = [];
 		let q: any = query;
 		let id = "";
 		try {
@@ -122,8 +126,8 @@ export default class InsightFacade implements IInsightFacade {
 		let parsedJsonContent = JSON.parse(jsonContent);
 		let content: any[] = parsedJsonContent.contents;
 		for (const item of content) {
-			let section: Sections = new Sections(item);
-			sectionArray.push(section);
+			let section: Dataset = new Sections(item);
+			datasetArray.push(section);
 		}
 		// Call filter() which returns resulting array...
 		let insightResultArray: InsightResult[] = [];
@@ -138,6 +142,10 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
+		// apply transformation
+		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
+			applyTransformation(q.TRANSFORMATIONS);
+		}
 		// Figure out which dataset to query
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
@@ -148,7 +156,6 @@ export default class InsightFacade implements IInsightFacade {
 			let orderKey = optionsValue.ORDER;
 			sortResult(orderKey, insightResultArray);
 		}
-
 		return Promise.resolve(insightResultArray);
 	}
 
