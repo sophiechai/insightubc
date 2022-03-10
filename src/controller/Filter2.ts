@@ -7,7 +7,7 @@ import {InsightError, InsightResult, ResultTooLargeError} from "./IInsightFacade
 export function sortResult(orderValue: any, resultArray: InsightResult[]) {
 	let dir = "";
 	let orderKeys: string[] = [];
-	if (orderValue === "string") {
+	if (typeof orderValue === "string") {
 		orderKeys.push(orderValue);
 	} else {
 		dir = orderValue.dir;

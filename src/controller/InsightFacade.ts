@@ -161,39 +161,58 @@ export default class InsightFacade implements IInsightFacade {
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
 		console.log("YEY");
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
-			let orderKey = optionsValue.ORDER;
-			sortResult(orderKey, insightResultArray);
+			let orderValue = optionsValue.ORDER;
+			sortResult(orderValue, insightResultArray);
 		}
 		return Promise.resolve(insightResultArray);
 	}
 
 	private instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
-		if (kind === InsightDatasetKind.Courses) {
+		if (kind === "courses") {
 			return new ValidateQueryCourses(q);
 		} else {
 			return new ValidateQueryRooms(q);
 		}
 	}
 
-	private decideKind(query: object): string {
-		let keys = Object.keys(query);
-		if (keys.length < 2 || keys[1] !== "OPTIONS") {
-			throw new InsightError("asdfghjkl");
+	private decideKind(query: any): string {
+		let property: string = "";
+		if (Object.prototype.hasOwnProperty.call(query, "TRANSFORMATIONS")) {
+			let transValue = query.TRANSFORMATIONS;
+			if (!Object.prototype.hasOwnProperty.call(transValue, "GROUP")) {
+				throw new InsightError("Missing GROUP in TRANSFORMATIONS");
+			}
+			let groupValue = transValue.GROUP;
+			if (!Array.isArray(groupValue) || groupValue.length === 0) {
+				throw new InsightError("GROUP value not valid");
+			}
+			let key: string = groupValue[0];
+			if (!key.includes("_")) {
+				throw new InsightError("Incorrect key in GROUP");
+			}
+			property = key.substring(key.indexOf("_") + 1);
+		} else {
+			if (!Object.prototype.hasOwnProperty.call(query, "OPTIONS")) {
+				throw new InsightError("Missing OPTIONS");
+			}
+			let optionsValue = query.OPTIONS;
+			if (!Object.prototype.hasOwnProperty.call(optionsValue, "COLUMNS")) {
+				throw new InsightError("Missing COLUMNS");
+			}
+			let columnsValue = optionsValue.COLUMNS;
+			if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
+				throw new InsightError("COLUMNS value invalid");
+			}
+			let key = columnsValue[0];
+			if (!key.includes("_")) {
+				throw new InsightError("Invalid key in COLUMNS");
+			}
+			property = key.substring(key.indexOf("_") + 1);
 		}
-		let optionsValue = Object.values(query)[1];
-		let optionsKeys = Object.keys(optionsValue);
-		if (optionsKeys.length === 0 || optionsKeys[0] !== "COLUMNS") {
-			throw new InsightError("asdfghjkl");
-		}
-		let columnsValue: any = Object.values(optionsValue)[0];
-		if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
-			throw new InsightError("asdfghjkl");
-		}
-		let key: string = columnsValue[0];
-		if (!key.includes("_")) {
-			throw new InsightError("asdfghjkl");
-		}
-		let property: string = key.substring(key.indexOf("_") + 1);
+		return this.getKindString(property);
+	}
+
+	private getKindString(property: string) {
 		switch (property) {
 			case "dept":
 			case "id":
@@ -219,7 +238,7 @@ export default class InsightFacade implements IInsightFacade {
 			case "seats":
 				return "rooms";
 			default:
-				throw new InsightError("asdfghjkl");
+				throw new InsightError("Invalid key property");
 		}
 	}
 
