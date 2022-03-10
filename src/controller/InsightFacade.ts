@@ -153,7 +153,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	private instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
-		if (kind === InsightDatasetKind.Courses) {
+		if (kind === "courses") {
 			return new ValidateQueryCourses(q);
 		} else {
 			return new ValidateQueryRooms(q);
