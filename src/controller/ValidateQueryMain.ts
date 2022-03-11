@@ -129,10 +129,8 @@ export abstract class ValidateQueryMain {
 		}
 		let values = Object.values(obj);
 		this.isColumnsValid(values[0]);
+
 		if (Object.prototype.hasOwnProperty.call(obj, "ORDER")) {
-			if (typeof values[1] !== "string") {
-				throw new InsightError("Type Invalid");
-			}
 			this.isOrderValid(values[1], values[0], typeof values[1]);
 		}
 	}
@@ -142,7 +140,7 @@ export abstract class ValidateQueryMain {
 			throw new InsightError("COLUMNS requires at least one key");
 		}
 		if (this.hasTransformations) {
-			for (const key in list) {
+			for (const key of list) {
 				if (!this.groupKeys.includes(key) && !this.applyKeys.includes(key)) {
 					throw new InsightError("COLUMN key " + key + " is not in GROUP or APPLY");
 				}
@@ -158,13 +156,11 @@ export abstract class ValidateQueryMain {
 		if (type === "object") {
 			let dirAndKeysKey = Object.keys(orderValue);
 			let dirAndKeysValues: any = Object.values(orderValue);
-			if (
-				dirAndKeysKey.length !== 2 &&
+			if (dirAndKeysKey.length !== 2 &&
 				dirAndKeysKey[0] !== "dir" &&
 				dirAndKeysKey[1] !== "keys" &&
 				typeof dirAndKeysValues[0] !== "string" &&
-				!Array.isArray(dirAndKeysValues[1])
-			) {
+				!Array.isArray(dirAndKeysValues[1])) {
 				throw new InsightError("ORDER value invalid");
 			}
 			this.checkDirectionAndKeys(dirAndKeysValues[0], dirAndKeysValues[1], columnKeys);
