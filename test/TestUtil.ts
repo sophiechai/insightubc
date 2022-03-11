@@ -1,9 +1,16 @@
 import * as fs from "fs-extra";
+import {InsightError} from "../src/controller/IInsightFacade";
 
 const persistDir = "./data";
 
 function getContentFromArchives(name: string): string {
-	return fs.readFileSync("test/resources/archives/" + name).toString("base64");
+	let output;
+	// try {
+	output = fs.readFileSync("test/resources/archives/" + name).toString("base64");
+	// } catch (err) {
+	// 	// return new InsightError("readFileSync error");
+	// }
+	return output;
 }
 
 function clearDisk(): void {

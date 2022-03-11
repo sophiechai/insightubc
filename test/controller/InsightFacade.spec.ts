@@ -275,6 +275,19 @@ describe("InsightFacade", function () {
 						expect(err).to.be.instanceof(InsightError);
 					});
 			});
+
+			it("should reject if not a zip file", function () {
+				let incorrectDir: string = getContentFromArchives("test.txt");
+
+				return facade
+					.addDataset("courses", incorrectDir, InsightDatasetKind.Courses)
+					.then((res) => {
+						throw new Error("Resolved with " + res);
+					})
+					.catch((err) => {
+						expect(err).to.be.instanceof(InsightError);
+					});
+			});
 		});
 	});
 
@@ -387,7 +400,7 @@ describe("Dynamic folder test for performQuery", function () {
 	folderTest<Input, Output, Error>(
 		"performQuery tests",
 		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/c2_queries",
+		"./test/resources/queries",
 		{
 			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
 			assertOnError: assertError,

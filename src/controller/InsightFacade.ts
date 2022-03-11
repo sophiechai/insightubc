@@ -62,10 +62,14 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
-		if (kind === InsightDatasetKind.Courses) {
-			return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
-		} else {
-			return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+		try {
+			if (kind === InsightDatasetKind.Courses) {
+				return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
+			} else {
+				return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+			}
+		} catch (err) {
+			throw new InsightError("zip error");
 		}
 	}
 
@@ -116,6 +120,13 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(err);
 		}
 		let jsonContent: string;
+		// let parsedJsonContent: any; // = JSON.parse(jsonContent);
+		// fs.readFile("data/" + id + ".json", (err, data) => {
+		// 	if (err) {
+		// 		return Promise.reject(new InsightError("Reading file not found"));
+		// 	}
+		// 	parsedJsonContent = JSON.parse(data.toString());
+		// });
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
 		} catch (err) {

@@ -279,7 +279,7 @@ function aggregate(
 		} else {
 			mapValue = aggregateMap.get(key)!;
 		}
-		mapValue.push(tracker);
+		mapValue.push(Number(tracker.toFixed(2)));
 		aggregateMap.set(key, mapValue);
 	}
 }
