@@ -3,6 +3,7 @@ import {Sections} from "./Sections";
 import {datasetArray} from "./InsightFacade";
 import {Rooms} from "./Rooms";
 import {Dataset} from "./Dataset";
+import Decimal from "decimal.js";
 
 let dataset: Dataset[];
 
@@ -44,46 +45,38 @@ export function filter(instruction: object, message: string) {
 	}
 }
 
-function getProperty(input: string): string {
+export function getProperty(input: string): string {
 	let idx = input.indexOf("_");
 	return input.substring(idx + 1);
 }
 
 export function filterGT(instruction: object) {
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v: number = values[0];
+	let k = Object.keys(instruction)[0];
+	let v: number = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
 	dataset = dataset.filter((x) => x.map.get(property)! > v);
 }
 
 export function filterLT(instruction: object) {
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v: number = values[0];
+	let k = Object.keys(instruction)[0];
+	let v: number = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
 	dataset = dataset.filter((x) => x.map.get(property)! < v);
 }
 
 export function filterEQ(instruction: object) {
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v: number = values[0];
+	let k = Object.keys(instruction)[0];
+	let v: number = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
 	dataset = dataset.filter((x) => x.map.get(property)! === v);
 }
 
 export function filterIS(instruction: object) {
-	let keys = Object.keys(instruction);
-	let values = Object.values(instruction);
-	let k = keys[0];
-	let v: string = values[0];
+	let k = Object.keys(instruction)[0];
+	let v: string = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
 	if (v.charAt(0) === "*" && v.length === 1) {
@@ -174,24 +167,7 @@ export function checkSectionArrayFinalLength(newMap: Map<string, Dataset[]>) {
 		}
 	}
 }
-
-export function applyTransformation(
-	instruction: object,
-	columnKeys: string[],
-	newMap: Map<string, Dataset[]>,
-	aggregateMap:  Map<string, number[]>) {
-
-	// GROUP
-	newMap = new Map(applyGroup(Object.values(instruction)[0], newMap));
-	// APPLY
-	// aggregateMap stores the transformation under APPLY
-	if (Object.keys(instruction).length === 2) {
-		applyApply(Object.values(instruction)[1], newMap, columnKeys, aggregateMap);
-	}
-	return newMap;
-}
-
-function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>) {
+export function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>) {
 	let property: string = getProperty(groupArray[0]);
 	for (const item of dataset) {
 		let roomValue: any = item.map.get(property);
@@ -205,7 +181,6 @@ function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>) {
 			newMap.set(roomValue, value);
 		}
 	}
-
 	if (groupArray.length > 1) {
 		for (let i = 1; i < groupArray.length; i++) {
 			let tempMap: Map<string, Dataset[]> = new Map();
@@ -231,53 +206,45 @@ function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>) {
 	return newMap;
 }
 
-function applyApply(
-	applyArray: object[],
-	newMap: Map<string, Dataset[]>,
-	columnKeys: string[],
-	aggregateMap: Map<string, number[]>
-) {
-	for (const item of applyArray) {
-		let key = Object.keys(item)[0];
-		if (columnKeys.includes(key)) {
-			let value = Object.values(item)[0];
-			let command: string = Object.keys(value)[0];
-			let commandValue = Object.values(value)[0];
-			let property: string = "";
-			if (typeof commandValue === "string") {
-				property = getProperty(commandValue);
-			}
-			aggregate(command, newMap, property, aggregateMap);
-		}
-	}
-}
-
-function aggregate(
-	command: string,
-	newMap: Map<string, Dataset[]>,
-	property: string,
+export function aggregate(command: string, newMap: Map<string, Dataset[]>, property: string,
 	aggregateMap: Map<string, number[]>
 ) {
 	for (let entry of newMap.entries()) {
 		let key = entry[0];
 		let value = entry[1];
 		let tracker: number = 0;
+		let avgSum: Decimal = new Decimal(0);
+		let countArray: string[] = [];
 		for (let data of value) {
-			let num: number = Number(data.map.get(property));
-			if (command === "MAX") {
-				if (num > tracker) {
-					tracker = num;
-				}
-			} else if (command === "MIN") {
-				if (num < tracker) {
-					tracker = num;
+			let x = data.map.get(property)!;
+			if (command === "COUNT") {
+				if (!countArray.includes(x.toString())) {
+					countArray.push(x.toString());
 				}
 			} else {
-				tracker += num;
+				let num: number = Number(x);
+				Number(data.map.get(property));
+				if (command === "MAX") {
+					if (num > tracker) {
+						tracker = num;
+					}
+				} else if (command === "MIN") {
+					if (num < tracker) {
+						tracker = num;
+					}
+				} else if (command === "SUM"){
+					tracker += num;
+				} else {
+					let total = new Decimal(num);
+					avgSum.add(total);
+				}
 			}
 		}
 		if (command === "AVG") {
-			tracker = tracker / value.length;
+			tracker = avgSum.toNumber() / value.length;
+		}
+		if (command === "COUNT") {
+			tracker = countArray.length;
 		}
 		let mapValue: number[];
 		if (!aggregateMap.has(key)) {
@@ -289,3 +256,9 @@ function aggregate(
 		aggregateMap.set(key, mapValue);
 	}
 }
+
+// function countCommand(countArray: string[], data: string) {
+// 	if (!countArray.includes(data)) {
+// 		countArray.push(data);
+// 	}
+// }

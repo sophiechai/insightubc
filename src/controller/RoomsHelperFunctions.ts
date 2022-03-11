@@ -283,7 +283,7 @@ function jszipRooms(
 				} else {
 					let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
 					if (codeArray.includes(code)) {
-						const promise = file.async("string");
+						let promise = file.async("string");
 						parseResult(promise, code, tempList);
 						promises.push(promise);
 					}
