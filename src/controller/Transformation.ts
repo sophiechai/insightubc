@@ -5,7 +5,8 @@ export function applyTransformation(
 	instruction: object,
 	columnKeys: string[],
 	newMap: Map<string, Dataset[]>,
-	aggregateMap:  Map<string, number[]>) {
+	aggregateMap: Map<string, number[]>
+) {
 	// GROUP
 	newMap = new Map(applyGroup(Object.values(instruction)[0], newMap));
 	// APPLY

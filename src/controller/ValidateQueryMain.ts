@@ -156,11 +156,13 @@ export abstract class ValidateQueryMain {
 		if (type === "object") {
 			let dirAndKeysKey = Object.keys(orderValue);
 			let dirAndKeysValues: any = Object.values(orderValue);
-			if (dirAndKeysKey.length !== 2 &&
+			if (
+				dirAndKeysKey.length !== 2 &&
 				dirAndKeysKey[0] !== "dir" &&
 				dirAndKeysKey[1] !== "keys" &&
 				typeof dirAndKeysValues[0] !== "string" &&
-				!Array.isArray(dirAndKeysValues[1])) {
+				!Array.isArray(dirAndKeysValues[1])
+			) {
 				throw new InsightError("ORDER value invalid");
 			}
 			this.checkDirectionAndKeys(dirAndKeysValues[0], dirAndKeysValues[1], columnKeys);

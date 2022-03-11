@@ -125,8 +125,8 @@ export function createInsightResult(
 	id: string,
 	resultArray: InsightResult[],
 	newMap: Map<string, Dataset[]>,
-	aggregateMap:  Map<string, number[]>) {
-
+	aggregateMap: Map<string, number[]>
+) {
 	let output: any = {};
 	if (newMap.size === 0) {
 		for (const item of dataset) {
@@ -150,7 +150,6 @@ export function createInsightResult(
 			resultArray.push({...output});
 		}
 	}
-
 }
 
 export function checkSectionArrayFinalLength(newMap: Map<string, Dataset[]>) {
@@ -232,7 +231,7 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 					if (num < tracker) {
 						tracker = num;
 					}
-				} else if (command === "SUM"){
+				} else if (command === "SUM") {
 					tracker += num;
 				} else {
 					let total = new Decimal(num);
