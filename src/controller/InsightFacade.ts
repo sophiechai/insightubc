@@ -62,10 +62,14 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
-		if (kind === InsightDatasetKind.Courses) {
-			return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
-		} else {
-			return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+		try {
+			if (kind === InsightDatasetKind.Courses) {
+				return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
+			} else {
+				return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+			}
+		} catch (err) {
+			throw new InsightError("zip error");
 		}
 	}
 

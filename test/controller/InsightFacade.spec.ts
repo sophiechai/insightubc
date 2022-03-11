@@ -275,6 +275,19 @@ describe("InsightFacade", function () {
 						expect(err).to.be.instanceof(InsightError);
 					});
 			});
+
+			it("should reject if not a zip file", function () {
+				let incorrectDir: string = getContentFromArchives("test.txt");
+
+				return facade
+					.addDataset("courses", incorrectDir, InsightDatasetKind.Courses)
+					.then((res) => {
+						throw new Error("Resolved with " + res);
+					})
+					.catch((err) => {
+						expect(err).to.be.instanceof(InsightError);
+					});
+			});
 		});
 	});
 
