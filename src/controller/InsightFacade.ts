@@ -120,13 +120,6 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(err);
 		}
 		let jsonContent: string;
-		// let parsedJsonContent: any; // = JSON.parse(jsonContent);
-		// fs.readFile("data/" + id + ".json", (err, data) => {
-		// 	if (err) {
-		// 		return Promise.reject(new InsightError("Reading file not found"));
-		// 	}
-		// 	parsedJsonContent = JSON.parse(data.toString());
-		// });
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
 		} catch (err) {
@@ -168,18 +161,16 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
-		// Figure out which dataset to query
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
 		console.log("YEY");
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
-			let orderKey = optionsValue.ORDER;
-			sortResult(orderKey, insightResultArray);
+			sortResult(optionsValue.ORDER, insightResultArray);
 		}
 		return Promise.resolve(insightResultArray);
 	}
 
 	private instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
-		if (kind === InsightDatasetKind.Courses) {
+		if (kind === "courses") {
 			return new ValidateQueryCourses(q);
 		} else {
 			return new ValidateQueryRooms(q);

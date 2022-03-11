@@ -8,7 +8,14 @@
 				"courses_id",
 				"max pass",
 				"max fail"
-			]
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys":  [
+					"courses_dept",
+					"courses_id"
+				]
+			}
 		},
 		"TRANSFORMATIONS": {
 			"GROUP": [
@@ -30,7 +37,8 @@
 		}
 	},
 	"errorExpected": false,
-	"expected": [
+	"expected":
+	[
 		{
 			"courses_dept": "aanb",
 			"courses_id": "504",
