@@ -150,6 +150,9 @@ function isLarger(arr: InsightResult[], idx: number, largest: number, orderKeys:
 		if (arr[idx][key] > arr[largest][key]) {
 			return true;
 		}
+		if (arr[idx][key] < arr[largest][key]) {
+			return false;
+		}
 	}
 	return false;
 }

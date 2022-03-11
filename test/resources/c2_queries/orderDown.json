@@ -1,0 +1,796 @@
+{
+	"title": "simple order test",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"asdf"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"courses_dept",
+					"asdf"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"courses_dept"
+			],
+			"APPLY": [
+				{
+					"asd": {
+						"MAX": "courses_pass"
+					}
+				},
+				{
+					"asdf": {
+						"AVG": "courses_fail"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"courses_dept": "zool",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "wrds",
+			"asdf": 2.26
+		},
+		{
+			"courses_dept": "wood",
+			"asdf": 0.53
+		},
+		{
+			"courses_dept": "visa",
+			"asdf": 0.94
+		},
+		{
+			"courses_dept": "vant",
+			"asdf": 1.8
+		},
+		{
+			"courses_dept": "ursy",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "urst",
+			"asdf": 0.13
+		},
+		{
+			"courses_dept": "ufor",
+			"asdf": 0.33
+		},
+		{
+			"courses_dept": "udes",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "thtr",
+			"asdf": 0.32
+		},
+		{
+			"courses_dept": "test",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "swed",
+			"asdf": 0.3
+		},
+		{
+			"courses_dept": "surg",
+			"asdf": 0.23
+		},
+		{
+			"courses_dept": "sts",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "stat",
+			"asdf": 4.04
+		},
+		{
+			"courses_dept": "spph",
+			"asdf": 0.05
+		},
+		{
+			"courses_dept": "spha",
+			"asdf": 0.06
+		},
+		{
+			"courses_dept": "span",
+			"asdf": 1.64
+		},
+		{
+			"courses_dept": "sowk",
+			"asdf": 0.07
+		},
+		{
+			"courses_dept": "soil",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "soci",
+			"asdf": 1.28
+		},
+		{
+			"courses_dept": "scie",
+			"asdf": 1.21
+		},
+		{
+			"courses_dept": "scan",
+			"asdf": 0.63
+		},
+		{
+			"courses_dept": "sans",
+			"asdf": 0.2
+		},
+		{
+			"courses_dept": "russ",
+			"asdf": 0.38
+		},
+		{
+			"courses_dept": "rsot",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "rmst",
+			"asdf": 1.7
+		},
+		{
+			"courses_dept": "rmes",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "rhsc",
+			"asdf": 0.08
+		},
+		{
+			"courses_dept": "rgla",
+			"asdf": 0.25
+		},
+		{
+			"courses_dept": "relg",
+			"asdf": 0.87
+		},
+		{
+			"courses_dept": "punj",
+			"asdf": 0.53
+		},
+		{
+			"courses_dept": "psyc",
+			"asdf": 7.62
+		},
+		{
+			"courses_dept": "port",
+			"asdf": 0.24
+		},
+		{
+			"courses_dept": "pols",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "poli",
+			"asdf": 3.74
+		},
+		{
+			"courses_dept": "plan",
+			"asdf": 0.05
+		},
+		{
+			"courses_dept": "phys",
+			"asdf": 6.6
+		},
+		{
+			"courses_dept": "phth",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "phrm",
+			"asdf": 0.18
+		},
+		{
+			"courses_dept": "phil",
+			"asdf": 6.31
+		},
+		{
+			"courses_dept": "phar",
+			"asdf": 0.12
+		},
+		{
+			"courses_dept": "pers",
+			"asdf": 0.2
+		},
+		{
+			"courses_dept": "pcth",
+			"asdf": 0.18
+		},
+		{
+			"courses_dept": "path",
+			"asdf": 0.02
+		},
+		{
+			"courses_dept": "onco",
+			"asdf": 0.11
+		},
+		{
+			"courses_dept": "obst",
+			"asdf": 0.06
+		},
+		{
+			"courses_dept": "nurs",
+			"asdf": 0.03
+		},
+		{
+			"courses_dept": "nrsc",
+			"asdf": 0.05
+		},
+		{
+			"courses_dept": "nest",
+			"asdf": 1.85
+		},
+		{
+			"courses_dept": "name",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "musc",
+			"asdf": 1.19
+		},
+		{
+			"courses_dept": "mtrl",
+			"asdf": 1.14
+		},
+		{
+			"courses_dept": "mrne",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "mine",
+			"asdf": 0.45
+		},
+		{
+			"courses_dept": "midw",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "micb",
+			"asdf": 3.02
+		},
+		{
+			"courses_dept": "medi",
+			"asdf": 0.03
+		},
+		{
+			"courses_dept": "medg",
+			"asdf": 0.08
+		},
+		{
+			"courses_dept": "mech",
+			"asdf": 2.05
+		},
+		{
+			"courses_dept": "mdvl",
+			"asdf": 1.2
+		},
+		{
+			"courses_dept": "math",
+			"asdf": 10.58
+		},
+		{
+			"courses_dept": "lled",
+			"asdf": 0.66
+		},
+		{
+			"courses_dept": "ling",
+			"asdf": 1.69
+		},
+		{
+			"courses_dept": "libr",
+			"asdf": 0.03
+		},
+		{
+			"courses_dept": "libe",
+			"asdf": 0.07
+		},
+		{
+			"courses_dept": "lfs",
+			"asdf": 1.74
+		},
+		{
+			"courses_dept": "law",
+			"asdf": 0.13
+		},
+		{
+			"courses_dept": "latn",
+			"asdf": 2.09
+		},
+		{
+			"courses_dept": "last",
+			"asdf": 0.81
+		},
+		{
+			"courses_dept": "laso",
+			"asdf": 1
+		},
+		{
+			"courses_dept": "larc",
+			"asdf": 0.04
+		},
+		{
+			"courses_dept": "lais",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "korn",
+			"asdf": 0.83
+		},
+		{
+			"courses_dept": "kin",
+			"asdf": 1.13
+		},
+		{
+			"courses_dept": "jrnl",
+			"asdf": 0.17
+		},
+		{
+			"courses_dept": "japn",
+			"asdf": 1.27
+		},
+		{
+			"courses_dept": "iwme",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "itst",
+			"asdf": 0.73
+		},
+		{
+			"courses_dept": "ital",
+			"asdf": 1.06
+		},
+		{
+			"courses_dept": "isci",
+			"asdf": 0.23
+		},
+		{
+			"courses_dept": "info",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "igen",
+			"asdf": 0.39
+		},
+		{
+			"courses_dept": "iar",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "hunu",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "hist",
+			"asdf": 1.87
+		},
+		{
+			"courses_dept": "hinu",
+			"asdf": 0.25
+		},
+		{
+			"courses_dept": "hgse",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "hebr",
+			"asdf": 0.67
+		},
+		{
+			"courses_dept": "gsat",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "grsj",
+			"asdf": 0.82
+		},
+		{
+			"courses_dept": "grek",
+			"asdf": 0.14
+		},
+		{
+			"courses_dept": "gpp",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "germ",
+			"asdf": 0.56
+		},
+		{
+			"courses_dept": "geog",
+			"asdf": 1.95
+		},
+		{
+			"courses_dept": "geob",
+			"asdf": 3.8
+		},
+		{
+			"courses_dept": "gbpr",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "frst",
+			"asdf": 1.29
+		},
+		{
+			"courses_dept": "fren",
+			"asdf": 1.39
+		},
+		{
+			"courses_dept": "fre",
+			"asdf": 0.25
+		},
+		{
+			"courses_dept": "fopr",
+			"asdf": 0.61
+		},
+		{
+			"courses_dept": "food",
+			"asdf": 0.02
+		},
+		{
+			"courses_dept": "fnis",
+			"asdf": 1.44
+		},
+		{
+			"courses_dept": "fnh",
+			"asdf": 1.08
+		},
+		{
+			"courses_dept": "fnel",
+			"asdf": 0.2
+		},
+		{
+			"courses_dept": "fmst",
+			"asdf": 3.15
+		},
+		{
+			"courses_dept": "fist",
+			"asdf": 1.88
+		},
+		{
+			"courses_dept": "fish",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "fipr",
+			"asdf": 0.27
+		},
+		{
+			"courses_dept": "fhis",
+			"asdf": 0.5
+		},
+		{
+			"courses_dept": "etec",
+			"asdf": 0.11
+		},
+		{
+			"courses_dept": "epse",
+			"asdf": 0.06
+		},
+		{
+			"courses_dept": "eosc",
+			"asdf": 2.89
+		},
+		{
+			"courses_dept": "envr",
+			"asdf": 0.39
+		},
+		{
+			"courses_dept": "enph",
+			"asdf": 0.43
+		},
+		{
+			"courses_dept": "engl",
+			"asdf": 1.45
+		},
+		{
+			"courses_dept": "ends",
+			"asdf": 0.19
+		},
+		{
+			"courses_dept": "elec",
+			"asdf": 4.38
+		},
+		{
+			"courses_dept": "eece",
+			"asdf": 0.07
+		},
+		{
+			"courses_dept": "educ",
+			"asdf": 0.62
+		},
+		{
+			"courses_dept": "edst",
+			"asdf": 0.02
+		},
+		{
+			"courses_dept": "edcp",
+			"asdf": 0.02
+		},
+		{
+			"courses_dept": "econ",
+			"asdf": 4.73
+		},
+		{
+			"courses_dept": "eced",
+			"asdf": 0.26
+		},
+		{
+			"courses_dept": "dhyg",
+			"asdf": 0.26
+		},
+		{
+			"courses_dept": "dent",
+			"asdf": 0.03
+		},
+		{
+			"courses_dept": "dani",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "crwr",
+			"asdf": 2.35
+		},
+		{
+			"courses_dept": "cpsc",
+			"asdf": 5.11
+		},
+		{
+			"courses_dept": "cpen",
+			"asdf": 2.09
+		},
+		{
+			"courses_dept": "cons",
+			"asdf": 1.48
+		},
+		{
+			"courses_dept": "comm",
+			"asdf": 1.75
+		},
+		{
+			"courses_dept": "cohr",
+			"asdf": 0.1
+		},
+		{
+			"courses_dept": "cogs",
+			"asdf": 0.96
+		},
+		{
+			"courses_dept": "coec",
+			"asdf": 0.47
+		},
+		{
+			"courses_dept": "cnto",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "cnrs",
+			"asdf": 0.97
+		},
+		{
+			"courses_dept": "cnps",
+			"asdf": 0.29
+		},
+		{
+			"courses_dept": "clst",
+			"asdf": 4.13
+		},
+		{
+			"courses_dept": "clch",
+			"asdf": 0.14
+		},
+		{
+			"courses_dept": "civl",
+			"asdf": 1.17
+		},
+		{
+			"courses_dept": "cics",
+			"asdf": 0.21
+		},
+		{
+			"courses_dept": "chin",
+			"asdf": 0.3
+		},
+		{
+			"courses_dept": "chil",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "chem",
+			"asdf": 11.37
+		},
+		{
+			"courses_dept": "chbe",
+			"asdf": 1.82
+		},
+		{
+			"courses_dept": "cens",
+			"asdf": 0.55
+		},
+		{
+			"courses_dept": "cell",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "ceen",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "ccst",
+			"asdf": 0.08
+		},
+		{
+			"courses_dept": "caps",
+			"asdf": 5.58
+		},
+		{
+			"courses_dept": "busi",
+			"asdf": 7.54
+		},
+		{
+			"courses_dept": "bota",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "bmeg",
+			"asdf": 0.04
+		},
+		{
+			"courses_dept": "biol",
+			"asdf": 5.66
+		},
+		{
+			"courses_dept": "biof",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "bioc",
+			"asdf": 4.05
+		},
+		{
+			"courses_dept": "baul",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "basm",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "basc",
+			"asdf": 0.04
+		},
+		{
+			"courses_dept": "bapa",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "bams",
+			"asdf": 0.01
+		},
+		{
+			"courses_dept": "bama",
+			"asdf": 0.01
+		},
+		{
+			"courses_dept": "bala",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "bait",
+			"asdf": 0
+		},
+		{
+			"courses_dept": "bahr",
+			"asdf": 0.02
+		},
+		{
+			"courses_dept": "bafi",
+			"asdf": 0.09
+		},
+		{
+			"courses_dept": "baen",
+			"asdf": 0.05
+		},
+		{
+			"courses_dept": "babs",
+			"asdf": 0.35
+		},
+		{
+			"courses_dept": "baac",
+			"asdf": 0.23
+		},
+		{
+			"courses_dept": "ba",
+			"asdf": 0.08
+		},
+		{
+			"courses_dept": "audi",
+			"asdf": 0.19
+		},
+		{
+			"courses_dept": "atsc",
+			"asdf": 0.29
+		},
+		{
+			"courses_dept": "astu",
+			"asdf": 1.73
+		},
+		{
+			"courses_dept": "astr",
+			"asdf": 2.74
+		},
+		{
+			"courses_dept": "asic",
+			"asdf": 0.82
+		},
+		{
+			"courses_dept": "asia",
+			"asdf": 1.85
+		},
+		{
+			"courses_dept": "arth",
+			"asdf": 1.2
+		},
+		{
+			"courses_dept": "arst",
+			"asdf": 0.01
+		},
+		{
+			"courses_dept": "arcl",
+			"asdf": 1.7
+		},
+		{
+			"courses_dept": "arch",
+			"asdf": 0.08
+		},
+		{
+			"courses_dept": "arbc",
+			"asdf": 0.63
+		},
+		{
+			"courses_dept": "apsc",
+			"asdf": 5.44
+		},
+		{
+			"courses_dept": "appp",
+			"asdf": 0.75
+		},
+		{
+			"courses_dept": "apbi",
+			"asdf": 1.1
+		},
+		{
+			"courses_dept": "anth",
+			"asdf": 1.09
+		},
+		{
+			"courses_dept": "anat",
+			"asdf": 0.07
+		},
+		{
+			"courses_dept": "adhe",
+			"asdf": 0.53
+		},
+		{
+			"courses_dept": "aanb",
+			"asdf": 0
+		}
+	]
+}
