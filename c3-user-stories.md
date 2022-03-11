@@ -82,7 +82,7 @@ You may provide any additional user stories + DoDs in this section for general T
 Note: These will not be graded.
 
 
-## User Story 1
+## User Story 3
 As a UBC CPSC student, I want to find CPSC courses with an average above 70, so that it can help me with deciding what courses to choose for course selection.
 
 
