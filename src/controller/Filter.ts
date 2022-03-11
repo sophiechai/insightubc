@@ -160,12 +160,18 @@ export function createInsightResult(
 
 }
 
-export function checkSectionArrayFinalLength() {
-	if (dataset.length === 0) {
-		throw new InsightError("Resolved");
-	}
-	if (dataset.length > 5000) {
-		throw new ResultTooLargeError("Result over 5000");
+export function checkSectionArrayFinalLength(newMap: Map<string, Dataset[]>) {
+	if (newMap.size === 0) {
+		if (dataset.length === 0) {
+			throw new InsightError("Resolved");
+		}
+		if (dataset.length > 5000) {
+			throw new ResultTooLargeError("Result over 5000");
+		}
+	} else {
+		if (newMap.size > 5000) {
+			throw new ResultTooLargeError("Result over 5000");
+		}
 	}
 }
 

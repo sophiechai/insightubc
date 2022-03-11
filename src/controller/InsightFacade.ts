@@ -144,15 +144,6 @@ export default class InsightFacade implements IInsightFacade {
 	private query(q: any, id: string) {
 		let insightResultArray: InsightResult[] = [];
 		filter(q.WHERE, "INIT");
-		try {
-			checkSectionArrayFinalLength();
-		} catch (err) {
-			if (err instanceof InsightError) {
-				return Promise.resolve(insightResultArray);
-			} else if (err instanceof ResultTooLargeError) {
-				return Promise.reject(err);
-			}
-		}
 		let optionsValue = q.OPTIONS;
 		let columnsValue = optionsValue.COLUMNS;
 		// apply transformation
@@ -160,6 +151,15 @@ export default class InsightFacade implements IInsightFacade {
 		let aggregateMap: Map<string, number[]> = new Map();
 		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
 			newMap = new Map(applyTransformation(q.TRANSFORMATIONS, columnsValue, newMap, aggregateMap));
+		}
+		try {
+			checkSectionArrayFinalLength(newMap);
+		} catch (err) {
+			if (err instanceof InsightError) {
+				return Promise.resolve(insightResultArray);
+			} else if (err instanceof ResultTooLargeError) {
+				return Promise.reject(err);
+			}
 		}
 		// Figure out which dataset to query
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
