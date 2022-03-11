@@ -8,7 +8,7 @@ As a student, I want to be able to add a zip file with data on courses/building,
 
 #### Definitions of Done(s)
 **Scenario 1**: Adding valid zip file
-Given: User is on the add dataset page/window?  
+Given: User is on the add dataset page/window
 When:
 - The user clicks on "ADD DATASET" and file explorer pops up where user selects a valid zip
   // or the user drags and drops a zip to the area indicated.
@@ -20,7 +20,7 @@ Then: Add dataset page/window closes and a message appears saying "DATASET (name
 ---
 
 **Scenario 2**: Adding invalid zip file
-Given: User is on the add dataset page/window?  
+Given: User is on the add dataset page/window
 When:
 - The user clicks on "ADD DATASET" and file explorer pops up where user selects an invalid zip
   // or the user drags and drops a invalid zip to the area indicated. (invalid ex. not a zip, no courses folder, etc)
@@ -33,7 +33,7 @@ Another message below indicating the reason (ex. "The file given is not a zip fi
 ---
 
 **Scenario 3**: Adding valid zip file with invalid name
-Given: User is on the add dataset page/window?  
+Given: User is on the add dataset page/window 
 When:
 - The user clicks on "ADD DATASET" and file explorer pops up where user selects a valid zip
   // or the user drags and drops a zip file to the area indicated.
@@ -59,8 +59,8 @@ When:
 - User also ticks box for "address".  
 - Then the user hits "SUBMIT".
 
-Then: A new(?) page displaying the results opens on the screen. 
-It displays a table with columns "BUILDINGS SHORT NAME" and "ADDRESS" and results below each column.
+Then: A table displaying the results opens right below the query box on the same page. 
+It is populated with columns "BUILDINGS SHORT NAME" and "ADDRESS" and results below each column.
 Results under "BUILDINGS SHORT NAME" match/contain the input from user.
 
 ---
@@ -72,7 +72,7 @@ When:
 - Under "FILTER", the user ticks off box for "short name" and types an input with an asterisk into the text box beside it.
 - User also ticks box for "address".
 - Then the user hits "SUBMIT".
-- 
+
 Then: A message pops up that says "ERROR: QUERY COULD NOT BE PERFORMED" and underneath is a message explaining why.
 
 ---
