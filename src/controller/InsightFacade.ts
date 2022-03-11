@@ -161,12 +161,10 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
-		// Figure out which dataset to query
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
 		console.log("YEY");
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
-			let orderValue = optionsValue.ORDER;
-			sortResult(orderValue, insightResultArray);
+			sortResult(optionsValue.ORDER, insightResultArray);
 		}
 		return Promise.resolve(insightResultArray);
 	}
