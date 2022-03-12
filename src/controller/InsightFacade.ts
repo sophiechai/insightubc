@@ -39,7 +39,7 @@ export let datasetArray: Dataset[];
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
-		jsZip = new JSZip();
+		// jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
 		mapForEachFormattedSection = new Map<string, number | string>();
@@ -59,16 +59,20 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		jsZip = new JSZip();
 		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
 		try {
-			if (kind === InsightDatasetKind.Courses) {
+			if (kind === InsightDatasetKind.Rooms) {
+				return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+			} else if (kind === InsightDatasetKind.Courses) {
 				return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
 			} else {
-				return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+				console.log("NOT ROOM NOT COURSES");
 			}
+			return Promise.reject();
 		} catch (err) {
 			throw new InsightError("zip error");
 		}

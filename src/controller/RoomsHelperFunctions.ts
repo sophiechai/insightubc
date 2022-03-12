@@ -29,7 +29,6 @@ function parseTable(table: object, codeArray: string[]) {
 	}
 }
 
-// eslint-disable-next-line max-lines-per-function
 function parseTableRooms(table: object, buildingInfoArray: string[], tempList: object[]) {
 	console.log("building info array 34: " + buildingInfoArray);
 	let roomInfoList: string[];
@@ -86,14 +85,10 @@ function parseTableRooms(table: object, buildingInfoArray: string[], tempList: o
 			// console.log("text: " + text.substring(2).trim());
 			roomInfoList.push(text.substring(2).trim()); // remove \n and space
 		}
-		console.log("roomInfoList: " + roomInfoList);
+		// console.log("roomInfoList: " + roomInfoList);
 		convertToJSON(roomInfoList, buildingInfoArray, tempList);
-		console.log("tempList line 90: " + tempList);
+		// console.log("tempList line 90: " + tempList);
 	}
-	// }).then(function () {
-	// convertToJSON(roomInfoList, buildingInfoArray, tempList);
-	// console.log("tempList line 90: " + tempList);
-	// });
 }
 
 function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
@@ -102,7 +97,6 @@ function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
 	let div: object = searchTreeByID(node, "building-info");
 	let divKeys = Object.keys(div);
 	let divValues = Object.values(div);
-	// console.log("divValues: " + divValues);
 
 	for (let i = 1; i <= 3; i = i + 2) {
 		// name -> h2, address -> div
@@ -239,7 +233,6 @@ let codeArray: string[] = [];
 const promises: Array<Promise<string>> = [];
 let data: InsightDataset;
 
-// eslint-disable-next-line max-lines-per-function
 function jszipRooms(
 	jsZip: JSZip,
 	id: string,
@@ -264,14 +257,12 @@ function jszipRooms(
 			globalZip.forEach((relativePath, file) => {
 				if (!relativePath.includes("rooms/")) {
 					promises.push(Promise.reject(new InsightError("invalid directory")));
-				} else {
-					let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
-					if (codeArray.includes(code)) {
-						let promise = file.async("string");
-						parseResult(promise, code, tempList);
-						console.log("tempList line286: " + tempList);
-						promises.push(promise);
-					}
+				}
+				let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
+				if (codeArray.includes(code)) {
+					let promise = file.async("string");
+					parseResult(promise, code, tempList);
+					promises.push(promise);
 				}
 			});
 		})
@@ -281,7 +272,7 @@ function jszipRooms(
 		.then(() => {
 			// return createJSONAndAddToData(tempList, addedIds, addedDatasets, id, kind);
 			// no sections in all the files in zip
-			if (tempList.length === 0) {
+			if (tempList.length !== 0) {
 				return Promise.reject(new InsightError("No Valid Rooms"));
 			} else {
 				// create a json object that contains all sections in all the files under the zip file

@@ -3,17 +3,17 @@
 	"input": {
 		"WHERE": {
 			"IS": {
-				"rooms_shortname": "*A*"
+				"roomsSmall_shortname": "*A*"
 			}
 		},
 		"OPTIONS": {
 			"COLUMNS": [
-				"rooms_shortname"
+				"roomsSmall_shortname"
 			]
 		},
 		"TRANSFORMATIONS": {
 			"GROUP": [
-				"rooms_shortname"
+				"roomsSmall_shortname"
 			],
 			"APPLY": []
 		}

@@ -378,12 +378,15 @@ describe("InsightFacade", function () {
 describe("Dynamic folder test for performQuery", function () {
 	this.timeout(15000);
 	let courses: string;
+	let rooms: string;
 	let facade: IInsightFacade;
 	before(async function () {
+		clearDisk();
 		courses = getContentFromArchives("courses.zip");
+		rooms = getContentFromArchives("rooms_small.zip");
 		facade = new InsightFacade();
+		await facade.addDataset("roomsSmall", rooms, InsightDatasetKind.Rooms);
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
 	});
 
 	// Assert actual error is of expected type
