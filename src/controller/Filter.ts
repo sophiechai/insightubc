@@ -235,7 +235,7 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 					tracker += num;
 				} else {
 					let total = new Decimal(num);
-					avgSum.add(total);
+					avgSum = Decimal.add(avgSum, total);
 				}
 			}
 		}
