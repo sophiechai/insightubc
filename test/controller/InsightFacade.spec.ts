@@ -275,6 +275,19 @@ describe("InsightFacade", function () {
 						expect(err).to.be.instanceof(InsightError);
 					});
 			});
+
+			it("should reject if not a zip file", function () {
+				let incorrectDir: string = getContentFromArchives("test.txt");
+
+				return facade
+					.addDataset("courses", incorrectDir, InsightDatasetKind.Courses)
+					.then((res) => {
+						throw new Error("Resolved with " + res);
+					})
+					.catch((err) => {
+						expect(err).to.be.instanceof(InsightError);
+					});
+			});
 		});
 	});
 
@@ -365,12 +378,15 @@ describe("InsightFacade", function () {
 describe("Dynamic folder test for performQuery", function () {
 	this.timeout(15000);
 	let courses: string;
+	let rooms: string;
 	let facade: IInsightFacade;
 	before(async function () {
+		clearDisk();
 		courses = getContentFromArchives("courses.zip");
+		rooms = getContentFromArchives("rooms_small.zip");
 		facade = new InsightFacade();
+		await facade.addDataset("roomsSmall", rooms, InsightDatasetKind.Rooms);
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
 	});
 
 	// Assert actual error is of expected type
@@ -387,7 +403,7 @@ describe("Dynamic folder test for performQuery", function () {
 	folderTest<Input, Output, Error>(
 		"performQuery tests",
 		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/queries",
+		"./test/resources/c2_queries",
 		{
 			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
 			assertOnError: assertError,

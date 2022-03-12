@@ -45,7 +45,7 @@ function formatSection(map: Map<string, number | string>, section: object) {
 }
 
 function writeToData(fileName: string, myJSON: string): void {
-	fse.writeFile(fileName, myJSON, (err) => {
+	return fse.writeFile(fileName, myJSON, (err) => {
 		if (err) {
 			console.error("file created error: " + err);
 			return;
@@ -98,6 +98,7 @@ function jszipCourses(
 	const promises: Array<Promise<string>> = [];
 	let tempList: any[] = [];
 	let mapForEachFormattedSection: Map<string, number | string> = new Map<string, number | string>();
+	let data: InsightDataset;
 
 	return jsZip.loadAsync(content, {base64: true}).then((zip) => {
 		zip.forEach((relativePath, file) => {
@@ -109,22 +110,25 @@ function jszipCourses(
 			parseResult(promise, mapForEachFormattedSection, tempList);
 			promises.push(promise);
 		});
-		return Promise.all(promises).then(() => {
-			// no sections in all the files in zip
-			if (tempList.length === 0) {
-				return Promise.reject(new InsightError("Invalid sections"));
-			} else {
-				// create a json object that contains all sections in all the files under the zip file
-				let data: InsightDataset = {id, kind, numRows: tempList.length};
-				const myJSON = JSON.stringify({header: data, contents: tempList});
+		return Promise.all(promises)
+			.then(() => {
+				// no sections in all the files in zip
+				if (tempList.length === 0) {
+					return Promise.reject(new InsightError("Invalid sections"));
+				} else {
+					// create a json object that contains all sections in all the files under the zip file
+					data = {id, kind, numRows: tempList.length};
+					const myJSON = JSON.stringify({header: data, contents: tempList});
 
-				const fileName = dataPath + "/" + id + ".json";
-				writeToData(fileName, myJSON);
+					const fileName = dataPath + "/" + id + ".json";
+					return writeToData(fileName, myJSON);
+				}
+			})
+			.then(function () {
 				addedIds.push(id);
 				addedDatasets.push(data);
 				return Promise.resolve(addedIds);
-			}
-		});
+			});
 	});
 }
 

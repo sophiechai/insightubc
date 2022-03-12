@@ -2,8 +2,10 @@ import JSZip, {JSZipObject} from "jszip";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import parse5, {Document} from "parse5";
 import http from "http";
-import {searchTreeByID, searchTreeByTag, createJSONAndAddToData} from "./RoomHelperFunction2";
+import {searchTreeByID, searchTreeByTag, convertToJSON} from "./RoomHelperFunction2";
+import {writeToData} from "./DatasetHelperFunctions";
 
+let dataPath = __dirname + "/../../data";
 function parseTable(table: object, codeArray: string[]) {
 	let tableKeys = Object.keys(table);
 	let tableValues = Object.values(table);
@@ -28,7 +30,10 @@ function parseTable(table: object, codeArray: string[]) {
 }
 
 function parseTableRooms(table: object, buildingInfoArray: string[], tempList: object[]) {
+	console.log("building info array 34: " + buildingInfoArray);
 	let roomInfoList: string[];
+	// return new Promise(function (resolve, reject) {
+	console.log("in line 36");
 	let tableKeys = Object.keys(table);
 	let tableValues = Object.values(table);
 	let tbody: object = tableValues[tableKeys.indexOf("childNodes")][3];
@@ -80,18 +85,18 @@ function parseTableRooms(table: object, buildingInfoArray: string[], tempList: o
 			// console.log("text: " + text.substring(2).trim());
 			roomInfoList.push(text.substring(2).trim()); // remove \n and space
 		}
-		// console.log("roomsInfoList: " + roomInfoList);
+		// console.log("roomInfoList: " + roomInfoList);
 		convertToJSON(roomInfoList, buildingInfoArray, tempList);
+		// console.log("tempList line 90: " + tempList);
 	}
 }
 
 function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
-	// console.log("inside building info method");
+	console.log("buildingInfoArray 98: " + buildingInfoArray);
 	// parse building name and address
 	let div: object = searchTreeByID(node, "building-info");
 	let divKeys = Object.keys(div);
 	let divValues = Object.values(div);
-	// console.log("divValues: " + divValues);
 
 	for (let i = 1; i <= 3; i = i + 2) {
 		// name -> h2, address -> div
@@ -110,18 +115,17 @@ function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
 		// console.log("value Values: " + valueValues);
 		buildingInfoArray.push(valueValues[valueKeys.indexOf("value")]);
 	}
+	console.log("building info array: " + buildingInfoArray);
 	// get building geolocation
-	// return getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
+	return getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
 }
 
-function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {
+function getBuildingGeolocation(address: string, buildingInfoArray: string[]): Promise<string> {
 	let formattedAddress = address.replace(/\s/g, "%20");
-	console.log("format address: " + formattedAddress);
 	let url: string = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team558/" + formattedAddress;
 
 	return new Promise(function (resolve, reject) {
 		http.get(url, (res) => {
-			console.log("in");
 			const {statusCode} = res;
 			const contentType = res.headers["content-type"];
 
@@ -137,7 +141,7 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {
 				console.error(error.message);
 				// Consume response data to free up memory
 				res.resume();
-				return;
+				reject();
 			}
 
 			res.setEncoding("utf8");
@@ -148,7 +152,9 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {
 			res.on("end", () => {
 				try {
 					const parsedData = JSON.parse(rawData);
-					console.log(parsedData);
+					// console.log(parsedData);
+					buildingInfoArray.push(parsedData["lat"]);
+					buildingInfoArray.push(parsedData["lon"]);
 					resolve("success!!!");
 				} catch (e) {
 					console.log("ERROR :(");
@@ -159,74 +165,40 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]) {
 			console.error(`Got error: ${e.message}`);
 			reject("fail!!!");
 		});
-
-		// return http
-		// 	.get(url, (res) => {
-		// 		res.setEncoding("utf8");
-		// 		let rawData = "";
-		// 		res.on("data", (chunk) => {
-		// 			rawData += chunk;
-		// 		});
-		// 		res.on("end", () => {
-		// 			try {
-		// 				const parsedData = JSON.parse(rawData);
-		// 				console.log("parsedData: " + parsedData);
-		// 				resolve("success!!!");
-		// 			} catch (e) {
-		// 				console.error("error!");
-		// 				reject("fail!!!");
-		// 			}
-		// 		});
-		// 	})
-		// 	.on("error", (e) => {
-		// 		console.error(`Got error: ${e.message}`);
-		// 		reject("fail !!!");
-		// 	});
 	});
 }
-
-function convertToJSON(roomInfoList: string[], buildingInfoArray: string[], tempList: object[]) {
-	// console.log("roomInfoList: " + roomInfoList);
-	// console.log("buildingInfoArray: " + buildingInfoArray);
-	let roomJSON: object = {
-		fullName: buildingInfoArray[1],
-		shortName: buildingInfoArray[0],
-		number: roomInfoList[1].toString(),
-		name: buildingInfoArray[0] + "_" + roomInfoList[1].toString(),
-		address: buildingInfoArray[2],
-		lat: 0,
-		lon: 0,
-		seats: roomInfoList[2],
-		type: roomInfoList[4],
-		furniture: roomInfoList[3],
-		href: roomInfoList[0],
-	};
-	tempList.push(roomJSON);
-}
-
 // parse each file with valid building code to get room data.
 function parseResult(promise: Promise<string>, buildingCode: string, tempList: object[]) {
 	let doc: Document;
 	let tableObj: object;
 	let buildingInfoArray: string[] = [];
 	promise
-		.then(function (fileData) {
+		.then((fileData) => {
 			doc = parse5.parse(fileData);
 			if (searchTreeByTag(doc.childNodes[6], "html") === null) {
 				return Promise.reject(new InsightError("file is not in HTML format"));
 			}
-			tableObj = searchTreeByTag(doc.childNodes[6], "table");
+			return searchTreeByTag(doc.childNodes[6], "table");
 		})
-		.then(function () {
-			if (tableObj !== null) {
-				// console.log("find table");
+		.then((tableObj2: object) => {
+			tableObj = tableObj2;
+			if (tableObj2 === null) {
+				console.log("null line 208");
+			}
+			if (tableObj2 !== null) {
+				console.log("in line 211");
 				buildingInfoArray.push(buildingCode);
+				console.log("building info array 213: " + buildingInfoArray);
 				return parseBuildingInfo(doc.childNodes[6], buildingInfoArray);
 			}
 		})
-		.then(function () {
+		.then(() => {
+			if (tableObj === null) {
+				console.log("null line 219");
+			}
 			if (tableObj !== null) {
-				console.log("buildingInfoArray: " + buildingInfoArray);
+				console.log("in line 222");
+				console.log("building info array 223: " + buildingInfoArray);
 				parseTableRooms(tableObj, buildingInfoArray, tempList);
 			}
 		});
@@ -243,20 +215,23 @@ function getCodeArray(indexFile: JSZipObject[], codeArray: string[]) {
 				return Promise.reject(new InsightError("index.htm file is not in HTML format"));
 			}
 			let tableObj: object = searchTreeByTag(doc.childNodes[6], "table");
+			console.log("tableObj is " + tableObj);
 			if (tableObj !== null) {
+				console.log("in");
 				parseTable(tableObj, codeArray);
 			}
+			console.log("codeArray is " + codeArray);
 			return [""];
 		})
 		.catch(function (err) {
 			console.log("error is " + err);
 		});
-	// promises.push(contentIndex);
 }
 
 let globalZip: JSZip;
 let codeArray: string[] = [];
 const promises: Array<Promise<string>> = [];
+let data: InsightDataset;
 
 function jszipRooms(
 	jsZip: JSZip,
@@ -272,27 +247,45 @@ function jszipRooms(
 		.then((zip) => {
 			let indexFile = zip.file(/index.htm/);
 			globalZip = zip;
-			if (indexFile.length === 1) { // iterate index.htm to get building codes.
+			if (indexFile.length === 1) {
+				// iterate index.htm to get building codes.
 				return getCodeArray(indexFile, codeArray);
 			}
-		}).then(() => {
+		})
+		.then(() => {
 			// iterate each file with valid building code to get room data.
 			globalZip.forEach((relativePath, file) => {
 				if (!relativePath.includes("rooms/")) {
 					promises.push(Promise.reject(new InsightError("invalid directory")));
-				} else {
-					let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
-					if (codeArray.includes(code)) {
-						const promise = file.async("string");
-						parseResult(promise, code, tempList);
-						promises.push(promise);
-					}
+				}
+				let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
+				if (codeArray.includes(code)) {
+					let promise = file.async("string");
+					parseResult(promise, code, tempList);
+					promises.push(promise);
 				}
 			});
-		}).then(() => {
+		})
+		.then(() => {
 			return Promise.all(promises);
-		}).then(() => {
-			return createJSONAndAddToData(tempList, addedIds, addedDatasets, id, kind);
+		})
+		.then(() => {
+			// return createJSONAndAddToData(tempList, addedIds, addedDatasets, id, kind);
+			// no sections in all the files in zip
+			if (tempList.length !== 0) {
+				return Promise.reject(new InsightError("No Valid Rooms"));
+			} else {
+				// create a json object that contains all sections in all the files under the zip file
+				data = {id, kind, numRows: tempList.length};
+				const myJSON = JSON.stringify({header: data, contents: tempList});
+				const fileName = dataPath + "/" + id + ".json";
+				return writeToData(fileName, myJSON);
+			}
+		})
+		.then(function () {
+			addedIds.push(id);
+			addedDatasets.push(data);
+			return Promise.resolve(addedIds);
 		});
 }
 export {jszipRooms, searchTreeByID};

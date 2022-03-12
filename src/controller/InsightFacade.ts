@@ -14,13 +14,15 @@ import {jszipRooms} from "./RoomsHelperFunctions";
 import JSZip from "jszip";
 import fse from "fs-extra";
 import * as fs from "fs-extra";
-import {filter, createInsightResult, checkSectionArrayFinalLength, applyTransformation} from "./Filter";
+import {filter, createInsightResult, checkSectionArrayFinalLength} from "./Filter";
+import {applyTransformation} from "./Transformation";
 import {sortResult} from "./Filter2";
 import {ValidateQueryMain} from "./ValidateQueryMain";
 import {ValidateQueryCourses} from "./ValidateQueryCourses";
 import {ValidateQueryRooms} from "./ValidateQueryRooms";
 import {Rooms} from "./Rooms";
 import {Dataset} from "./Dataset";
+import {Sections} from "./Sections";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -37,7 +39,7 @@ export let datasetArray: Dataset[];
 
 export default class InsightFacade implements IInsightFacade {
 	constructor() {
-		jsZip = new JSZip();
+		// jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
 		mapForEachFormattedSection = new Map<string, number | string>();
@@ -57,14 +59,22 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		jsZip = new JSZip();
 		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
-		if (kind === InsightDatasetKind.Courses) {
-			return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
-		} else {
-			return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+		try {
+			if (kind === InsightDatasetKind.Rooms) {
+				return jszipRooms(jsZip, id, content, kind, addedIds, addedDatasets);
+			} else if (kind === InsightDatasetKind.Courses) {
+				return jszipCourses(jsZip, id, content, kind, addedIds, addedDatasets);
+			} else {
+				console.log("NOT ROOM NOT COURSES");
+			}
+			return Promise.reject();
+		} catch (err) {
+			throw new InsightError("zip error");
 		}
 	}
 
@@ -102,19 +112,19 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		datasetArray = [];
 		let q: any = query;
-		let id = "rooms";
-		let kind = "rooms";
-		// try {
-		// 	kind = this.decideKind(q);
-		// 	let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
-		// 	id = validateQueryObject.isQueryValid();
-		// 	if (!addedIds.includes(id)) {
-		// 		throw new InsightError("Dataset ID does not exist");
-		// 	}
-		// } catch (err) {
-		// 	return Promise.reject(err);
-		// }
-		let jsonContent;
+		let id = "";
+		let kind = "";
+		try {
+			kind = this.decideKind(q);
+			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
+			id = validateQueryObject.isQueryValid();
+			if (!addedIds.includes(id)) {
+				throw new InsightError("Dataset ID does not exist");
+			}
+		} catch (err) {
+			return Promise.reject(err);
+		}
+		let jsonContent: string;
 		try {
 			jsonContent = fs.readFileSync("data/" + id + ".json").toString("utf8");
 		} catch (err) {
@@ -127,7 +137,11 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		let content: any[] = parsedJsonContent.contents;
 		for (const item of content) {
-			datasetArray.push(new Rooms(item));
+			if (kind === "courses") {
+				datasetArray.push(new Sections(item));
+			} else {
+				datasetArray.push(new Rooms(item));
+			}
 		}
 		return this.query(q, id);
 	}
@@ -135,8 +149,16 @@ export default class InsightFacade implements IInsightFacade {
 	private query(q: any, id: string) {
 		let insightResultArray: InsightResult[] = [];
 		filter(q.WHERE, "INIT");
+		let optionsValue = q.OPTIONS;
+		let columnsValue = optionsValue.COLUMNS;
+		// apply transformation
+		let newMap: Map<string, Dataset[]> = new Map();
+		let aggregateMap: Map<string, number[]> = new Map();
+		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
+			newMap = new Map(applyTransformation(q.TRANSFORMATIONS, columnsValue, newMap, aggregateMap));
+		}
 		try {
-			checkSectionArrayFinalLength();
+			checkSectionArrayFinalLength(newMap);
 		} catch (err) {
 			if (err instanceof InsightError) {
 				return Promise.resolve(insightResultArray);
@@ -144,48 +166,60 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 		}
-		let optionsValue = q.OPTIONS;
-		let columnsValue = optionsValue.COLUMNS;
-		// apply transformation
-		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
-			applyTransformation(q.TRANSFORMATIONS, columnsValue);
-		}
-		// Figure out which dataset to query
-		createInsightResult(columnsValue, id, insightResultArray);
+		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
+		console.log("YEY");
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
-			let orderKey = optionsValue.ORDER;
-			sortResult(orderKey, insightResultArray);
+			sortResult(optionsValue.ORDER, insightResultArray);
 		}
 		return Promise.resolve(insightResultArray);
 	}
 
 	private instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
-		if (kind === InsightDatasetKind.Courses) {
+		if (kind === "courses") {
 			return new ValidateQueryCourses(q);
 		} else {
 			return new ValidateQueryRooms(q);
 		}
 	}
 
-	private decideKind(query: object): string {
-		let keys = Object.keys(query);
-		if (keys.length < 2 || keys[1] !== "OPTIONS") {
-			throw new InsightError("asdfghjkl");
+	private decideKind(query: any): string {
+		let property: string = "";
+		if (Object.prototype.hasOwnProperty.call(query, "TRANSFORMATIONS")) {
+			let transValue = query.TRANSFORMATIONS;
+			if (!Object.prototype.hasOwnProperty.call(transValue, "GROUP")) {
+				throw new InsightError("Missing GROUP in TRANSFORMATIONS");
+			}
+			let groupValue = transValue.GROUP;
+			if (!Array.isArray(groupValue) || groupValue.length === 0) {
+				throw new InsightError("GROUP value not valid");
+			}
+			let key: string = groupValue[0];
+			if (!key.includes("_")) {
+				throw new InsightError("Incorrect key in GROUP");
+			}
+			property = key.substring(key.indexOf("_") + 1);
+		} else {
+			if (!Object.prototype.hasOwnProperty.call(query, "OPTIONS")) {
+				throw new InsightError("Missing OPTIONS");
+			}
+			let optionsValue = query.OPTIONS;
+			if (!Object.prototype.hasOwnProperty.call(optionsValue, "COLUMNS")) {
+				throw new InsightError("Missing COLUMNS");
+			}
+			let columnsValue = optionsValue.COLUMNS;
+			if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
+				throw new InsightError("COLUMNS value invalid");
+			}
+			let key = columnsValue[0];
+			if (!key.includes("_")) {
+				throw new InsightError("Invalid key in COLUMNS");
+			}
+			property = key.substring(key.indexOf("_") + 1);
 		}
-		let optionsValue = Object.values(query)[1];
-		let optionsKeys = Object.keys(optionsValue);
-		if (optionsKeys.length === 0 || optionsKeys[0] !== "COLUMNS") {
-			throw new InsightError("asdfghjkl");
-		}
-		let columnsValue: any = Object.values(optionsValue)[0];
-		if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
-			throw new InsightError("asdfghjkl");
-		}
-		let key: string = columnsValue[0];
-		if (!key.includes("_")) {
-			throw new InsightError("asdfghjkl");
-		}
-		let property: string = key.substring(key.indexOf("_") + 1);
+		return this.getKindString(property);
+	}
+
+	private getKindString(property: string) {
 		switch (property) {
 			case "dept":
 			case "id":
@@ -211,7 +245,7 @@ export default class InsightFacade implements IInsightFacade {
 			case "seats":
 				return "rooms";
 			default:
-				throw new InsightError("asdfghjkl");
+				throw new InsightError("Invalid key property");
 		}
 	}
 

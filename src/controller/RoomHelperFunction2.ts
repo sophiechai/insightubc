@@ -79,4 +79,21 @@ function createJSONAndAddToData(
 		return Promise.resolve(addedIds);
 	}
 }
-export {searchTreeByID, searchTreeByTag, createJSONAndAddToData};
+
+function convertToJSON(roomInfoList: string[], buildingInfoArray: string[], tempList: object[]) {
+	let roomJSON: object = {
+		fullName: buildingInfoArray[1],
+		shortName: buildingInfoArray[0],
+		number: roomInfoList[1].toString(),
+		name: buildingInfoArray[0] + "_" + roomInfoList[1].toString(),
+		address: buildingInfoArray[2],
+		lat: buildingInfoArray[3],
+		lon: buildingInfoArray[4],
+		seats: roomInfoList[2],
+		type: roomInfoList[4],
+		furniture: roomInfoList[3],
+		href: roomInfoList[0],
+	};
+	tempList.push(roomJSON);
+}
+export {searchTreeByID, searchTreeByTag, createJSONAndAddToData, convertToJSON};
