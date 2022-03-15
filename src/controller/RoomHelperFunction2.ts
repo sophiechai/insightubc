@@ -1,15 +1,9 @@
-import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {writeToData} from "./DatasetHelperFunctions";
-
-let dataPath = __dirname + "/../../data";
-
 function searchTreeByTag(element: object, matchingTag: string): object {
 	// html -> body -> div -> div -> div -> section -> div -> div -> table
 	let keys = Object.keys(element);
 	let values = Object.values(element);
 
 	if (!keys.includes("tagName")) {
-		// console.log("skip " + values[keys.indexOf("nodeName")]);
 		return null as any;
 	}
 
@@ -30,7 +24,6 @@ function searchTreeByTag(element: object, matchingTag: string): object {
 }
 
 function searchTreeByID(element: object, matchingID: string): object {
-	// console.log("inside searchTreeByID method");
 	let keys = Object.keys(element);
 	let values = Object.values(element);
 	if (!keys.includes("attrs")) {
@@ -58,42 +51,35 @@ function searchTreeByID(element: object, matchingID: string): object {
 	return null as any;
 }
 
-function createJSONAndAddToData(
-	tempList: any[],
-	addedIds: string[],
-	addedDatasets: InsightDataset[],
-	id: string,
-	kind: InsightDatasetKind
-) {
-	// no sections in all the files in zip
-	if (tempList.length === 0) {
-		return Promise.reject(new InsightError("No Valid Rooms"));
-	} else {
-		// create a json object that contains all sections in all the files under the zip file
-		let data: InsightDataset = {id, kind, numRows: tempList.length};
-		const myJSON = JSON.stringify({header: data, contents: tempList});
-		const fileName = dataPath + "/" + id + ".json";
-		writeToData(fileName, myJSON);
-		addedIds.push(id);
-		addedDatasets.push(data);
-		return Promise.resolve(addedIds);
-	}
-}
+function convertToJSON(
+	roomInfoList: Map<string, string[][]>,
+	buildingInfoArray: Map<string, Array<string|object>>,
+	tempList: object[]) {
 
-function convertToJSON(roomInfoList: string[], buildingInfoArray: string[], tempList: object[]) {
-	let roomJSON: object = {
-		fullName: buildingInfoArray[1],
-		shortName: buildingInfoArray[0],
-		number: roomInfoList[1].toString(),
-		name: buildingInfoArray[0] + "_" + roomInfoList[1].toString(),
-		address: buildingInfoArray[2],
-		lat: buildingInfoArray[3],
-		lon: buildingInfoArray[4],
-		seats: roomInfoList[2],
-		type: roomInfoList[4],
-		furniture: roomInfoList[3],
-		href: roomInfoList[0],
-	};
-	tempList.push(roomJSON);
+	for(const [key, value] of roomInfoList) {
+		let buildingInfo = buildingInfoArray.get(key);
+
+		if (buildingInfo === undefined) {
+			console.log("building info is undefined");
+		} else {
+			for (const [index, room] of value.entries()) {
+				let roomJSON: object = {
+					fullName: buildingInfo[1],
+					shortName: buildingInfo[0],
+					number: room[1],
+					name: buildingInfo[0] + "_" + room[1],
+					address: buildingInfo[2],
+					lat: buildingInfo[4],
+					lon: buildingInfo[5],
+					seats: room[2],
+					type: room[4],
+					furniture: room[3],
+					href: room[0],
+				};
+				tempList.push(roomJSON);
+			}
+		}
+	}
+	return tempList;
 }
-export {searchTreeByID, searchTreeByTag, createJSONAndAddToData, convertToJSON};
+export {searchTreeByID, searchTreeByTag, convertToJSON};

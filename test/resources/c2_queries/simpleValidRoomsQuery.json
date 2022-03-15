@@ -1,0 +1,57 @@
+{
+	"title": "A simple valid rooms query",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_shortname": "*A*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"rooms_shortname"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "MATX"
+		},
+		{
+			"rooms_shortname": "MATH"
+		},
+		{
+			"rooms_shortname": "LASR"
+		},
+		{
+			"rooms_shortname": "IONA"
+		},
+		{
+			"rooms_shortname": "AUDX"
+		},
+		{
+			"rooms_shortname": "ANSO"
+		},
+		{
+			"rooms_shortname": "ANGU"
+		},
+		{
+			"rooms_shortname": "ALRD"
+		},
+		{
+			"rooms_shortname": "AERL"
+		}
+	]
+}

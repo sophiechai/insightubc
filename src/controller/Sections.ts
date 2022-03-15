@@ -1,18 +1,9 @@
-import {Dataset} from "./Dataset";
+import {Dataset} from "./Datasets";
 
 export class Sections extends Dataset {
-	// public get map(): Map<string, number | string> {
-	// 	return this._map;
-	// }
-	//
-	// public set map(value: Map<string, number | string>) {
-	// 	this._map = value;
-	// }
-	//
-	// private _map: Map<string, number | string>;
 
 	public constructor(jsonStringInput: string) {
-		super(jsonStringInput);
+		super();
 
 		let keys: string[] = Object.keys(jsonStringInput);
 		let values: Array<string | number> = Object.values(jsonStringInput);

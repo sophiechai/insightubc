@@ -383,9 +383,9 @@ describe("Dynamic folder test for performQuery", function () {
 	before(async function () {
 		clearDisk();
 		courses = getContentFromArchives("courses.zip");
-		rooms = getContentFromArchives("rooms_small.zip");
+		rooms = getContentFromArchives("rooms.zip");
 		facade = new InsightFacade();
-		await facade.addDataset("roomsSmall", rooms, InsightDatasetKind.Rooms);
+		await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 	});
 
