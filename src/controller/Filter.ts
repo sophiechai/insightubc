@@ -2,7 +2,7 @@ import {InsightError, InsightResult, ResultTooLargeError} from "./IInsightFacade
 import {Sections} from "./Sections";
 import {datasetArray} from "./InsightFacade";
 import {Rooms} from "./Rooms";
-import {Dataset} from "./Dataset";
+import {Dataset} from "./Datasets";
 import Decimal from "decimal.js";
 
 let dataset: Dataset[];

@@ -16,10 +16,6 @@ function checkValidSection(section: object): boolean {
 		Object.prototype.hasOwnProperty.call(section, "Audit") &&
 		Object.prototype.hasOwnProperty.call(section, "id") &&
 		Object.prototype.hasOwnProperty.call(section, "Year")
-		// section.hasOwnProperty("id") && section.hasOwnProperty("avg") &&
-		// section.hasOwnProperty("instructor") && section.hasOwnProperty("title") && section.hasOwnProperty("pass") &&
-		// section.hasOwnProperty("fail") && section.hasOwnProperty("audit") && section.hasOwnProperty("uuid") &&
-		// section.hasOwnProperty("year")
 	);
 }
 
@@ -45,7 +41,7 @@ function formatSection(map: Map<string, number | string>, section: object) {
 }
 
 function writeToData(fileName: string, myJSON: string): void {
-	return fse.writeFile(fileName, myJSON, (err) => {
+	fse.writeFile(fileName, myJSON, (err) => {
 		if (err) {
 			console.error("file created error: " + err);
 			return;
@@ -55,12 +51,10 @@ function writeToData(fileName: string, myJSON: string): void {
 }
 
 function removeItem<T>(arr: T[], value: T): T[] {
-	// console.log("before: " + arr.length);
 	const index = arr.indexOf(value);
 	if (index > -1) {
 		arr.splice(index, 1);
 	}
-	// console.log("after: " + arr.length);
 	return arr;
 }
 
@@ -74,7 +68,6 @@ function parseResult(
 		const dataObj = JSON.parse(fileData)["result"];
 		if (dataObj.length !== 0) {
 			dataObj.forEach((section: object) => {
-				// console.log("section is " + JSON.stringify(section));
 				const validSection = checkValidSection(section);
 				if (validSection) {
 					formatSection(mapForEachFormattedSection, section);
@@ -105,7 +98,6 @@ function jszipCourses(
 			if (!relativePath.includes("courses/")) {
 				promises.push(Promise.reject(new InsightError("invalid directory")));
 			}
-			// console.log("file is " + file);
 			const promise = file.async("string");
 			parseResult(promise, mapForEachFormattedSection, tempList);
 			promises.push(promise);
@@ -121,10 +113,8 @@ function jszipCourses(
 					const myJSON = JSON.stringify({header: data, contents: tempList});
 
 					const fileName = dataPath + "/" + id + ".json";
-					return writeToData(fileName, myJSON);
+					writeToData(fileName, myJSON);
 				}
-			})
-			.then(function () {
 				addedIds.push(id);
 				addedDatasets.push(data);
 				return Promise.resolve(addedIds);

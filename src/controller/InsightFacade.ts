@@ -21,7 +21,7 @@ import {ValidateQueryMain} from "./ValidateQueryMain";
 import {ValidateQueryCourses} from "./ValidateQueryCourses";
 import {ValidateQueryRooms} from "./ValidateQueryRooms";
 import {Rooms} from "./Rooms";
-import {Dataset} from "./Dataset";
+import {Dataset} from "./Datasets";
 import {Sections} from "./Sections";
 
 /**
@@ -116,7 +116,7 @@ export default class InsightFacade implements IInsightFacade {
 		let kind = "";
 		try {
 			kind = this.decideKind(q);
-			let validateQueryObject: ValidateQueryMain = this.instantiateValidateObject(q, kind);
+			let validateQueryObject: ValidateQueryMain = InsightFacade.instantiateValidateObject(q, kind);
 			id = validateQueryObject.isQueryValid();
 			if (!addedIds.includes(id)) {
 				throw new InsightError("Dataset ID does not exist");
@@ -143,10 +143,10 @@ export default class InsightFacade implements IInsightFacade {
 				datasetArray.push(new Rooms(item));
 			}
 		}
-		return this.query(q, id);
+		return InsightFacade.query(q, id);
 	}
 
-	private query(q: any, id: string) {
+	private static query(q: any, id: string) {
 		let insightResultArray: InsightResult[] = [];
 		filter(q.WHERE, "INIT");
 		let optionsValue = q.OPTIONS;
@@ -167,14 +167,13 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		}
 		createInsightResult(columnsValue, id, insightResultArray, newMap, aggregateMap);
-		console.log("YEY");
 		if (Object.prototype.hasOwnProperty.call(optionsValue, "ORDER")) {
 			sortResult(optionsValue.ORDER, insightResultArray);
 		}
 		return Promise.resolve(insightResultArray);
 	}
 
-	private instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
+	private static instantiateValidateObject(q: object, kind: string): ValidateQueryMain {
 		if (kind === "courses") {
 			return new ValidateQueryCourses(q);
 		} else {
@@ -216,10 +215,10 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			property = key.substring(key.indexOf("_") + 1);
 		}
-		return this.getKindString(property);
+		return InsightFacade.getKindString(property);
 	}
 
-	private getKindString(property: string) {
+	private static getKindString(property: string) {
 		switch (property) {
 			case "dept":
 			case "id":

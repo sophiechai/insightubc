@@ -28,12 +28,7 @@ function parseTable(table: object, codeArray: string[]) {
 		codeArray.push(text.replace(/[^A-Z]/g, ""));
 	}
 }
-
-function parseTableRooms(table: object, buildingInfoArray: string[], tempList: object[]) {
-	console.log("building info array 34: " + buildingInfoArray);
-	let roomInfoList: string[];
-	// return new Promise(function (resolve, reject) {
-	console.log("in line 36");
+function parseTableRooms(table: object, roomsInfoArray: Map<string, string[][]>, code: string) {
 	let tableKeys = Object.keys(table);
 	let tableValues = Object.values(table);
 	let tbody: object = tableValues[tableKeys.indexOf("childNodes")][3];
@@ -42,7 +37,7 @@ function parseTableRooms(table: object, buildingInfoArray: string[], tempList: o
 	let tbodyValues = Object.values(tbody);
 	let tbodyChildNodes = tbodyValues[tbodyKeys.indexOf("childNodes")];
 	for (let i = 1; i < tbodyChildNodes.length - 1; i = i + 2) {
-		roomInfoList = [];
+		let tempRoomInfoList2: string[] = [];
 
 		let tr: object = tbodyChildNodes[i];
 		let trKeys = Object.keys(tr);
@@ -63,13 +58,13 @@ function parseTableRooms(table: object, buildingInfoArray: string[], tempList: o
 		let hrefValueKeys = Object.keys(hrefValue);
 		let hrefValueValues = Object.values(hrefValue);
 		// console.log("hrefValueValues: " + hrefValueValues[hrefValueKeys.indexOf("value")]);
-		roomInfoList.push(hrefValueValues[hrefValueKeys.indexOf("value")]);
+		tempRoomInfoList2.push(hrefValueValues[hrefValueKeys.indexOf("value")]);
 
 		let numberValue: object = hrefAValues[hrefAKeys.indexOf("childNodes")][0];
 		let numberValueKeys = Object.keys(numberValue);
 		let numberValueValues = Object.values(numberValue);
 		// console.log("numberValueValues: " + numberValueValues[numberValueKeys.indexOf("value")]);
-		roomInfoList.push(numberValueValues[numberValueKeys.indexOf("value")]);
+		tempRoomInfoList2.push(numberValueValues[numberValueKeys.indexOf("value")]);
 
 		// get room seats, furniture, type (second to forth column)
 		for (let j = 3; j <= 7; j = j + 2) {
@@ -83,16 +78,24 @@ function parseTableRooms(table: object, buildingInfoArray: string[], tempList: o
 			// console.log("valueValues: " + valueValues);
 			let text: string = valueValues[valueKeys.indexOf("value")];
 			// console.log("text: " + text.substring(2).trim());
-			roomInfoList.push(text.substring(2).trim()); // remove \n and space
+			tempRoomInfoList2.push(text.substring(2).trim()); // remove \n and space
 		}
-		// console.log("roomInfoList: " + roomInfoList);
-		convertToJSON(roomInfoList, buildingInfoArray, tempList);
-		// console.log("tempList line 90: " + tempList);
+		if (roomsInfoArray.has(code)) {
+			roomsInfoArray.get(code)!.push(tempRoomInfoList2);
+		} else {
+			roomsInfoArray.set(code, [tempRoomInfoList2]);
+		}
 	}
 }
 
-function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
-	console.log("buildingInfoArray 98: " + buildingInfoArray);
+function parseBuildingInfo(
+	node: object,
+	buildingCode: string,
+	roomsTable: object,
+	buildingInfoArray: Map<string, Array<string|object>>) {
+
+	let tempBuildingInfoArray: Array<string|object> = [];
+	tempBuildingInfoArray.push(buildingCode);
 	// parse building name and address
 	let div: object = searchTreeByID(node, "building-info");
 	let divKeys = Object.keys(div);
@@ -113,14 +116,13 @@ function parseBuildingInfo(node: object, buildingInfoArray: string[]) {
 		let valueKeys = Object.keys(value);
 		let valueValues = Object.values(value);
 		// console.log("value Values: " + valueValues);
-		buildingInfoArray.push(valueValues[valueKeys.indexOf("value")]);
+		tempBuildingInfoArray.push(valueValues[valueKeys.indexOf("value")]);
 	}
-	console.log("building info array: " + buildingInfoArray);
-	// get building geolocation
-	return getBuildingGeolocation(buildingInfoArray[2], buildingInfoArray);
+	tempBuildingInfoArray.push(roomsTable);
+	buildingInfoArray.set(buildingCode, tempBuildingInfoArray);
 }
 
-function getBuildingGeolocation(address: string, buildingInfoArray: string[]): Promise<string> {
+function getBuildingGeolocation(address: string, buildingInfoArray: Array<string|object>): Promise<string>{
 	let formattedAddress = address.replace(/\s/g, "%20");
 	let url: string = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team558/" + formattedAddress;
 
@@ -130,8 +132,7 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]): P
 			const contentType = res.headers["content-type"];
 
 			let error;
-			// Any 2xx status code signals a successful response but
-			// here we're only checking for 200.
+		// Any 2xx status code signals a successful response but here we're only checking for 200.
 			if (statusCode !== 200) {
 				error = new Error("Request Failed.\n" + `Status Code: ${statusCode}`);
 			} else if (!/^application\/json/.test(typeof contentType === "string" ? contentType : "")) {
@@ -139,11 +140,10 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]): P
 			}
 			if (error) {
 				console.error(error.message);
-				// Consume response data to free up memory
+			// Consume response data to free up memory
 				res.resume();
 				reject();
 			}
-
 			res.setEncoding("utf8");
 			let rawData = "";
 			res.on("data", (chunk) => {
@@ -152,7 +152,6 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]): P
 			res.on("end", () => {
 				try {
 					const parsedData = JSON.parse(rawData);
-					// console.log(parsedData);
 					buildingInfoArray.push(parsedData["lat"]);
 					buildingInfoArray.push(parsedData["lon"]);
 					resolve("success!!!");
@@ -168,70 +167,89 @@ function getBuildingGeolocation(address: string, buildingInfoArray: string[]): P
 	});
 }
 // parse each file with valid building code to get room data.
-function parseResult(promise: Promise<string>, buildingCode: string, tempList: object[]) {
+function parseResult(
+	promise: Promise<string>,
+	buildingCode: string,
+	buildingInfoArray: Map<string, Array<string|object>>) {
 	let doc: Document;
-	let tableObj: object;
-	let buildingInfoArray: string[] = [];
 	promise
 		.then((fileData) => {
 			doc = parse5.parse(fileData);
 			if (searchTreeByTag(doc.childNodes[6], "html") === null) {
-				return Promise.reject(new InsightError("file is not in HTML format"));
+				throw new InsightError("not valid html");
 			}
-			return searchTreeByTag(doc.childNodes[6], "table");
-		})
-		.then((tableObj2: object) => {
-			tableObj = tableObj2;
-			if (tableObj2 === null) {
-				console.log("null line 208");
-			}
-			if (tableObj2 !== null) {
-				console.log("in line 211");
-				buildingInfoArray.push(buildingCode);
-				console.log("building info array 213: " + buildingInfoArray);
-				return parseBuildingInfo(doc.childNodes[6], buildingInfoArray);
-			}
-		})
-		.then(() => {
-			if (tableObj === null) {
-				console.log("null line 219");
-			}
+			let tableObj = searchTreeByTag(doc.childNodes[6], "table");
 			if (tableObj !== null) {
-				console.log("in line 222");
-				console.log("building info array 223: " + buildingInfoArray);
-				parseTableRooms(tableObj, buildingInfoArray, tempList);
+				parseBuildingInfo(doc.childNodes[6], buildingCode, tableObj, buildingInfoArray); // populate buildingInfoArray
 			}
+		})
+		.catch((err) => {
+			console.log(err);
 		});
 }
 
-function getCodeArray(indexFile: JSZipObject[], codeArray: string[]) {
+function getCodeArray(indexFile: JSZipObject[], codeArray: string[]): Promise<string[]> {
 	console.log("Valid index.htm file");
 	let contentIndex = indexFile[0].async("string");
 	return contentIndex
 		.then(function (fileData) {
-			// console.log("fileData is " + fileData);
 			const doc = parse5.parse(fileData);
 			if (searchTreeByTag(doc.childNodes[6], "html") === null) {
 				return Promise.reject(new InsightError("index.htm file is not in HTML format"));
 			}
 			let tableObj: object = searchTreeByTag(doc.childNodes[6], "table");
-			console.log("tableObj is " + tableObj);
 			if (tableObj !== null) {
-				console.log("in");
 				parseTable(tableObj, codeArray);
 			}
-			console.log("codeArray is " + codeArray);
-			return [""];
 		})
 		.catch(function (err) {
 			console.log("error is " + err);
+			return err;
 		});
 }
 
-let globalZip: JSZip;
-let codeArray: string[] = [];
-const promises: Array<Promise<string>> = [];
-let data: InsightDataset;
+function combineRoomsAndBuildingInfo(
+	buildingInfoArray: Map<string, Array<string|object>>,
+	roomInfoList: Map<string, string[][]>,
+	tempList: object[],
+	id: string,
+	kind: InsightDatasetKind): InsightDataset {
+	for (let [key, item] of buildingInfoArray) {
+		if (typeof item[3] === "object") {
+			parseTableRooms(item[3], roomInfoList, key);
+		}
+	}
+	convertToJSON(roomInfoList, buildingInfoArray, tempList);
+	// no sections in all the files in zip
+	let data: InsightDataset;
+	if (tempList.length === 0) {
+		throw new InsightError("no valid buildings");
+	} else {
+		// create a json object that contains all sections in all the files under the zip file
+		data = {id, kind, numRows: tempList.length};
+		const myJSON = JSON.stringify({header: data, contents: tempList});
+		const fileName = dataPath + "/" + id + ".json";
+		writeToData(fileName, myJSON);
+		return data;
+	}
+}
+
+function iterateFile(globalZip: JSZip, codeArray: string[], buildingInfoArray: Map<string, Array<string|object>>) {
+	const promises: Array<Promise<string>> = [];
+	// iterate each file with valid building code to get room data.
+	globalZip.forEach((relativePath, file) => {
+		if (!relativePath.includes("rooms/")) {
+			promises.push(Promise.reject(new InsightError("invalid directory")));
+		}
+		let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
+		if (codeArray.includes(code)) {
+			let promise = file.async("string");
+			parseResult(promise, code, buildingInfoArray);
+			promises.push(promise);
+		}
+	});
+	return Promise.all(promises);
+}
 
 function jszipRooms(
 	jsZip: JSZip,
@@ -241,7 +259,13 @@ function jszipRooms(
 	addedIds: string[],
 	addedDatasets: InsightDataset[]
 ): Promise<string[]> {
-	let tempList: any[] = [];
+
+	let tempList: object[] = [];
+	let buildingInfoArray: Map<string, Array<string|object>> = new Map();
+	let roomInfoList: Map<string, string[][]> = new Map();
+	let codeArray: string[] = [];
+	let globalZip: JSZip;
+
 	return jsZip
 		.loadAsync(content, {base64: true})
 		.then((zip) => {
@@ -253,39 +277,24 @@ function jszipRooms(
 			}
 		})
 		.then(() => {
-			// iterate each file with valid building code to get room data.
-			globalZip.forEach((relativePath, file) => {
-				if (!relativePath.includes("rooms/")) {
-					promises.push(Promise.reject(new InsightError("invalid directory")));
-				}
-				let code: string = relativePath.substring(relativePath.lastIndexOf("/") + 1);
-				if (codeArray.includes(code)) {
-					let promise = file.async("string");
-					parseResult(promise, code, tempList);
-					promises.push(promise);
-				}
-			});
+			return iterateFile(globalZip, codeArray, buildingInfoArray);
 		})
-		.then(() => {
+		.then((promise: string[]) => {
+			const promises: Array<Promise<string>> = [];
+			for (let [key, item] of buildingInfoArray) {
+				promises.push(getBuildingGeolocation(item[2].toString(), item));
+			}
 			return Promise.all(promises);
 		})
-		.then(() => {
-			// return createJSONAndAddToData(tempList, addedIds, addedDatasets, id, kind);
-			// no sections in all the files in zip
-			if (tempList.length !== 0) {
-				return Promise.reject(new InsightError("No Valid Rooms"));
-			} else {
-				// create a json object that contains all sections in all the files under the zip file
-				data = {id, kind, numRows: tempList.length};
-				const myJSON = JSON.stringify({header: data, contents: tempList});
-				const fileName = dataPath + "/" + id + ".json";
-				return writeToData(fileName, myJSON);
-			}
-		})
-		.then(function () {
+		.then((promise: string[]) => {
+			let data = combineRoomsAndBuildingInfo(buildingInfoArray, roomInfoList, tempList, id, kind);
 			addedIds.push(id);
 			addedDatasets.push(data);
 			return Promise.resolve(addedIds);
+		})
+		.catch((err) => {
+			console.log("error");
+			return Promise.reject(err);
 		});
 }
 export {jszipRooms, searchTreeByID};

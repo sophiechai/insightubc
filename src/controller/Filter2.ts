@@ -1,5 +1,4 @@
-import {InsightError, InsightResult, ResultTooLargeError} from "./IInsightFacade";
-import {Dataset} from "./Dataset";
+import {InsightResult} from "./IInsightFacade";
 
 export function sortResult(orderValue: any, resultArray: InsightResult[]) {
 	let dir = "UP";
