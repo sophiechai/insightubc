@@ -1,0 +1,274 @@
+{
+	"title": "Courses apply COUNT for id, year, uuid (strings and numbers)",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"IS": {
+						"courses_dept": "c*"
+					}
+				},
+				{
+					"IS": {
+						"courses_dept": "*h"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"uniqueIds",
+				"uniqueYears",
+				"uniqueUuids"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"courses_dept"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"courses_dept"
+			],
+			"APPLY": [
+				{
+					"uniqueIds": {
+						"COUNT": "courses_id"
+					}
+				},
+				{
+					"uniqueYears": {
+						"COUNT": "courses_year"
+					}
+				},
+				{
+					"uniqueUuids": {
+						"COUNT": "courses_uuid"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"courses_dept": "spph",
+			"uniqueIds": 51,
+			"uniqueYears": 9,
+			"uniqueUuids": 618
+		},
+		{
+			"courses_dept": "phth",
+			"uniqueIds": 16,
+			"uniqueYears": 6,
+			"uniqueUuids": 122
+		},
+		{
+			"courses_dept": "pcth",
+			"uniqueIds": 12,
+			"uniqueYears": 11,
+			"uniqueUuids": 189
+		},
+		{
+			"courses_dept": "path",
+			"uniqueIds": 27,
+			"uniqueYears": 10,
+			"uniqueUuids": 465
+		},
+		{
+			"courses_dept": "mech",
+			"uniqueIds": 85,
+			"uniqueYears": 10,
+			"uniqueUuids": 1285
+		},
+		{
+			"courses_dept": "math",
+			"uniqueIds": 94,
+			"uniqueYears": 11,
+			"uniqueUuids": 2772
+		},
+		{
+			"courses_dept": "fnh",
+			"uniqueIds": 38,
+			"uniqueYears": 11,
+			"uniqueUuids": 767
+		},
+		{
+			"courses_dept": "fish",
+			"uniqueIds": 5,
+			"uniqueYears": 10,
+			"uniqueUuids": 44
+		},
+		{
+			"courses_dept": "enph",
+			"uniqueIds": 5,
+			"uniqueYears": 6,
+			"uniqueUuids": 56
+		},
+		{
+			"courses_dept": "crwr",
+			"uniqueIds": 12,
+			"uniqueYears": 10,
+			"uniqueUuids": 208
+		},
+		{
+			"courses_dept": "cpsc",
+			"uniqueIds": 53,
+			"uniqueYears": 11,
+			"uniqueUuids": 1111
+		},
+		{
+			"courses_dept": "cpen",
+			"uniqueIds": 18,
+			"uniqueYears": 3,
+			"uniqueUuids": 44
+		},
+		{
+			"courses_dept": "cons",
+			"uniqueIds": 15,
+			"uniqueYears": 11,
+			"uniqueUuids": 217
+		},
+		{
+			"courses_dept": "comm",
+			"uniqueIds": 99,
+			"uniqueYears": 11,
+			"uniqueUuids": 3570
+		},
+		{
+			"courses_dept": "cohr",
+			"uniqueIds": 12,
+			"uniqueYears": 11,
+			"uniqueUuids": 176
+		},
+		{
+			"courses_dept": "cogs",
+			"uniqueIds": 5,
+			"uniqueYears": 11,
+			"uniqueUuids": 137
+		},
+		{
+			"courses_dept": "coec",
+			"uniqueIds": 5,
+			"uniqueYears": 3,
+			"uniqueUuids": 17
+		},
+		{
+			"courses_dept": "cnto",
+			"uniqueIds": 2,
+			"uniqueYears": 2,
+			"uniqueUuids": 5
+		},
+		{
+			"courses_dept": "cnrs",
+			"uniqueIds": 4,
+			"uniqueYears": 10,
+			"uniqueUuids": 31
+		},
+		{
+			"courses_dept": "cnps",
+			"uniqueIds": 19,
+			"uniqueYears": 10,
+			"uniqueUuids": 720
+		},
+		{
+			"courses_dept": "clst",
+			"uniqueIds": 25,
+			"uniqueYears": 11,
+			"uniqueUuids": 343
+		},
+		{
+			"courses_dept": "clch",
+			"uniqueIds": 3,
+			"uniqueYears": 4,
+			"uniqueUuids": 14
+		},
+		{
+			"courses_dept": "civl",
+			"uniqueIds": 84,
+			"uniqueYears": 11,
+			"uniqueUuids": 1240
+		},
+		{
+			"courses_dept": "cics",
+			"uniqueIds": 2,
+			"uniqueYears": 9,
+			"uniqueUuids": 28
+		},
+		{
+			"courses_dept": "chin",
+			"uniqueIds": 43,
+			"uniqueYears": 10,
+			"uniqueUuids": 974
+		},
+		{
+			"courses_dept": "chil",
+			"uniqueIds": 1,
+			"uniqueYears": 10,
+			"uniqueUuids": 27
+		},
+		{
+			"courses_dept": "chem",
+			"uniqueIds": 63,
+			"uniqueYears": 10,
+			"uniqueUuids": 1254
+		},
+		{
+			"courses_dept": "chbe",
+			"uniqueIds": 55,
+			"uniqueYears": 11,
+			"uniqueUuids": 801
+		},
+		{
+			"courses_dept": "cens",
+			"uniqueIds": 4,
+			"uniqueYears": 11,
+			"uniqueUuids": 87
+		},
+		{
+			"courses_dept": "cell",
+			"uniqueIds": 12,
+			"uniqueYears": 10,
+			"uniqueUuids": 144
+		},
+		{
+			"courses_dept": "ceen",
+			"uniqueIds": 4,
+			"uniqueYears": 8,
+			"uniqueUuids": 54
+		},
+		{
+			"courses_dept": "ccst",
+			"uniqueIds": 4,
+			"uniqueYears": 10,
+			"uniqueUuids": 49
+		},
+		{
+			"courses_dept": "caps",
+			"uniqueIds": 12,
+			"uniqueYears": 5,
+			"uniqueUuids": 86
+		},
+		{
+			"courses_dept": "arth",
+			"uniqueIds": 32,
+			"uniqueYears": 11,
+			"uniqueUuids": 423
+		},
+		{
+			"courses_dept": "arch",
+			"uniqueIds": 29,
+			"uniqueYears": 11,
+			"uniqueUuids": 685
+		},
+		{
+			"courses_dept": "anth",
+			"uniqueIds": 26,
+			"uniqueYears": 11,
+			"uniqueUuids": 279
+		}
+	]
+}
