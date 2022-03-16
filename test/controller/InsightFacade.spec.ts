@@ -19,12 +19,14 @@ type Output = Promise<InsightResult[]>;
 type Error = "InsightError" | "ResultTooLargeError";
 
 describe("InsightFacade", function () {
-	this.timeout(10000);
+	this.timeout(20000);
 	let courses: string;
+	let rooms: string;
 	let facade: IInsightFacade;
 
 	before(function () {
 		courses = getContentFromArchives("courses.zip");
+		rooms = getContentFromArchives("rooms.zip");
 	});
 
 	beforeEach(function () {
@@ -128,6 +130,34 @@ describe("InsightFacade", function () {
 					});
 				});
 		}).timeout(10000);
+
+		it("should list multiple courses and rooms datasets", function () {
+			return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
+				.then(() => {
+					return facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+				})
+				.then(() => {
+					return facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
+				})
+				.then(() => {
+					return facade.addDataset("rooms2", rooms, InsightDatasetKind.Rooms);
+				})
+				.then(() => {
+					return facade.listDatasets();
+				})
+				.then((insightDatasets) => {
+					expect(insightDatasets).to.be.an.instanceof(Array);
+					expect(insightDatasets).to.have.length(4);
+					const insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses");
+					expect(insightDatasetCourses).to.exist;
+					const insightDatasetCourses2 = insightDatasets.find((dataset) => dataset.id === "courses2");
+					expect(insightDatasetCourses2).to.exist;
+					const insightDatasetRooms = insightDatasets.find((dataset) => dataset.id === "rooms");
+					expect(insightDatasetRooms).to.exist;
+					const insightDatasetRooms2 = insightDatasets.find((dataset) => dataset.id === "rooms2");
+					expect(insightDatasetRooms2).to.exist;
+				});
+		});
 	});
 
 	describe("Add Dataset", function () {
