@@ -174,6 +174,12 @@ describe("InsightFacade", function () {
 				expect(addedIds).to.have.length(1);
 			});
 
+			it("should add one id (contains whitespace character) for rooms", async function () {
+				const addedIds = await facade.addDataset("ubc rooms", rooms, InsightDatasetKind.Rooms);
+				expect(addedIds).to.deep.equal(["ubc rooms"]);
+				expect(addedIds).to.have.length(1);
+			});
+
 			it("should add one id (one valid file)", async function () {
 				let oneValidFile = getContentFromArchives("one valid.zip");
 
@@ -192,6 +198,15 @@ describe("InsightFacade", function () {
 				const otherId = addedIds.find((id) => id === "courses-2");
 				expect(otherId).to.exist;
 			}).timeout(10000);
+
+			it("should add one rooms id for files under rooms dir", async function () {
+				let filesUnderRoomDir = getContentFromArchives("files under rooms dir.zip");
+				const addedIds = await facade.addDataset("rooms", filesUnderRoomDir, InsightDatasetKind.Rooms);
+				expect(addedIds).to.be.an.instanceof(Array);
+				expect(addedIds).to.have.length(1);
+				const roomId = addedIds.find((id) => id === "rooms");
+				expect(roomId).to.exist;
+			});
 		});
 
 		describe("Reject With InsightError", function () {
@@ -207,6 +222,15 @@ describe("InsightFacade", function () {
 			it("should reject if id contains underscore at beginning", async function () {
 				try {
 					await facade.addDataset("_courses", courses, InsightDatasetKind.Courses);
+					expect.fail("Should have rejected!");
+				} catch (err) {
+					expect(err).to.be.instanceof(InsightError);
+				}
+			});
+
+			it("should reject if id contains underscore for rooms", async function () {
+				try {
+					await facade.addDataset("_rooms", rooms, InsightDatasetKind.Rooms);
 					expect.fail("Should have rejected!");
 				} catch (err) {
 					expect(err).to.be.instanceof(InsightError);
@@ -234,6 +258,15 @@ describe("InsightFacade", function () {
 			it("should reject if id is only whitespace characters", async function () {
 				try {
 					await facade.addDataset(" ", courses, InsightDatasetKind.Courses);
+					expect.fail("Should have rejected!");
+				} catch (err) {
+					expect(err).to.be.instanceof(InsightError);
+				}
+			});
+
+			it("should reject if id is only whitespace characters for rooms", async function () {
+				try {
+					await facade.addDataset(" ", rooms, InsightDatasetKind.Rooms);
 					expect.fail("Should have rejected!");
 				} catch (err) {
 					expect(err).to.be.instanceof(InsightError);
