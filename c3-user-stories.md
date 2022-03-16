@@ -7,8 +7,8 @@ As a student, I want to be able to add a zip file with data on courses/building,
 ---
 
 #### Definitions of Done(s)
-**Scenario 1**: Adding valid zip file
-Given: User is on the add dataset page/window
+**Scenario 1**: Adding valid zip file  
+Given: User is on the add dataset page/window  
 When:
 - The user clicks on "ADD DATASET" and file explorer pops up where user selects a valid zip
   // or the user drags and drops a zip to the area indicated.
@@ -19,8 +19,8 @@ Then: Add dataset page/window closes and a message appears saying "DATASET (name
 
 ---
 
-**Scenario 2**: Adding invalid zip file
-Given: User is on the add dataset page/window
+**Scenario 2**: Adding invalid zip file  
+Given: User is on the add dataset page/window  
 When:
 - The user clicks on "ADD DATASET" and file explorer pops up where user selects an invalid zip
   // or the user drags and drops a invalid zip to the area indicated. (invalid ex. not a zip, no courses folder, etc)
@@ -32,8 +32,8 @@ Another message below indicating the reason (ex. "The file given is not a zip fi
 
 ---
 
-**Scenario 3**: Adding valid zip file with invalid name
-Given: User is on the add dataset page/window 
+**Scenario 3**: Adding valid zip file with invalid name  
+Given: User is on the add dataset page/window  
 When:
 - The user clicks on "ADD DATASET" and file explorer pops up where user selects a valid zip
   // or the user drags and drops a zip file to the area indicated.
