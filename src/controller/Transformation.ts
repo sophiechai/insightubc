@@ -5,7 +5,7 @@ export function applyTransformation(
 	instruction: object,
 	columnKeys: string[],
 	newMap: Map<string, Dataset[]>,
-	aggregateMap: Map<string, number[]>
+	aggregateMap: Map<string, Map<string, number>>
 ) {
 	// GROUP
 	newMap = new Map(applyGroup(Object.values(instruction)[0], newMap));
@@ -21,10 +21,11 @@ function applyApply(
 	applyArray: object[],
 	newMap: Map<string, Dataset[]>,
 	columnKeys: string[],
-	aggregateMap: Map<string, number[]>
+	aggregateMap: Map<string, Map<string, number>>
 ) {
 	for (const item of applyArray) {
-		if (columnKeys.includes(Object.keys(item)[0])) {
+		let applyKey: string = Object.keys(item)[0];
+		if (columnKeys.includes(applyKey)) {
 			let value = Object.values(item)[0];
 			let command: string = Object.keys(value)[0];
 			let commandValue = Object.values(value)[0];
@@ -32,7 +33,7 @@ function applyApply(
 			if (typeof commandValue === "string") {
 				property = getProperty(commandValue);
 			}
-			aggregate(command, newMap, property, aggregateMap);
+			aggregate(command, newMap, property, applyKey, aggregateMap);
 		}
 	}
 }
