@@ -13,8 +13,12 @@ function getContentFromArchives(name: string): Promise<string> {
 	});
 }
 
+function getContentFromArchivesAwait(name: string): string {
+	return fs.readFileSync("test/resources/archives/" + name).toString("base64");
+}
+
 function clearDisk(): void {
 	fs.removeSync(persistDir);
 }
 
-export {getContentFromArchives, persistDir, clearDisk};
+export {getContentFromArchives, getContentFromArchivesAwait, persistDir, clearDisk};

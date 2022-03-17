@@ -153,7 +153,7 @@ export default class InsightFacade implements IInsightFacade {
 		let columnsValue = optionsValue.COLUMNS;
 		// apply transformation
 		let newMap: Map<string, Dataset[]> = new Map();
-		let aggregateMap: Map<string, number[]> = new Map();
+		let aggregateMap: Map<string, Map<string, number>> = new Map();
 		if (Object.prototype.hasOwnProperty.call(q, "TRANSFORMATIONS")) {
 			newMap = new Map(applyTransformation(q.TRANSFORMATIONS, columnsValue, newMap, aggregateMap));
 		}

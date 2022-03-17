@@ -9,7 +9,7 @@ import {
 import InsightFacade from "../../src/controller/InsightFacade";
 import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
-import {clearDisk, getContentFromArchives} from "../TestUtil";
+import {clearDisk, getContentFromArchives, getContentFromArchivesAwait} from "../TestUtil";
 import {folderTest} from "@ubccpsc310/folder-test";
 
 use(chaiAsPromised); // extends chai to use additional keywords (e.g. eventually)
@@ -21,10 +21,12 @@ type Error = "InsightError" | "ResultTooLargeError";
 describe("InsightFacade", function () {
 	this.timeout(10000);
 	let courses: Promise<string>;
+	let rooms: Promise<string>;
 	let facade: IInsightFacade;
 
 	before(function () {
 		courses = getContentFromArchives("courses.zip");
+		rooms = getContentFromArchives("rooms.zip");
 	});
 
 	beforeEach(function () {
@@ -115,6 +117,36 @@ describe("InsightFacade", function () {
 				});
 		});
 
+		// it("should list multiple courses and rooms datasets", function () {
+		// 	courses.then(function (content) {
+		// 		return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+		// 	})
+		// 		.then(() => {
+		// 			return facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+		// 		})
+		// 		.then(() => {
+		// 			return facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
+		// 		})
+		// 		.then(() => {
+		// 			return facade.addDataset("rooms2", rooms, InsightDatasetKind.Rooms);
+		// 		})
+		// 		.then(() => {
+		// 			return facade.listDatasets();
+		// 		})
+		// 		.then((insightDatasets) => {
+		// 			expect(insightDatasets).to.be.an.instanceof(Array);
+		// 			expect(insightDatasets).to.have.length(4);
+		// 			const insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses");
+		// 			expect(insightDatasetCourses).to.exist;
+		// 			const insightDatasetCourses2 = insightDatasets.find((dataset) => dataset.id === "courses2");
+		// 			expect(insightDatasetCourses2).to.exist;
+		// 			const insightDatasetRooms = insightDatasets.find((dataset) => dataset.id === "rooms");
+		// 			expect(insightDatasetRooms).to.exist;
+		// 			const insightDatasetRooms2 = insightDatasets.find((dataset) => dataset.id === "rooms2");
+		// 			expect(insightDatasetRooms2).to.exist;
+		// 		});
+		// });
+
 		describe("Add Dataset", function () {
 			describe("Successful Add Dataset", function () {
 				it("should add one id", async function () {
@@ -128,11 +160,22 @@ describe("InsightFacade", function () {
 					});
 				});
 
-				it("should add one id (contains whitespace character)", async function () {
+				it("should add one id (contains whitespace character)", function () {
 					courses.then(function (content) {
 						return facade.addDataset("courses", content, InsightDatasetKind.Courses);
 					}).then((addedIds: string[]) => {
 						expect(addedIds).to.deep.equal(["ubc courses"]);
+						expect(addedIds).to.have.length(1);
+					}).catch((err: InsightError) => {
+						expect(err).to.be.instanceof(InsightError);
+					});
+				});
+
+				it("should add one id (contains whitespace character) for rooms", function () {
+					rooms.then(function (content) {
+						return facade.addDataset("ubc rooms", content, InsightDatasetKind.Rooms);
+					}).then((addedIds: string[]) => {
+						expect(addedIds).to.deep.equal(["ubc rooms"]);
 						expect(addedIds).to.have.length(1);
 					}).catch((err: InsightError) => {
 						expect(err).to.be.instanceof(InsightError);
@@ -386,15 +429,21 @@ describe("InsightFacade", function () {
 });
 
 describe("Dynamic folder test for performQuery", function () {
-	this.timeout(15000);
 	let courses: string;
 	let rooms: string;
 	let facade: IInsightFacade;
 	before(async function () {
 		clearDisk();
-		// courses = getContentFromArchives("courses.zip");
-		// rooms = getContentFromArchives("rooms.zip");
+		courses = getContentFromArchivesAwait("courses.zip");
+		rooms = getContentFromArchivesAwait("rooms.zip");
 		facade = new InsightFacade();
+		// courses.then((content) => {
+		// 	return facade.addDataset("rooms", content, InsightDatasetKind.Rooms);
+		// }).then(() => {
+		// 	return rooms.then((content) => {
+		// 		return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+		// 	});
+		// });
 		await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 	});
