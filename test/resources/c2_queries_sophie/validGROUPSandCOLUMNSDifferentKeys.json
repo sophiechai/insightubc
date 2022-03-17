@@ -1,0 +1,1490 @@
+{
+	"title": "GROUPS and COLUMNS have different keys",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"totalSeats"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"totalSeats"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_type"
+			],
+			"APPLY": [
+				{
+					"totalSeats": {
+						"SUM": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_name": "WOOD_2",
+			"totalSeats": 503
+		},
+		{
+			"rooms_name": "OSBO_A",
+			"totalSeats": 442
+		},
+		{
+			"rooms_name": "CIRS_1250",
+			"totalSeats": 426
+		},
+		{
+			"rooms_name": "HEBB_100",
+			"totalSeats": 375
+		},
+		{
+			"rooms_name": "ESB_1013",
+			"totalSeats": 350
+		},
+		{
+			"rooms_name": "LSC_1001",
+			"totalSeats": 350
+		},
+		{
+			"rooms_name": "LSC_1002",
+			"totalSeats": 350
+		},
+		{
+			"rooms_name": "WESB_100",
+			"totalSeats": 325
+		},
+		{
+			"rooms_name": "SRC_220A",
+			"totalSeats": 299
+		},
+		{
+			"rooms_name": "SRC_220B",
+			"totalSeats": 299
+		},
+		{
+			"rooms_name": "SRC_220C",
+			"totalSeats": 299
+		},
+		{
+			"rooms_name": "SCRF_100",
+			"totalSeats": 280
+		},
+		{
+			"rooms_name": "BUCH_A101",
+			"totalSeats": 275
+		},
+		{
+			"rooms_name": "CHEM_B150",
+			"totalSeats": 265
+		},
+		{
+			"rooms_name": "ANGU_098",
+			"totalSeats": 260
+		},
+		{
+			"rooms_name": "HENN_200",
+			"totalSeats": 257
+		},
+		{
+			"rooms_name": "FSC_1005",
+			"totalSeats": 250
+		},
+		{
+			"rooms_name": "CHEM_B250",
+			"totalSeats": 240
+		},
+		{
+			"rooms_name": "PHRM_1101",
+			"totalSeats": 236
+		},
+		{
+			"rooms_name": "BIOL_2000",
+			"totalSeats": 228
+		},
+		{
+			"rooms_name": "GEOG_100",
+			"totalSeats": 225
+		},
+		{
+			"rooms_name": "MATH_100",
+			"totalSeats": 224
+		},
+		{
+			"rooms_name": "LSK_200",
+			"totalSeats": 205
+		},
+		{
+			"rooms_name": "CHBE_101",
+			"totalSeats": 200
+		},
+		{
+			"rooms_name": "MCML_166",
+			"totalSeats": 200
+		},
+		{
+			"rooms_name": "SWNG_221",
+			"totalSeats": 190
+		},
+		{
+			"rooms_name": "SWNG_222",
+			"totalSeats": 190
+		},
+		{
+			"rooms_name": "SWNG_122",
+			"totalSeats": 188
+		},
+		{
+			"rooms_name": "SWNG_121",
+			"totalSeats": 187
+		},
+		{
+			"rooms_name": "LSK_201",
+			"totalSeats": 183
+		},
+		{
+			"rooms_name": "BUCH_A201",
+			"totalSeats": 181
+		},
+		{
+			"rooms_name": "WOOD_6",
+			"totalSeats": 181
+		},
+		{
+			"rooms_name": "PHRM_1201",
+			"totalSeats": 167
+		},
+		{
+			"rooms_name": "FRDM_153",
+			"totalSeats": 160
+		},
+		{
+			"rooms_name": "DMP_310",
+			"totalSeats": 160
+		},
+		{
+			"rooms_name": "HENN_201",
+			"totalSeats": 155
+		},
+		{
+			"rooms_name": "IBLC_182",
+			"totalSeats": 154
+		},
+		{
+			"rooms_name": "BUCH_A102",
+			"totalSeats": 150
+		},
+		{
+			"rooms_name": "BUCH_A104",
+			"totalSeats": 150
+		},
+		{
+			"rooms_name": "ESB_1012",
+			"totalSeats": 150
+		},
+		{
+			"rooms_name": "HENN_202",
+			"totalSeats": 150
+		},
+		{
+			"rooms_name": "AERL_120",
+			"totalSeats": 144
+		},
+		{
+			"rooms_name": "MCLD_228",
+			"totalSeats": 136
+		},
+		{
+			"rooms_name": "BUCH_A103",
+			"totalSeats": 131
+		},
+		{
+			"rooms_name": "LSC_1003",
+			"totalSeats": 125
+		},
+		{
+			"rooms_name": "MCLD_202",
+			"totalSeats": 123
+		},
+		{
+			"rooms_name": "DMP_110",
+			"totalSeats": 120
+		},
+		{
+			"rooms_name": "WOOD_1",
+			"totalSeats": 120
+		},
+		{
+			"rooms_name": "WOOD_4",
+			"totalSeats": 120
+		},
+		{
+			"rooms_name": "WOOD_5",
+			"totalSeats": 120
+		},
+		{
+			"rooms_name": "CHEM_D200",
+			"totalSeats": 114
+		},
+		{
+			"rooms_name": "CHEM_D300",
+			"totalSeats": 114
+		},
+		{
+			"rooms_name": "IBLC_261",
+			"totalSeats": 112
+		},
+		{
+			"rooms_name": "BUCH_A202",
+			"totalSeats": 108
+		},
+		{
+			"rooms_name": "BUCH_A203",
+			"totalSeats": 108
+		},
+		{
+			"rooms_name": "MATX_1100",
+			"totalSeats": 106
+		},
+		{
+			"rooms_name": "WESB_201",
+			"totalSeats": 102
+		},
+		{
+			"rooms_name": "CEME_1202",
+			"totalSeats": 100
+		},
+		{
+			"rooms_name": "GEOG_200",
+			"totalSeats": 100
+		},
+		{
+			"rooms_name": "IONA_301",
+			"totalSeats": 100
+		},
+		{
+			"rooms_name": "FNH_60",
+			"totalSeats": 99
+		},
+		{
+			"rooms_name": "FSC_1221",
+			"totalSeats": 99
+		},
+		{
+			"rooms_name": "ALRD_105",
+			"totalSeats": 94
+		},
+		{
+			"rooms_name": "CHBE_102",
+			"totalSeats": 94
+		},
+		{
+			"rooms_name": "LASR_104",
+			"totalSeats": 94
+		},
+		{
+			"rooms_name": "ANSO_207",
+			"totalSeats": 90
+		},
+		{
+			"rooms_name": "CHEM_C124",
+			"totalSeats": 90
+		},
+		{
+			"rooms_name": "CHEM_C126",
+			"totalSeats": 90
+		},
+		{
+			"rooms_name": "WOOD_3",
+			"totalSeats": 88
+		},
+		{
+			"rooms_name": "MCLD_254",
+			"totalSeats": 84
+		},
+		{
+			"rooms_name": "ESB_2012",
+			"totalSeats": 80
+		},
+		{
+			"rooms_name": "LASR_102",
+			"totalSeats": 80
+		},
+		{
+			"rooms_name": "ANGU_254",
+			"totalSeats": 80
+		},
+		{
+			"rooms_name": "DMP_301",
+			"totalSeats": 80
+		},
+		{
+			"rooms_name": "BUCH_B213",
+			"totalSeats": 78
+		},
+		{
+			"rooms_name": "BUCH_B215",
+			"totalSeats": 78
+		},
+		{
+			"rooms_name": "BUCH_B313",
+			"totalSeats": 78
+		},
+		{
+			"rooms_name": "BUCH_B315",
+			"totalSeats": 78
+		},
+		{
+			"rooms_name": "BIOL_2200",
+			"totalSeats": 76
+		},
+		{
+			"rooms_name": "LSK_460",
+			"totalSeats": 75
+		},
+		{
+			"rooms_name": "MCML_158",
+			"totalSeats": 74
+		},
+		{
+			"rooms_name": "GEOG_212",
+			"totalSeats": 72
+		},
+		{
+			"rooms_name": "MCML_160",
+			"totalSeats": 72
+		},
+		{
+			"rooms_name": "ORCH_1001",
+			"totalSeats": 72
+		},
+		{
+			"rooms_name": "ORCH_3074",
+			"totalSeats": 72
+		},
+		{
+			"rooms_name": "ORCH_4074",
+			"totalSeats": 72
+		},
+		{
+			"rooms_name": "PHRM_3208",
+			"totalSeats": 72
+		},
+		{
+			"rooms_name": "BRKX_2365",
+			"totalSeats": 70
+		},
+		{
+			"rooms_name": "ANGU_241",
+			"totalSeats": 70
+		},
+		{
+			"rooms_name": "ANGU_347",
+			"totalSeats": 70
+		},
+		{
+			"rooms_name": "ANGU_243",
+			"totalSeats": 68
+		},
+		{
+			"rooms_name": "ANGU_343",
+			"totalSeats": 68
+		},
+		{
+			"rooms_name": "ANGU_345",
+			"totalSeats": 68
+		},
+		{
+			"rooms_name": "SOWK_124",
+			"totalSeats": 68
+		},
+		{
+			"rooms_name": "SPPH_B151",
+			"totalSeats": 66
+		},
+		{
+			"rooms_name": "BUCH_D217",
+			"totalSeats": 65
+		},
+		{
+			"rooms_name": "BUCH_D218",
+			"totalSeats": 65
+		},
+		{
+			"rooms_name": "BUCH_D219",
+			"totalSeats": 65
+		},
+		{
+			"rooms_name": "BUCH_D222",
+			"totalSeats": 65
+		},
+		{
+			"rooms_name": "FSC_1001",
+			"totalSeats": 65
+		},
+		{
+			"rooms_name": "FSC_1003",
+			"totalSeats": 65
+		},
+		{
+			"rooms_name": "FORW_303",
+			"totalSeats": 63
+		},
+		{
+			"rooms_name": "CEME_1204",
+			"totalSeats": 62
+		},
+		{
+			"rooms_name": "CHBE_103",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "LASR_105",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "GEOG_101",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "GEOG_147",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "ANGU_234",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "ANGU_334",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "MCLD_214",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "MCLD_242",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "MATH_102",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "SCRF_209",
+			"totalSeats": 60
+		},
+		{
+			"rooms_name": "ANGU_350",
+			"totalSeats": 58
+		},
+		{
+			"rooms_name": "BUCH_B208",
+			"totalSeats": 56
+		},
+		{
+			"rooms_name": "UCLL_103",
+			"totalSeats": 55
+		},
+		{
+			"rooms_name": "FNH_40",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "HEBB_10",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "HEBB_12",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "HEBB_13",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "ANGU_037",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "ANGU_039",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "ANGU_291",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "ANGU_295",
+			"totalSeats": 54
+		},
+		{
+			"rooms_name": "ANGU_435",
+			"totalSeats": 53
+		},
+		{
+			"rooms_name": "LASR_107",
+			"totalSeats": 51
+		},
+		{
+			"rooms_name": "ALRD_121",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "BUCH_D316",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "BUCH_D317",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "BUCH_D322",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "EOSM_135",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "IONA_633",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "IBLC_155",
+			"totalSeats": 50
+		},
+		{
+			"rooms_name": "BUCH_B210",
+			"totalSeats": 48
+		},
+		{
+			"rooms_name": "MATH_104",
+			"totalSeats": 48
+		},
+		{
+			"rooms_name": "MATH_203",
+			"totalSeats": 48
+		},
+		{
+			"rooms_name": "ORCH_3018",
+			"totalSeats": 48
+		},
+		{
+			"rooms_name": "ORCH_4018",
+			"totalSeats": 48
+		},
+		{
+			"rooms_name": "UCLL_107",
+			"totalSeats": 48
+		},
+		{
+			"rooms_name": "MCML_154",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_105",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_107",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_109",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_305",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_307",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_309",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_405",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_407",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "SWNG_409",
+			"totalSeats": 47
+		},
+		{
+			"rooms_name": "CEME_1215",
+			"totalSeats": 45
+		},
+		{
+			"rooms_name": "ALRD_B101",
+			"totalSeats": 44
+		},
+		{
+			"rooms_name": "FORW_317",
+			"totalSeats": 44
+		},
+		{
+			"rooms_name": "ANGU_354",
+			"totalSeats": 44
+		},
+		{
+			"rooms_name": "ANGU_434",
+			"totalSeats": 44
+		},
+		{
+			"rooms_name": "FNH_50",
+			"totalSeats": 43
+		},
+		{
+			"rooms_name": "BUCH_B141",
+			"totalSeats": 42
+		},
+		{
+			"rooms_name": "GEOG_201",
+			"totalSeats": 42
+		},
+		{
+			"rooms_name": "LSK_462",
+			"totalSeats": 42
+		},
+		{
+			"rooms_name": "ANGU_235",
+			"totalSeats": 41
+		},
+		{
+			"rooms_name": "ANGU_237",
+			"totalSeats": 41
+		},
+		{
+			"rooms_name": "ANGU_335",
+			"totalSeats": 41
+		},
+		{
+			"rooms_name": "BUCH_B209",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_B211",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_B218",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_B303",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_B309",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_B318",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_D201",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_D204",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_D301",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_D312",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "BUCH_D314",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "DMP_101",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "DMP_201",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "IBLC_185",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "MCLD_220",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_1003",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_1004",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_1005",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_200",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_201",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_202",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_203",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_204",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_206",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_207",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "SCRF_208",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "PCOH_1001",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "PCOH_1002",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "PCOH_1003",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "OSBO_203A",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "MGYM_208",
+			"totalSeats": 40
+		},
+		{
+			"rooms_name": "GEOG_214",
+			"totalSeats": 39
+		},
+		{
+			"rooms_name": "OSBO_203B",
+			"totalSeats": 39
+		},
+		{
+			"rooms_name": "SCRF_1328",
+			"totalSeats": 38
+		},
+		{
+			"rooms_name": "ANSO_205",
+			"totalSeats": 37
+		},
+		{
+			"rooms_name": "ANGU_296",
+			"totalSeats": 37
+		},
+		{
+			"rooms_name": "FSC_1613",
+			"totalSeats": 36
+		},
+		{
+			"rooms_name": "HENN_304",
+			"totalSeats": 36
+		},
+		{
+			"rooms_name": "FORW_519",
+			"totalSeats": 35
+		},
+		{
+			"rooms_name": "ANGU_292",
+			"totalSeats": 35
+		},
+		{
+			"rooms_name": "CEME_1212",
+			"totalSeats": 34
+		},
+		{
+			"rooms_name": "SCRF_205",
+			"totalSeats": 34
+		},
+		{
+			"rooms_name": "ANSO_203",
+			"totalSeats": 33
+		},
+		{
+			"rooms_name": "BUCH_B302",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "BUCH_B304",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "BUCH_B306",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "BUCH_B307",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "BUCH_B308",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "BUCH_B310",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "ANGU_293",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "ANGU_437",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "MCML_256",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "MCML_260",
+			"totalSeats": 32
+		},
+		{
+			"rooms_name": "BUCH_D323",
+			"totalSeats": 31
+		},
+		{
+			"rooms_name": "SOWK_224",
+			"totalSeats": 31
+		},
+		{
+			"rooms_name": "BUCH_D205",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D207",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D213",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D221",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D229",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D304",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D307",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "BUCH_D313",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "HENN_301",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "HENN_302",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "IBLC_461",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "MATH_105",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "MATH_202",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "MATH_204",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "SPPH_B108",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "UCLL_101",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "UCLL_109",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "WOOD_B75",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "WOOD_G41",
+			"totalSeats": 30
+		},
+		{
+			"rooms_name": "SOWK_222",
+			"totalSeats": 29
+		},
+		{
+			"rooms_name": "SOWK_223",
+			"totalSeats": 29
+		},
+		{
+			"rooms_name": "FNH_30",
+			"totalSeats": 28
+		},
+		{
+			"rooms_name": "SPPH_143",
+			"totalSeats": 28
+		},
+		{
+			"rooms_name": "FNH_320",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_106",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_108",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_110",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_306",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_308",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_310",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_406",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_408",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "SWNG_410",
+			"totalSeats": 27
+		},
+		{
+			"rooms_name": "ANSO_202",
+			"totalSeats": 26
+		},
+		{
+			"rooms_name": "BUCH_B142",
+			"totalSeats": 26
+		},
+		{
+			"rooms_name": "CEME_1206",
+			"totalSeats": 26
+		},
+		{
+			"rooms_name": "MATH_225",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_3002",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_3004",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_3016",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_3052",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_3058",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_4002",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_4004",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_4016",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_4052",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "ORCH_4058",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "MGYM_206",
+			"totalSeats": 25
+		},
+		{
+			"rooms_name": "BRKX_2367",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "BUCH_B219",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "BUCH_B319",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "BUCH_D216",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "BUCH_D228",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "FSC_1002",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "FSC_1611",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "IBLC_156",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "IBLC_157",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "IBLC_158",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "IBLC_191",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "MCML_358",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "SCRF_1020",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "SCRF_204A",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "SCRF_210",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "PCOH_1008",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "PCOH_1009",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "PCOH_1011",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "PCOH_1215",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "PCOH_1302",
+			"totalSeats": 24
+		},
+		{
+			"rooms_name": "BUCH_B216",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_B316",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_D209",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_D214",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_D306",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_D315",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_D319",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "BUCH_D325",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "CEME_1210",
+			"totalSeats": 22
+		},
+		{
+			"rooms_name": "AUDX_157",
+			"totalSeats": 21
+		},
+		{
+			"rooms_name": "GEOG_242",
+			"totalSeats": 21
+		},
+		{
+			"rooms_name": "WOOD_B79",
+			"totalSeats": 21
+		},
+		{
+			"rooms_name": "ALRD_112",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "ALRD_113",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "AUDX_142",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "FSC_1615",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "FSC_1617",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "LASR_211",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "LASR_5C",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "ANGU_339",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "SCRF_1021",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "SCRF_1022",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "SCRF_1023",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "SCRF_1024",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "ORCH_4072",
+			"totalSeats": 20
+		},
+		{
+			"rooms_name": "BUCH_B312",
+			"totalSeats": 18
+		},
+		{
+			"rooms_name": "FSC_1402",
+			"totalSeats": 18
+		},
+		{
+			"rooms_name": "BIOL_1503",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "BIOL_2519",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ANGU_232",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ANGU_332",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ANGU_432",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "IBLC_460",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "SOWK_324",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "SOWK_326",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ORCH_3062",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ORCH_3068",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ORCH_3072",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ORCH_4062",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "ORCH_4068",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "SPPH_B112",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "WOOD_G66",
+			"totalSeats": 16
+		},
+		{
+			"rooms_name": "PHRM_3116",
+			"totalSeats": 14
+		},
+		{
+			"rooms_name": "SPPH_B138",
+			"totalSeats": 14
+		},
+		{
+			"rooms_name": "WOOD_G44",
+			"totalSeats": 14
+		},
+		{
+			"rooms_name": "FNH_20",
+			"totalSeats": 12
+		},
+		{
+			"rooms_name": "IBLC_264",
+			"totalSeats": 12
+		},
+		{
+			"rooms_name": "SOWK_122",
+			"totalSeats": 12
+		},
+		{
+			"rooms_name": "SPPH_B136",
+			"totalSeats": 12
+		},
+		{
+			"rooms_name": "WOOD_G57",
+			"totalSeats": 12
+		},
+		{
+			"rooms_name": "WOOD_G65",
+			"totalSeats": 12
+		},
+		{
+			"rooms_name": "IBLC_265",
+			"totalSeats": 10
+		},
+		{
+			"rooms_name": "WOOD_G53",
+			"totalSeats": 10
+		},
+		{
+			"rooms_name": "WOOD_G55",
+			"totalSeats": 10
+		},
+		{
+			"rooms_name": "WOOD_G59",
+			"totalSeats": 10
+		},
+		{
+			"rooms_name": "IBLC_192",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "IBLC_193",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "IBLC_194",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "IBLC_195",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "IBLC_263",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "IBLC_266",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360C",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360D",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360E",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360F",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360G",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360H",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360J",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360K",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360L",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "MCML_360M",
+			"totalSeats": 8
+		},
+		{
+			"rooms_name": "PHRM_3112",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "PHRM_3114",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "PHRM_3115",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "PHRM_3118",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "PHRM_3120",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "PHRM_3122",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "PHRM_3124",
+			"totalSeats": 7
+		},
+		{
+			"rooms_name": "MCML_360A",
+			"totalSeats": 6
+		},
+		{
+			"rooms_name": "MCML_360B",
+			"totalSeats": 6
+		}
+	]
+}
