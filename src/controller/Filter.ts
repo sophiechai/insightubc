@@ -213,7 +213,7 @@ export function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>)
 }
 
 function updateTracker(command: string, tracker: number, avgSum: Decimal, value: Dataset[],
-	countArray: string[], minTracker: number) {
+	countArray: string[], minTracker: number, sumTracker: number) {
 	if (command === "AVG") {
 		tracker = Number((avgSum.toNumber() / value.length).toFixed(2));
 	}
@@ -224,7 +224,7 @@ function updateTracker(command: string, tracker: number, avgSum: Decimal, value:
 		tracker = minTracker;
 	}
 	if (command === "SUM") {
-		tracker = Number(tracker.toFixed(2));
+		tracker = Number(sumTracker.toFixed(2));
 	}
 	return tracker;
 }
@@ -236,6 +236,7 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 	for (let entry of newMap.entries()) {
 		let key = entry[0];
 		let value = entry[1];
+		let sumTracker: number = 0;
 		let tracker: number = Number.NEGATIVE_INFINITY;
 		let minTracker: number = Number.POSITIVE_INFINITY;
 		let avgSum: Decimal = new Decimal(0);
@@ -258,14 +259,14 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 						minTracker = num;
 					}
 				} else if (command === "SUM") {
-					tracker += num;
+					sumTracker += num;
 				} else {
 					let total = new Decimal(num);
 					avgSum = Decimal.add(avgSum, total);
 				}
 			}
 		}
-		tracker = updateTracker(command, tracker, avgSum, value, countArray, minTracker);
+		tracker = updateTracker(command, tracker, avgSum, value, countArray, minTracker, sumTracker);
 		// let mapValue: Map<string, number[]>;
 		if (!aggregateMap.has(key)) {
 			let mapValue: Map<string, number> = new Map();
