@@ -1,0 +1,683 @@
+{
+	"title": "valid rooms query apply COUNT to all properties",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_lat",
+				"count seats",
+				"count lon",
+				"count lat",
+				"count fullname",
+				"count shortname",
+				"count number",
+				"count name",
+				"count address",
+				"count type",
+				"count furniture",
+				"count href"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"rooms_lat"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_lat"
+			],
+			"APPLY": [
+				{
+					"count fullname": {
+						"COUNT": "rooms_fullname"
+					}
+				},
+				{
+					"count shortname": {
+						"COUNT": "rooms_shortname"
+					}
+				},
+				{
+					"count number": {
+						"COUNT": "rooms_number"
+					}
+				},
+				{
+					"count name": {
+						"COUNT": "rooms_name"
+					}
+				},
+				{
+					"count address": {
+						"COUNT": "rooms_address"
+					}
+				},
+				{
+					"count lat": {
+						"COUNT": "rooms_lat"
+					}
+				},
+				{
+					"count lon": {
+						"COUNT": "rooms_lon"
+					}
+				},
+				{
+					"count seats": {
+						"COUNT": "rooms_seats"
+					}
+				},
+				{
+					"count type": {
+						"COUNT": "rooms_type"
+					}
+				},
+				{
+					"count furniture": {
+						"COUNT": "rooms_furniture"
+					}
+				},
+				{
+					"count href": {
+						"COUNT": "rooms_href"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"rooms_lat": 49.26044,
+			"count seats": 7,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 10,
+			"count name": 10,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 10
+		},
+		{
+			"rooms_lat": 49.26047,
+			"count seats": 3,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 3,
+			"count name": 3,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 3
+		},
+		{
+			"rooms_lat": 49.26048,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 21,
+			"count name": 21,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 5,
+			"count href": 21
+		},
+		{
+			"rooms_lat": 49.26114,
+			"count seats": 8,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 19,
+			"count name": 19,
+			"count address": 1,
+			"count type": 4,
+			"count furniture": 4,
+			"count href": 19
+		},
+		{
+			"rooms_lat": 49.26125,
+			"count seats": 4,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 5,
+			"count name": 5,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 5
+		},
+		{
+			"rooms_lat": 49.26176,
+			"count seats": 8,
+			"count lon": 2,
+			"count lat": 1,
+			"count fullname": 2,
+			"count shortname": 2,
+			"count number": 9,
+			"count name": 9,
+			"count address": 2,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 9
+		},
+		{
+			"rooms_lat": 49.26207,
+			"count seats": 1,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 1,
+			"count name": 1,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 1
+		},
+		{
+			"rooms_lat": 49.26228,
+			"count seats": 4,
+			"count lon": 2,
+			"count lat": 1,
+			"count fullname": 2,
+			"count shortname": 2,
+			"count number": 4,
+			"count name": 4,
+			"count address": 2,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 4
+		},
+		{
+			"rooms_lat": 49.26229,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 11,
+			"count name": 11,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 2,
+			"count href": 11
+		},
+		{
+			"rooms_lat": 49.26236,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 3,
+			"count name": 3,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 3
+		},
+		{
+			"rooms_lat": 49.26273,
+			"count seats": 6,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 6,
+			"count name": 6,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 6
+		},
+		{
+			"rooms_lat": 49.26274,
+			"count seats": 3,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 3,
+			"count name": 3,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 3,
+			"count href": 3
+		},
+		{
+			"rooms_lat": 49.26293,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 22,
+			"count name": 22,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 22
+		},
+		{
+			"rooms_lat": 49.26372,
+			"count seats": 1,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 1,
+			"count name": 1,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 1
+		},
+		{
+			"rooms_lat": 49.26398,
+			"count seats": 7,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 22,
+			"count name": 22,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 3,
+			"count href": 22
+		},
+		{
+			"rooms_lat": 49.264,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 8,
+			"count name": 8,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 3,
+			"count href": 8
+		},
+		{
+			"rooms_lat": 49.26414,
+			"count seats": 6,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 6,
+			"count name": 6,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 6
+		},
+		{
+			"rooms_lat": 49.2642,
+			"count seats": 6,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 6,
+			"count name": 6,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 6
+		},
+		{
+			"rooms_lat": 49.2643,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 7,
+			"count name": 7,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 7
+		},
+		{
+			"rooms_lat": 49.26478,
+			"count seats": 10,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 16,
+			"count name": 16,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 4,
+			"count href": 16
+		},
+		{
+			"rooms_lat": 49.26479,
+			"count seats": 3,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 4,
+			"count name": 4,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 3,
+			"count href": 4
+		},
+		{
+			"rooms_lat": 49.26486,
+			"count seats": 15,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 28,
+			"count name": 28,
+			"count address": 1,
+			"count type": 5,
+			"count furniture": 2,
+			"count href": 28
+		},
+		{
+			"rooms_lat": 49.26517,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 2,
+			"count name": 2,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 2
+		},
+		{
+			"rooms_lat": 49.26541,
+			"count seats": 1,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 1,
+			"count name": 1,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 1
+		},
+		{
+			"rooms_lat": 49.26545,
+			"count seats": 4,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 4,
+			"count name": 4,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 4
+		},
+		{
+			"rooms_lat": 49.2659,
+			"count seats": 4,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 6,
+			"count name": 6,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 6
+		},
+		{
+			"rooms_lat": 49.26605,
+			"count seats": 7,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 8,
+			"count name": 8,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 4,
+			"count href": 8
+		},
+		{
+			"rooms_lat": 49.266089,
+			"count seats": 1,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 1,
+			"count name": 1,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 1
+		},
+		{
+			"rooms_lat": 49.2661,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 4,
+			"count name": 4,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 4
+		},
+		{
+			"rooms_lat": 49.26627,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 6,
+			"count name": 6,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 6
+		},
+		{
+			"rooms_lat": 49.2663,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 2,
+			"count name": 2,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 2
+		},
+		{
+			"rooms_lat": 49.266463,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 8,
+			"count name": 8,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 8
+		},
+		{
+			"rooms_lat": 49.2666,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 2,
+			"count name": 2,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 2
+		},
+		{
+			"rooms_lat": 49.26766,
+			"count seats": 10,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 18,
+			"count name": 18,
+			"count address": 1,
+			"count type": 4,
+			"count furniture": 5,
+			"count href": 18
+		},
+		{
+			"rooms_lat": 49.26767,
+			"count seats": 5,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 6,
+			"count name": 6,
+			"count address": 1,
+			"count type": 4,
+			"count furniture": 4,
+			"count href": 6
+		},
+		{
+			"rooms_lat": 49.26826,
+			"count seats": 19,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 61,
+			"count name": 61,
+			"count address": 1,
+			"count type": 4,
+			"count furniture": 7,
+			"count href": 61
+		},
+		{
+			"rooms_lat": 49.2683,
+			"count seats": 1,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 3,
+			"count name": 3,
+			"count address": 1,
+			"count type": 1,
+			"count furniture": 1,
+			"count href": 3
+		},
+		{
+			"rooms_lat": 49.26862,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 2,
+			"count name": 2,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 2
+		},
+		{
+			"rooms_lat": 49.26867,
+			"count seats": 3,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 4,
+			"count name": 4,
+			"count address": 1,
+			"count type": 3,
+			"count furniture": 3,
+			"count href": 4
+		},
+		{
+			"rooms_lat": 49.26958,
+			"count seats": 4,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 4,
+			"count name": 4,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 3,
+			"count href": 4
+		},
+		{
+			"rooms_lat": 49.2699,
+			"count seats": 4,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 5,
+			"count name": 5,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 5
+		},
+		{
+			"rooms_lat": 49.27106,
+			"count seats": 2,
+			"count lon": 1,
+			"count lat": 1,
+			"count fullname": 1,
+			"count shortname": 1,
+			"count number": 2,
+			"count name": 2,
+			"count address": 1,
+			"count type": 2,
+			"count furniture": 2,
+			"count href": 2
+		}
+	]
+
+}
