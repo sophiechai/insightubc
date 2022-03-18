@@ -236,8 +236,8 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 	for (let entry of newMap.entries()) {
 		let key = entry[0];
 		let value = entry[1];
-		let tracker: number = 0;
-		let minTracker: number = -1;
+		let tracker: number = Number.NEGATIVE_INFINITY;
+		let minTracker: number = Number.POSITIVE_INFINITY;
 		let avgSum: Decimal = new Decimal(0);
 		let countArray: string[] = [];
 		for (let data of value) {
@@ -254,7 +254,7 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 						tracker = num;
 					}
 				} else if (command === "MIN") {
-					if (minTracker === -1 || num < minTracker) {
+					if (num < minTracker) {
 						minTracker = num;
 					}
 				} else if (command === "SUM") {
