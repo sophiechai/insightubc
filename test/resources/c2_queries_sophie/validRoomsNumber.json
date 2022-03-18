@@ -1,0 +1,1254 @@
+{
+	"title": "rooms_number query",
+	"input": {
+		"WHERE": {
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_number",
+				"countType"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"rooms_number"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_number"
+			],
+			"APPLY": [
+				{
+					"countType": {
+						"COUNT": "rooms_number"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_number": "G66",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G65",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G59",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G57",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G55",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G53",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G44",
+			"countType": 1
+		},
+		{
+			"rooms_number": "G41",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D325",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D323",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D322",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D319",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D317",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D316",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D315",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D314",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D313",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D312",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D307",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D306",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D304",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D301",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D300",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D229",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D228",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D222",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D221",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D219",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D218",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D217",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D216",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D214",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D213",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D209",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D207",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D205",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D204",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D201",
+			"countType": 1
+		},
+		{
+			"rooms_number": "D200",
+			"countType": 1
+		},
+		{
+			"rooms_number": "C126",
+			"countType": 1
+		},
+		{
+			"rooms_number": "C124",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B79",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B75",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B319",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B318",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B316",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B315",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B313",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B312",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B310",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B309",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B308",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B307",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B306",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B304",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B303",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B302",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B250",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B219",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B218",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B216",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B215",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B213",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B211",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B210",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B209",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B208",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B151",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B150",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B142",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B141",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B138",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B136",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B112",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B108",
+			"countType": 1
+		},
+		{
+			"rooms_number": "B101",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A203",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A202",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A201",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A104",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A103",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A102",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A101",
+			"countType": 1
+		},
+		{
+			"rooms_number": "A",
+			"countType": 1
+		},
+		{
+			"rooms_number": "633",
+			"countType": 1
+		},
+		{
+			"rooms_number": "60",
+			"countType": 1
+		},
+		{
+			"rooms_number": "6",
+			"countType": 1
+		},
+		{
+			"rooms_number": "5C",
+			"countType": 1
+		},
+		{
+			"rooms_number": "519",
+			"countType": 1
+		},
+		{
+			"rooms_number": "50",
+			"countType": 1
+		},
+		{
+			"rooms_number": "5",
+			"countType": 1
+		},
+		{
+			"rooms_number": "462",
+			"countType": 1
+		},
+		{
+			"rooms_number": "461",
+			"countType": 1
+		},
+		{
+			"rooms_number": "460",
+			"countType": 1
+		},
+		{
+			"rooms_number": "437",
+			"countType": 1
+		},
+		{
+			"rooms_number": "435",
+			"countType": 1
+		},
+		{
+			"rooms_number": "434",
+			"countType": 1
+		},
+		{
+			"rooms_number": "432",
+			"countType": 1
+		},
+		{
+			"rooms_number": "410",
+			"countType": 1
+		},
+		{
+			"rooms_number": "409",
+			"countType": 1
+		},
+		{
+			"rooms_number": "408",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4074",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4072",
+			"countType": 1
+		},
+		{
+			"rooms_number": "407",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4068",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4062",
+			"countType": 1
+		},
+		{
+			"rooms_number": "406",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4058",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4052",
+			"countType": 1
+		},
+		{
+			"rooms_number": "405",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4018",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4016",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4004",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4002",
+			"countType": 1
+		},
+		{
+			"rooms_number": "40",
+			"countType": 1
+		},
+		{
+			"rooms_number": "4",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360M",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360L",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360K",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360J",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360H",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360G",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360F",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360E",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360D",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360C",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360B",
+			"countType": 1
+		},
+		{
+			"rooms_number": "360A",
+			"countType": 1
+		},
+		{
+			"rooms_number": "358",
+			"countType": 1
+		},
+		{
+			"rooms_number": "354",
+			"countType": 1
+		},
+		{
+			"rooms_number": "350",
+			"countType": 1
+		},
+		{
+			"rooms_number": "347",
+			"countType": 1
+		},
+		{
+			"rooms_number": "345",
+			"countType": 1
+		},
+		{
+			"rooms_number": "343",
+			"countType": 1
+		},
+		{
+			"rooms_number": "339",
+			"countType": 1
+		},
+		{
+			"rooms_number": "335",
+			"countType": 1
+		},
+		{
+			"rooms_number": "334",
+			"countType": 1
+		},
+		{
+			"rooms_number": "332",
+			"countType": 1
+		},
+		{
+			"rooms_number": "326",
+			"countType": 1
+		},
+		{
+			"rooms_number": "324",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3208",
+			"countType": 1
+		},
+		{
+			"rooms_number": "320",
+			"countType": 1
+		},
+		{
+			"rooms_number": "317",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3124",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3122",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3120",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3118",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3116",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3115",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3114",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3112",
+			"countType": 1
+		},
+		{
+			"rooms_number": "310",
+			"countType": 1
+		},
+		{
+			"rooms_number": "309",
+			"countType": 1
+		},
+		{
+			"rooms_number": "308",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3074",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3072",
+			"countType": 1
+		},
+		{
+			"rooms_number": "307",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3068",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3062",
+			"countType": 1
+		},
+		{
+			"rooms_number": "306",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3058",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3052",
+			"countType": 1
+		},
+		{
+			"rooms_number": "305",
+			"countType": 1
+		},
+		{
+			"rooms_number": "304",
+			"countType": 1
+		},
+		{
+			"rooms_number": "303",
+			"countType": 1
+		},
+		{
+			"rooms_number": "302",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3018",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3016",
+			"countType": 1
+		},
+		{
+			"rooms_number": "301",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3004",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3002",
+			"countType": 1
+		},
+		{
+			"rooms_number": "30",
+			"countType": 1
+		},
+		{
+			"rooms_number": "3",
+			"countType": 1
+		},
+		{
+			"rooms_number": "296",
+			"countType": 1
+		},
+		{
+			"rooms_number": "295",
+			"countType": 1
+		},
+		{
+			"rooms_number": "293",
+			"countType": 1
+		},
+		{
+			"rooms_number": "292",
+			"countType": 1
+		},
+		{
+			"rooms_number": "291",
+			"countType": 1
+		},
+		{
+			"rooms_number": "266",
+			"countType": 1
+		},
+		{
+			"rooms_number": "265",
+			"countType": 1
+		},
+		{
+			"rooms_number": "264",
+			"countType": 1
+		},
+		{
+			"rooms_number": "263",
+			"countType": 1
+		},
+		{
+			"rooms_number": "261",
+			"countType": 1
+		},
+		{
+			"rooms_number": "260",
+			"countType": 1
+		},
+		{
+			"rooms_number": "256",
+			"countType": 1
+		},
+		{
+			"rooms_number": "254",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2519",
+			"countType": 1
+		},
+		{
+			"rooms_number": "243",
+			"countType": 1
+		},
+		{
+			"rooms_number": "242",
+			"countType": 1
+		},
+		{
+			"rooms_number": "241",
+			"countType": 1
+		},
+		{
+			"rooms_number": "237",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2367",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2365",
+			"countType": 1
+		},
+		{
+			"rooms_number": "235",
+			"countType": 1
+		},
+		{
+			"rooms_number": "234",
+			"countType": 1
+		},
+		{
+			"rooms_number": "232",
+			"countType": 1
+		},
+		{
+			"rooms_number": "228",
+			"countType": 1
+		},
+		{
+			"rooms_number": "225",
+			"countType": 1
+		},
+		{
+			"rooms_number": "224",
+			"countType": 1
+		},
+		{
+			"rooms_number": "223",
+			"countType": 1
+		},
+		{
+			"rooms_number": "222",
+			"countType": 1
+		},
+		{
+			"rooms_number": "221",
+			"countType": 1
+		},
+		{
+			"rooms_number": "220C",
+			"countType": 1
+		},
+		{
+			"rooms_number": "220B",
+			"countType": 1
+		},
+		{
+			"rooms_number": "220A",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2200",
+			"countType": 1
+		},
+		{
+			"rooms_number": "220",
+			"countType": 1
+		},
+		{
+			"rooms_number": "214",
+			"countType": 1
+		},
+		{
+			"rooms_number": "212",
+			"countType": 1
+		},
+		{
+			"rooms_number": "211",
+			"countType": 1
+		},
+		{
+			"rooms_number": "210",
+			"countType": 1
+		},
+		{
+			"rooms_number": "209",
+			"countType": 1
+		},
+		{
+			"rooms_number": "208",
+			"countType": 1
+		},
+		{
+			"rooms_number": "207",
+			"countType": 1
+		},
+		{
+			"rooms_number": "206",
+			"countType": 1
+		},
+		{
+			"rooms_number": "205",
+			"countType": 1
+		},
+		{
+			"rooms_number": "204A",
+			"countType": 1
+		},
+		{
+			"rooms_number": "204",
+			"countType": 1
+		},
+		{
+			"rooms_number": "203B",
+			"countType": 1
+		},
+		{
+			"rooms_number": "203A",
+			"countType": 1
+		},
+		{
+			"rooms_number": "203",
+			"countType": 1
+		},
+		{
+			"rooms_number": "202",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2012",
+			"countType": 1
+		},
+		{
+			"rooms_number": "201",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2000",
+			"countType": 1
+		},
+		{
+			"rooms_number": "200",
+			"countType": 1
+		},
+		{
+			"rooms_number": "20",
+			"countType": 1
+		},
+		{
+			"rooms_number": "2",
+			"countType": 1
+		},
+		{
+			"rooms_number": "195",
+			"countType": 1
+		},
+		{
+			"rooms_number": "194",
+			"countType": 1
+		},
+		{
+			"rooms_number": "193",
+			"countType": 1
+		},
+		{
+			"rooms_number": "192",
+			"countType": 1
+		},
+		{
+			"rooms_number": "191",
+			"countType": 1
+		},
+		{
+			"rooms_number": "185",
+			"countType": 1
+		},
+		{
+			"rooms_number": "182",
+			"countType": 1
+		},
+		{
+			"rooms_number": "166",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1617",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1615",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1613",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1611",
+			"countType": 1
+		},
+		{
+			"rooms_number": "160",
+			"countType": 1
+		},
+		{
+			"rooms_number": "158",
+			"countType": 1
+		},
+		{
+			"rooms_number": "157",
+			"countType": 1
+		},
+		{
+			"rooms_number": "156",
+			"countType": 1
+		},
+		{
+			"rooms_number": "155",
+			"countType": 1
+		},
+		{
+			"rooms_number": "154",
+			"countType": 1
+		},
+		{
+			"rooms_number": "153",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1503",
+			"countType": 1
+		},
+		{
+			"rooms_number": "147",
+			"countType": 1
+		},
+		{
+			"rooms_number": "143",
+			"countType": 1
+		},
+		{
+			"rooms_number": "142",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1402",
+			"countType": 1
+		},
+		{
+			"rooms_number": "135",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1328",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1302",
+			"countType": 1
+		},
+		{
+			"rooms_number": "13",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1250",
+			"countType": 1
+		},
+		{
+			"rooms_number": "124",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1221",
+			"countType": 1
+		},
+		{
+			"rooms_number": "122",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1215",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1212",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1210",
+			"countType": 1
+		},
+		{
+			"rooms_number": "121",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1206",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1204",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1202",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1201",
+			"countType": 1
+		},
+		{
+			"rooms_number": "120",
+			"countType": 1
+		},
+		{
+			"rooms_number": "12",
+			"countType": 1
+		},
+		{
+			"rooms_number": "113",
+			"countType": 1
+		},
+		{
+			"rooms_number": "112",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1101",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1100",
+			"countType": 1
+		},
+		{
+			"rooms_number": "110",
+			"countType": 1
+		},
+		{
+			"rooms_number": "109",
+			"countType": 1
+		},
+		{
+			"rooms_number": "108",
+			"countType": 1
+		},
+		{
+			"rooms_number": "107",
+			"countType": 1
+		},
+		{
+			"rooms_number": "106",
+			"countType": 1
+		},
+		{
+			"rooms_number": "105",
+			"countType": 1
+		},
+		{
+			"rooms_number": "104",
+			"countType": 1
+		},
+		{
+			"rooms_number": "103",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1024",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1023",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1022",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1021",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1020",
+			"countType": 1
+		},
+		{
+			"rooms_number": "102",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1013",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1012",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1011",
+			"countType": 1
+		},
+		{
+			"rooms_number": "101",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1009",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1008",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1005",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1004",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1003",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1002",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1001",
+			"countType": 1
+		},
+		{
+			"rooms_number": "100",
+			"countType": 1
+		},
+		{
+			"rooms_number": "10",
+			"countType": 1
+		},
+		{
+			"rooms_number": "1",
+			"countType": 1
+		},
+		{
+			"rooms_number": "098",
+			"countType": 1
+		},
+		{
+			"rooms_number": "039",
+			"countType": 1
+		},
+		{
+			"rooms_number": "037",
+			"countType": 1
+		}
+	]
+}
