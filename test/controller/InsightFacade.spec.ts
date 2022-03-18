@@ -447,6 +447,7 @@ describe("Dynamic folder test for performQuery", function () {
 		// });
 		await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
 	});
 
 	// Assert actual error is of expected type
@@ -463,7 +464,7 @@ describe("Dynamic folder test for performQuery", function () {
 	folderTest<Input, Output, Error>(
 		"performQuery tests",
 		(input: Input): Output => facade.performQuery(input),
-		"./test/resources/c2_queries",
+		"./test/resources/queries/multipleDatasets",
 		{
 			errorValidator: (error): error is Error => error === "InsightError" || error === "ResultTooLargeError",
 			assertOnError: assertError,
