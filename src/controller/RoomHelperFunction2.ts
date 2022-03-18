@@ -71,7 +71,7 @@ function convertToJSON(
 					address: buildingInfo[2],
 					lat: buildingInfo[4],
 					lon: buildingInfo[5],
-					seats: room[2],
+					seats: Number(room[2]),
 					type: room[4],
 					furniture: room[3],
 					href: room[0],

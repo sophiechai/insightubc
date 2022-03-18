@@ -1,0 +1,69 @@
+{
+	"title": "EQ rooms_seats Filter query",
+	"input": {
+		"WHERE": {
+			"EQ": {
+				"rooms_seats": 30
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"rooms_lon",
+				"rooms_lat"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"rooms_shortname"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname",
+				"rooms_lon",
+				"rooms_lat"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_lon": -123.24673,
+			"rooms_lat": 49.26478
+		},
+		{
+			"rooms_shortname": "UCLL",
+			"rooms_lon": -123.25692,
+			"rooms_lat": 49.26867
+		},
+		{
+			"rooms_shortname": "SPPH",
+			"rooms_lon": -123.24842,
+			"rooms_lat": 49.2642
+		},
+		{
+			"rooms_shortname": "MATH",
+			"rooms_lon": -123.255534,
+			"rooms_lat": 49.266463
+		},
+		{
+			"rooms_shortname": "IBLC",
+			"rooms_lon": -123.2521,
+			"rooms_lat": 49.26766
+		},
+		{
+			"rooms_shortname": "HENN",
+			"rooms_lon": -123.25374,
+			"rooms_lat": 49.26627
+		},
+		{
+			"rooms_shortname": "BUCH",
+			"rooms_lon": -123.25468,
+			"rooms_lat": 49.26826
+		}
+	]
+}
