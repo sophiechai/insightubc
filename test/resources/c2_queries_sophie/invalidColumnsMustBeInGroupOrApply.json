@@ -1,0 +1,34 @@
+{
+	"title": "Keys in COLUMNS must be in GROUP or APPLY when TRANSFORMATIONS is present",
+	"input":
+	{
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"rooms_type",
+				"totalSeats"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"totalSeats"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name"
+			],
+			"APPLY": [
+				{
+					"totalSeats": {
+						"SUM": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

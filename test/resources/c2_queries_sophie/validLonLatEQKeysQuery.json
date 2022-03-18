@@ -1,0 +1,53 @@
+{
+	"title": "Lon Lat EQ Keys query",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"EQ": {
+						"rooms_lon": -123.24937
+					}
+				},
+				{
+					"EQ": {
+						"rooms_lat": 49.26398
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"rooms_lon",
+				"rooms_lat"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"rooms_shortname"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname",
+				"rooms_lon",
+				"rooms_lat"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "WESB",
+			"rooms_lon": -123.24937,
+			"rooms_lat": 49.26517
+		},
+		{
+			"rooms_shortname": "SCRF",
+			"rooms_lon": -123.2531,
+			"rooms_lat": 49.26398
+		}
+	]
+}

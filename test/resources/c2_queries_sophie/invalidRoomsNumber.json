@@ -1,0 +1,36 @@
+{
+	"title": "invalid rooms_number COUNT",
+	"input":
+	{
+		"WHERE": {
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"rooms_number",
+				"countType"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"rooms_name"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_number"
+			],
+			"APPLY": [
+				{
+					"countType": {
+						"SUM": "rooms_number"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

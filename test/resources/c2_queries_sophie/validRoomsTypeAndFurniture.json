@@ -1,0 +1,456 @@
+{
+	"title": "rooms_type and rooms_furniture query",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_name": "*A*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"rooms_type",
+				"rooms_furniture",
+				"countType"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"rooms_name",
+					"rooms_type"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_type",
+				"rooms_furniture"
+			],
+			"APPLY": [
+				{
+					"countType": {
+						"COUNT": "rooms_type"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_name": "SRC_220A",
+			"rooms_type": "TBD",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "SCRF_204A",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "OSBO_A",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "OSBO_203A",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MCML_360A",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Moveable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATX_1100",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_225",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_204",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_203",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_202",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_105",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_104",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_102",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "MATH_100",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "LASR_5C",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "LASR_211",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "LASR_107",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "LASR_105",
+			"rooms_type": "",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "LASR_104",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "LASR_102",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "IONA_633",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "IONA_301",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A203",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A202",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A201",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A104",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A103",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A102",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "BUCH_A101",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "AUDX_157",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "AUDX_142",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANSO_207",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Moveable Tablets",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANSO_205",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Moveable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANSO_203",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Moveable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANSO_202",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_437",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_435",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_434",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_432",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_354",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_350",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_347",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_345",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_343",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_339",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_335",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_334",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_332",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_296",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_295",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_293",
+			"rooms_type": "TBD",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_292",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_291",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_254",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_243",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_241",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_237",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_235",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_234",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_232",
+			"rooms_type": "Small Group",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_098",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_039",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ANGU_037",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ALRD_B101",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ALRD_121",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ALRD_113",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ALRD_112",
+			"rooms_type": "Open Design General Purpose",
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "ALRD_105",
+			"rooms_type": "Case Style",
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"countType": 1
+		},
+		{
+			"rooms_name": "AERL_120",
+			"rooms_type": "Tiered Large Group",
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"countType": 1
+		}
+	]
+}
