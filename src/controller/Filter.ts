@@ -39,7 +39,7 @@ export function filter(instruction: object, message: string) {
 			filterNOT(v);
 			break;
 		default:
-			console.log("NO FILTER");
+			// console.log("NO FILTER");
 	}
 }
 
@@ -53,7 +53,18 @@ export function filterGT(instruction: object) {
 	let v: number = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
-	dataset = dataset.filter((x) => x.map.get(property)! > v);
+	dataset = dataset.filter(function (x) {
+		return checkNonNull(x.map.get(property)) > v;
+	});
+}
+
+export function checkNonNull(input: any) {
+	if (input === null || input === undefined) {
+		console.log("null");
+		throw new InsightError("NULL Value :(");
+	} else {
+		return input;
+	}
 }
 
 export function filterLT(instruction: object) {
@@ -61,7 +72,7 @@ export function filterLT(instruction: object) {
 	let v: number = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
-	dataset = dataset.filter((x) => x.map.get(property)! < v);
+	dataset = dataset.filter((x) => checkNonNull(x.map.get(property)) < v);
 }
 
 export function filterEQ(instruction: object) {
@@ -69,7 +80,7 @@ export function filterEQ(instruction: object) {
 	let v: number = Object.values(instruction)[0];
 	// Get the substring for what specific section I need to compare
 	let property = getProperty(k);
-	dataset = dataset.filter((x) => x.map.get(property)! === v);
+	dataset = dataset.filter((x) => checkNonNull(x.map.get(property)) === v);
 }
 
 export function filterIS(instruction: object) {
@@ -81,15 +92,15 @@ export function filterIS(instruction: object) {
 		return;
 	} else if (v.charAt(0) === "*" && v.charAt(v.length - 1) === "*") {
 		v = v.substring(1, v.length - 1);
-		dataset = dataset.filter((x) => String(x.map.get(property)!).includes(v));
+		dataset = dataset.filter((x) => String(checkNonNull(x.map.get(property))).includes(v));
 	} else if (v.charAt(0) === "*") {
 		v = v.substring(1);
-		dataset = dataset.filter((x) => String(x.map.get(property)!).endsWith(v));
+		dataset = dataset.filter((x) => String(checkNonNull(x.map.get(property))).endsWith(v));
 	} else if (v.charAt(v.length - 1) === "*") {
 		v = v.substring(0, v.length - 1);
-		dataset = dataset.filter((x) => String(x.map.get(property)!).startsWith(v));
+		dataset = dataset.filter((x) => String(checkNonNull(x.map.get(property))).startsWith(v));
 	} else {
-		dataset = dataset.filter((x) => x.map.get(property)! === v);
+		dataset = dataset.filter((x) => checkNonNull(x.map.get(property)) === v);
 	}
 }
 
@@ -138,7 +149,7 @@ export function createInsightResult(
 			for (const item1 of columnKeys) {
 				let value = entry[1][0].map.get(getProperty(item1));
 				if (value === undefined) {
-					output[item1] = aggregateMap.get(entry[0] + "")!.get(item1);
+					output[item1] = checkNonNull(aggregateMap.get(entry[0])).get(item1);
 				} else {
 					output[item1] = value;
 				}
@@ -171,7 +182,7 @@ export function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>)
 			value.push(item);
 			newMap.set(roomValue, value);
 		} else {
-			let value: Dataset[] = newMap.get(roomValue)!;
+			let value: Dataset[] = checkNonNull(newMap.get(roomValue));
 			value.push(item);
 			newMap.set(roomValue, value);
 		}
@@ -189,7 +200,7 @@ export function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>)
 						value.push(j);
 						tempMap.set(key, value);
 					} else {
-						let value: Dataset[] = tempMap.get(key)!;
+						let value: Dataset[] = checkNonNull(tempMap.get(key));
 						value.push(j);
 						tempMap.set(key, value);
 					}
@@ -227,7 +238,7 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 		let avgSum: Decimal = new Decimal(0);
 		let countArray: string[] = [];
 		for (let data of value) {
-			let x = data.map.get(property)!;
+			let x = checkNonNull(data.map.get(property));
 			if (command === "COUNT") {
 				if (!countArray.includes(x.toString())) {
 					countArray.push(x.toString());
@@ -258,7 +269,7 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 			mapValue.set(applyKey, Number(tracker.toFixed(2)));
 			aggregateMap.set(key, mapValue);
 		} else {
-			aggregateMap.get(key)!.set(applyKey, Number(tracker.toFixed(2)));
+			checkNonNull(aggregateMap.get(key)).set(applyKey, Number(tracker.toFixed(2)));
 		}
 	}
 }

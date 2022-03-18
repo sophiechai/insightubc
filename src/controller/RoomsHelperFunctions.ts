@@ -4,6 +4,7 @@ import parse5, {Document} from "parse5";
 import http from "http";
 import {searchTreeByID, searchTreeByTag, convertToJSON} from "./RoomHelperFunction2";
 import {writeToData} from "./DatasetHelperFunctions";
+import {checkNonNull} from "./Filter";
 
 let dataPath = __dirname + "/../../data";
 function parseTable(table: object, codeArray: string[]) {
@@ -81,7 +82,7 @@ function parseTableRooms(table: object, roomsInfoArray: Map<string, string[][]>,
 			tempRoomInfoList2.push(text.substring(2).trim()); // remove \n and space
 		}
 		if (roomsInfoArray.has(code)) {
-			roomsInfoArray.get(code)!.push(tempRoomInfoList2);
+			checkNonNull(roomsInfoArray.get(code)).push(tempRoomInfoList2);
 		} else {
 			roomsInfoArray.set(code, [tempRoomInfoList2]);
 		}
@@ -189,7 +190,6 @@ function parseResult(
 }
 
 function getCodeArray(indexFile: JSZipObject[], codeArray: string[]): Promise<string[]> {
-	console.log("Valid index.htm file");
 	let contentIndex = indexFile[0].async("string");
 	return contentIndex
 		.then(function (fileData) {

@@ -11,7 +11,8 @@ export function applyTransformation(
 	newMap = new Map(applyGroup(Object.values(instruction)[0], newMap));
 	// APPLY
 	// aggregateMap stores the transformation under APPLY
-	if (Object.keys(instruction).length === 2) {
+	let keys = Object.keys(instruction);
+	if (Array.isArray(keys) && keys.length === 2) {
 		applyApply(Object.values(instruction)[1], newMap, columnKeys, aggregateMap);
 	}
 	return newMap;
