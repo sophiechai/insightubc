@@ -35,12 +35,6 @@ describe("InsightFacade", function () {
 	});
 
 	describe("List Datasets", function () {
-		// let facade: IInsightFacade = new InsightFacade();
-
-		// beforeEach(function () {
-		//    clearDisk();
-		//    facade = new InsightFacade();
-		// });
 
 		it("should list no datasets", function () {
 			// return facade.listDatasets().then((insightDatasets) => {
@@ -61,19 +55,29 @@ describe("InsightFacade", function () {
 				return facade.addDataset("courses", content, InsightDatasetKind.Courses);
 			}).then((addedIds) => {
 				return facade.listDatasets();
+			}).then((addedIds) => {
+				return rooms.then(function (content) {
+					return facade.addDataset("rooms", content, InsightDatasetKind.Rooms);
+				});
 			}).then((insightDatasets) => {
 				expect(insightDatasets).to.deep.equal([{
 					id: "courses",
 					kind: InsightDatasetKind.Courses,
 					numRows: 64612
-				}]);
+				},
+				{
+					id: "rooms",
+					kind: InsightDatasetKind.Rooms,
+					numRows: 364
+				}
+				]);
 
 				// OR instead of deep.equal
 				expect(insightDatasets).to.be.an.instanceof(Array);
-				expect(insightDatasets).to.have.length(1);
-				const [insightDataset] = insightDatasets; // take first element of insightDatasets
-				expect(insightDataset).to.have.property("id");
-				expect(insightDataset.id).to.equal("courses");
+				expect(insightDatasets).to.have.length(2);
+				// const [insightDataset] = insightDatasets; // take first element of insightDatasets
+				// expect(insightDataset).to.have.property("id");
+				// expect(insightDataset.id).to.equal("courses");
 			}).catch((err: InsightError) => {
 				expect(err).to.be.instanceof(InsightError);
 			});
@@ -313,6 +317,18 @@ describe("InsightFacade", function () {
 				}).catch((err: InsightError) => {
 					expect(err).to.be.instanceof(InsightError);
 				});
+			});
+
+			it("...", function () {
+				// let invalidZip: Promise<string> = getContentFromArchives("test.txt");
+
+				// invalidZip.then(function (content) {
+				facade.addDataset("rooms", "abcd", InsightDatasetKind.Rooms)
+					.then(() => {
+						console.log("in");
+					}).catch((err: InsightError) => {
+						expect(err).to.be.instanceof(InsightError);
+					});
 			});
 		});
 	});

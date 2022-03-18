@@ -205,7 +205,7 @@ export default class InsightFacade implements IInsightFacade {
 			if (!Object.prototype.hasOwnProperty.call(optionsValue, "COLUMNS")) {
 				throw new InsightError("Missing COLUMNS");
 			}
-			let columnsValue = optionsValue.COLUMNS;
+			let columnsValue: string[] = optionsValue.COLUMNS;
 			if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
 				throw new InsightError("COLUMNS value invalid");
 			}
