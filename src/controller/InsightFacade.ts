@@ -16,7 +16,7 @@ import fse from "fs-extra";
 import * as fs from "fs-extra";
 import {filter, createInsightResult, checkSectionArrayFinalLength} from "./Filter";
 import {applyTransformation} from "./Transformation";
-import {sortResult} from "./Filter2";
+import {sortResult} from "./Sort";
 import {ValidateQueryMain} from "./ValidateQueryMain";
 import {ValidateQueryCourses} from "./ValidateQueryCourses";
 import {ValidateQueryRooms} from "./ValidateQueryRooms";

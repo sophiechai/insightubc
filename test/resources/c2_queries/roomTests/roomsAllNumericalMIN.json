@@ -1,0 +1,106 @@
+{
+	"title": "valid rooms query apply MIN for all numerical properties",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_furniture",
+				"minSeats",
+				"minLon",
+				"minLat"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"minSeats"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_furniture"
+			],
+			"APPLY": [
+				{
+					"minLat": {
+						"MIN": "rooms_lat"
+					}
+				},
+				{
+					"minLon": {
+						"MIN": "rooms_lon"
+					}
+				},
+				{
+					"minSeats": {
+						"MIN": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":
+	[
+		{
+			"rooms_furniture": "Classroom-Moveable Tables & Chairs",
+			"minSeats": 6,
+			"minLon": -123.25741,
+			"minLat": 49.26114
+		},
+		{
+			"rooms_furniture": "Classroom-Movable Tables & Chairs",
+			"minSeats": 7,
+			"minLon": -123.25741,
+			"minLat": 49.26044
+		},
+		{
+			"rooms_furniture": "Classroom-Movable Tablets",
+			"minSeats": 12,
+			"minLon": -123.2559,
+			"minLat": 49.26047
+		},
+		{
+			"rooms_furniture": "Classroom-Hybrid Furniture",
+			"minSeats": 16,
+			"minLon": -123.25224,
+			"minLat": 49.26048
+		},
+		{
+			"rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+			"minSeats": 25,
+			"minLon": -123.25692,
+			"minLat": 49.26044
+		},
+		{
+			"rooms_furniture": "Classroom-Learn Lab",
+			"minSeats": 30,
+			"minLon": -123.25692,
+			"minLat": 49.26048
+		},
+		{
+			"rooms_furniture": "Classroom-Fixed Tables/Moveable Chairs",
+			"minSeats": 56,
+			"minLon": -123.25468,
+			"minLat": 49.26826
+		},
+		{
+			"rooms_furniture": "Classroom-Fixed Tablets",
+			"minSeats": 60,
+			"minLon": -123.25623,
+			"minLat": 49.26044
+		},
+		{
+			"rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs",
+			"minSeats": 80,
+			"minLon": -123.25583,
+			"minLat": 49.26176
+		},
+		{
+			"rooms_furniture": "Classroom-Moveable Tablets",
+			"minSeats": 90,
+			"minLon": -123.25741,
+			"minLat": 49.26958
+		}
+	]
+}
