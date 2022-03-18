@@ -447,6 +447,7 @@ describe("Dynamic folder test for performQuery", function () {
 		// });
 		await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
 	});
 
 	// Assert actual error is of expected type
