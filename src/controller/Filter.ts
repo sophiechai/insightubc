@@ -215,13 +215,16 @@ export function applyGroup(groupArray: string[], newMap: Map<string, Dataset[]>)
 function updateTracker(command: string, tracker: number, avgSum: Decimal, value: Dataset[],
 	countArray: string[], minTracker: number) {
 	if (command === "AVG") {
-		tracker = avgSum.toNumber() / value.length;
+		tracker = Number((avgSum.toNumber() / value.length).toFixed(2));
 	}
 	if (command === "COUNT") {
 		tracker = countArray.length;
 	}
 	if (command === "MIN") {
 		tracker = minTracker;
+	}
+	if (command === "SUM") {
+		tracker = Number(tracker.toFixed(2));
 	}
 	return tracker;
 }
@@ -266,10 +269,10 @@ export function aggregate(command: string, newMap: Map<string, Dataset[]>, prope
 		// let mapValue: Map<string, number[]>;
 		if (!aggregateMap.has(key)) {
 			let mapValue: Map<string, number> = new Map();
-			mapValue.set(applyKey, Number(tracker.toFixed(2)));
+			mapValue.set(applyKey,tracker);
 			aggregateMap.set(key, mapValue);
 		} else {
-			checkNonNull(aggregateMap.get(key)).set(applyKey, Number(tracker.toFixed(2)));
+			checkNonNull(aggregateMap.get(key)).set(applyKey, tracker);
 		}
 	}
 }
