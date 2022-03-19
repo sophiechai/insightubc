@@ -1,0 +1,28 @@
+{
+	"title": "referencing multiple datasets (options differ) throws InsightError",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"GT": {
+						"courses_avg": 97
+					}
+				},
+				{
+					"EQ": {
+						"courses_avg": 95
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses2_avg"
+			],
+			"ORDER": "courses_avg"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
