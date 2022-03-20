@@ -1,7 +1,8 @@
 import Server from "../../src/rest/Server";
 import InsightFacade from "../../src/controller/InsightFacade";
-import {use} from "chai";
+import {expect, use} from "chai";
 import chaiHttp from "chai-http";
+import {serverGetContentFromArchives} from "../TestUtil";
 
 describe("Facade D3", function () {
 	let facade: InsightFacade;
@@ -65,4 +66,28 @@ describe("Facade D3", function () {
 	*/
 
 	// The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
+
+	describe("PUT Request Tests", function () {
+		it("PUT for courses dataset", function () {
+			let result = {result: ["mycourses"]};
+			try {
+				return chai.request(server)
+					.put("/dataset/mycourses/courses")
+					.send(serverGetContentFromArchives("courses.zip"))
+					.set("Content-Type", "application/x-zip-compressed")
+					.then(function (res: ChaiHttp.Response) {
+						// some logging
+						expect(res.status).to.be.equal(200);
+						expect(res.body).to.be.equal(result);
+					})
+					.catch(function (err) {
+						// some logging
+						expect.fail();
+					});
+			} catch (err) {
+				// some logging
+				expect.fail();
+			}
+		});
+	});
 });
