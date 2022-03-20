@@ -1,6 +1,7 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
+import {putDataset} from "./PUTRequest";
 
 export default class Server {
 	private readonly port: number;
@@ -87,6 +88,7 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
+		this.express.put("/dataset/:id/:kind", putDataset);
 	}
 
 	// The next two methods handle the echo service.

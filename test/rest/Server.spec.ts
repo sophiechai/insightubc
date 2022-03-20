@@ -13,10 +13,25 @@ describe("Facade D3", function () {
 		facade = new InsightFacade();
 		server = new Server(4321);
 		// TODO: start server here once and handle errors properly
+		return server
+			.start()
+			.then(() => {
+				console.info("TestServer::initServer() - started");
+			})
+			.catch((err: Error) => {
+				console.error("TestServer::initServer() - ERROR: ", err.message);
+			});
 	});
 
 	after(function () {
 		// TODO: stop server here once!
+		return server.stop()
+			.then(() => {
+				console.info("TestServer - stopped");
+			})
+			.catch((err: Error) => {
+				console.error("TestServer - ERROR: ", err.message);
+			});
 	});
 
 	beforeEach(function () {
