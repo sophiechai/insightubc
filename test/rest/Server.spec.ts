@@ -1,12 +1,13 @@
 import Server from "../../src/rest/Server";
 import InsightFacade from "../../src/controller/InsightFacade";
-import {expect, use} from "chai";
+import {expect, request, use} from "chai";
 import chaiHttp from "chai-http";
 import {serverGetContentFromArchives} from "../TestUtil";
 
 describe("Facade D3", function () {
 	let facade: InsightFacade;
 	let server: Server;
+	const SERVER_URL = "localhost:4321";
 
 	use(chaiHttp);
 
@@ -71,7 +72,7 @@ describe("Facade D3", function () {
 		it("PUT for courses dataset", function () {
 			let result = {result: ["mycourses"]};
 			try {
-				return chai.request(server)
+				return request(SERVER_URL)
 					.put("/dataset/mycourses/courses")
 					.send(serverGetContentFromArchives("courses.zip"))
 					.set("Content-Type", "application/x-zip-compressed")
@@ -82,10 +83,12 @@ describe("Facade D3", function () {
 					})
 					.catch(function (err) {
 						// some logging
+						console.log(err);
 						expect.fail();
 					});
 			} catch (err) {
 				// some logging
+				console.log(err);
 				expect.fail();
 			}
 		});
