@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+		<title>InsightUBC</title>
+		<link href="/style.css" rel="stylesheet" />
+	</head>
+	<body>
+
+		<div class="header">
+			<h1>InsightUBC</h1>
+		</div>
+		<!-- Top navigation -->
+		<div class="topnav">
+			<!-- Left-aligned links (default) -->
+			<a href="zipData.html">Data</a>
+			<a href="index.html">Queries</a>
+		</div>
+
+		<div style="padding-left:16px">
+			<div class="row">
+				<div class="column half">
+					<h2>Add Zip File</h2>
+
+					<div>
+						<form action="/action_page.php">
+
+							<label for="datasetId">ID:
+								<input type="text" id="datasetId" name="datasetId" required></label><br>
+
+							<br><br>
+							<label>Choose Type:
+								<select id="datasetType" name="datasetType" required>
+									<option value="">Select One ...</option>
+									<option value="courses">Courses</option>
+									<option value="rooms">Rooms</option>
+								</select>
+							</label>
+
+							<br><br>
+
+							<label>Upload:
+								<br><br>
+								<input type="file" id="myFile" name="filename">
+							</label>
+							<br><br>
+
+							<input type="submit" value="Submit">
+						</form>
+						<div class="result"></div>
+						<div class="order"></div>
+					</div>
+				</div>
+				<div class="column half">
+					<h2>Remove Zip File</h2>
+					<p>Some text..</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer">
+			<p>By Sophie Chai and Lisa Lam</p>
+		</div>
+
+		<script type="text/javascript" src="/frontend.js"></script>
+	</body>
+</html>

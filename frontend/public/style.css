@@ -27,7 +27,11 @@ body {
 	padding: 10px;
 }
 
-/* Left and right column */
+.column.half {
+	width: 50%;
+}
+
+/* Side column */
 .column.side {
 	width: 30%;
 }
