@@ -110,6 +110,9 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
+		if (query === undefined || query === null || query === "") {
+			throw new InsightError("Undefined or missing query input");
+		}
 		datasetArray = [];
 		let q: any = query;
 		let id = "";

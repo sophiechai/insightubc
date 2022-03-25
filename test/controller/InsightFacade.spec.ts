@@ -442,6 +442,40 @@ describe("InsightFacade", function () {
 			});
 		});
 	});
+
+	describe("Perform Query", function () {
+		describe("Invalid Query input", function () {
+			it("should reject if empty string query input", function () {
+				courses.then(function (content) {
+					return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+				}).then(() => {
+					facade.performQuery("");
+				}).catch((err: InsightError) => {
+					expect(err).to.be.instanceof(InsightError);
+				});
+			});
+
+			it("should reject if null string query input", function () {
+				courses.then(function (content) {
+					return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+				}).then(() => {
+					facade.performQuery(null);
+				}).catch((err: InsightError) => {
+					expect(err).to.be.instanceof(InsightError);
+				});
+			});
+
+			it("should reject if undefined string query input", function () {
+				courses.then(function (content) {
+					return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+				}).then(() => {
+					facade.performQuery(undefined);
+				}).catch((err: InsightError) => {
+					expect(err).to.be.instanceof(InsightError);
+				});
+			});
+		});
+	});
 });
 
 describe("Dynamic folder test for performQuery", function () {
