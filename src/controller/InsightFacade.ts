@@ -59,6 +59,9 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		if (content === null || content === undefined || content === "") {
+			return Promise.reject(new InsightError("Invalid input string"));
+		}
 		jsZip = new JSZip();
 		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
