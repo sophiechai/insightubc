@@ -9,12 +9,12 @@ function changeLayout(){
 	if (coursesList.includes(id)) {
 		showCoursesFilter();
 		document.getElementById("coursesColumns").addEventListener("change",
-			function() { updateOrderCourses("courses", "coursesOrder"); });
+			function() { updateOrderCourses("courses[]", "coursesOrder"); });
 		showCoursesOrder();
 	} else {
 		showRoomsFilter();
 		document.getElementById("roomsColumns").addEventListener("change",
-			function() { updateOrderCourses("rooms", "roomsOrder"); });
+			function() { updateOrderCourses("rooms[]", "roomsOrder"); });
 		showRoomsOrder();
 	}
 }

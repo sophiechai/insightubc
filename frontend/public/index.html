@@ -24,7 +24,7 @@
 				<div class="column side">
 					<h2>Filter</h2>
 					<div>
-						<form action="/action_page.php">
+						<form action="filter.php", method="post">
 
 							<label>Choose Zip File:
 								<select id="zipfile" name="zipfile">
@@ -39,50 +39,50 @@
 								<br>
 								<div id="coursesColumns" class="showColumns">
 									<label for="dept">
-										<input type="checkbox" id="dept" name="courses" value="dept">Department</label><br>
+										<input type="checkbox" id="dept" name="courses[]" value="dept">Department</label><br>
 									<label for="id">
-										<input type="checkbox" id="id" name="courses" value="id">Course number</label><br>
+										<input type="checkbox" id="id" name="courses[]" value="id">Course number</label><br>
 									<label for="avg">
-										<input type="checkbox" id="avg" name="courses" value="avg">Average of course</label><br>
+										<input type="checkbox" id="avg" name="courses[]" value="avg">Average of course</label><br>
 									<label for="instructor">
-										<input type="checkbox" id="instructor" name="courses" value="instructor">Instructor</label><br>
+										<input type="checkbox" id="instructor" name="courses[]" value="instructor">Instructor</label><br>
 									<label for="title">
-										<input type="checkbox" id="title" name="courses" value="title">Course name</label><br>
+										<input type="checkbox" id="title" name="courses[]" value="title">Course name</label><br>
 									<label for="pass">
-										<input type="checkbox" id="pass" name="courses" value="pass">Number of students passed</label><br>
+										<input type="checkbox" id="pass" name="courses[]" value="pass">Number of students passed</label><br>
 									<label for="fail">
-										<input type="checkbox" id="fail" name="courses" value="fail">Number of students failed</label><br>
+										<input type="checkbox" id="fail" name="courses[]" value="fail">Number of students failed</label><br>
 									<label for="audit">
-										<input type="checkbox" id="audit" name="courses" value="audit">Number of students audited</label><br>
+										<input type="checkbox" id="audit" name="courses[]" value="audit">Number of students audited</label><br>
 									<label for="uuid">
-										<input type="checkbox" id="uuid" name="courses" value="uuid">Course unique id</label><br>
+										<input type="checkbox" id="uuid" name="courses[]" value="uuid">Course unique id</label><br>
 									<label for="year">
-										<input type="checkbox" id="year" name="courses" value="year">Year offered</label><br>
+										<input type="checkbox" id="year" name="courses[]" value="year">Year offered</label><br>
 								</div>
 
 								<div id="roomsColumns" class="showColumns">
 									<label for="fullname">
-										<input type="checkbox" id="fullname" name="rooms" value="fullname">Full building name</label><br>
+										<input type="checkbox" id="fullname" name="rooms[]" value="fullname">Full building name</label><br>
 									<label for="shortname">
-										<input type="checkbox" id="shortname" name="rooms" value="shortname">Short building name</label><br>
+										<input type="checkbox" id="shortname" name="rooms[]" value="shortname">Short building name</label><br>
 									<label for="number">
-										<input type="checkbox" id="number" name="rooms" value="number">Room number</label><br>
+										<input type="checkbox" id="number" name="rooms[]" value="number">Room number</label><br>
 									<label for="name">
-										<input type="checkbox" id="name" name="rooms" value="name">Room id</label><br>
+										<input type="checkbox" id="name" name="rooms[]" value="name">Room id</label><br>
 									<label for="address">
-										<input type="checkbox" id="address" name="rooms" value="address">Building address</label><br>
+										<input type="checkbox" id="address" name="rooms[]" value="address">Building address</label><br>
 									<label for="lat">
-										<input type="checkbox" id="lat" name="rooms" value="lat">Building Latitude</label><br>
+										<input type="checkbox" id="lat" name="rooms[]" value="lat">Building Latitude</label><br>
 									<label for="lon">
-										<input type="checkbox" id="lon" name="rooms" value="lon">Building Longitude</label><br>
+										<input type="checkbox" id="lon" name="rooms[]" value="lon">Building Longitude</label><br>
 									<label for="seats">
-										<input type="checkbox" id="seats" name="rooms" value="seats">Number of seats in room</label><br>
+										<input type="checkbox" id="seats" name="rooms[]" value="seats">Number of seats in room</label><br>
 									<label for="type">
-										<input type="checkbox" id="type" name="rooms" value="type">Room type</label><br>
+										<input type="checkbox" id="type" name="rooms[]" value="type">Room type</label><br>
 									<label for="furniture">
-										<input type="checkbox" id="furniture" name="rooms" value="furniture">Room furniture</label><br>
+										<input type="checkbox" id="furniture" name="rooms[]" value="furniture">Room furniture</label><br>
 									<label for="href">
-										<input type="checkbox" id="href" name="rooms" value="href">Link to full details</label><br>
+										<input type="checkbox" id="href" name="rooms[]" value="href">Link to full details</label><br>
 								</div>
 							</label>
 							<br><br>
