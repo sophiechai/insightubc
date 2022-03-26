@@ -29,6 +29,7 @@ describe("Facade D3", function () {
 
 	beforeEach(function () {
 		// might want to add some process logging here to keep track of what"s going on
+		// clearDisk();
 	});
 
 	afterEach(function () {
@@ -60,70 +61,272 @@ describe("Facade D3", function () {
 	// The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
 
 	describe("PUT Request Tests", function () {
-		it("PUT for courses dataset - valid", function () {
-			try {
-				return request(SERVER_URL)
-					.put("/dataset/mycourses/courses")
-					.send(serverGetContentFromArchives("courses.zip"))
-					.set("Content-Type", "application/x-zip-compressed")
-					.then(function (res: ChaiHttp.Response) {
-						expect(res.status).to.be.equal(200);
-						expect(res.body).to.haveOwnProperty("result");
-						expect(res.body.result).to.deep.equal(["mycourses"]);
-					})
-					.catch(function (err) {
-						// console.log(err);
-						expect.fail();
-					});
-			} catch (err) {
-				// console.log(err);
-				expect.fail();
-			}
+		describe("COURSES DATASET", function () {
+			it("PUT for courses dataset - valid", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/mycourses/courses")
+						.send(serverGetContentFromArchives("courses.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(200);
+							expect(res.body).to.haveOwnProperty("result");
+							expect(res.body.result).to.deep.equal(["mycourses"]);
+						})
+						.catch(function (err) {
+							// console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					// console.log(err);
+					expect.fail();
+				}
+			});
+
+			// it("PUT for courses dataset - invalid repeat id", function () {
+			// 	try {
+			// 		return request(SERVER_URL)
+			// 			.put("/dataset/mycourses/courses")
+			// 			.send(serverGetContentFromArchives("courses.zip"))
+			// 			.set("Content-Type", "application/x-zip-compressed")
+			// 			.then(function (res: ChaiHttp.Response) {
+			// 				expect(res.status).to.be.equal(200);
+			// 				return request(SERVER_URL)
+			// 					.put("/dataset/mycourses/courses")
+			// 					.send(serverGetContentFromArchives("courses.zip"))
+			// 					.set("Content-Type", "application/x-zip-compressed")
+			// 					.then(function (res2: ChaiHttp.Response) {
+			// 						expect(res2.status).to.be.equal(400);
+			// 						expect(res2.body.error).to.be.equal("Invalid id");
+			// 					});
+			// 			})
+			// 			.catch(function (err) {
+			// 				console.log(err);
+			// 				expect.fail();
+			// 			});
+			// 	} catch (err) {
+			// 		// console.log(err);
+			// 		expect.fail();
+			// 	}
+			// });
+
+			it("PUT for courses dataset - invalid repeat id", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/mycourses/courses")
+						.send(serverGetContentFromArchives("courses.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid id");
+						})
+						.catch(function (err) {
+							// console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					// console.log(err);
+					expect.fail();
+				}
+			});
+
+			it("PUT for courses - invalid id with underscore", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/my_courses/courses")
+						.send(serverGetContentFromArchives("courses.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid id");
+							// console.log("res.body.error", res.body.error);
+						})
+						.catch(function (err) {
+							// console.log("ERR", err);
+							expect.fail();
+						});
+				} catch (err) {
+					expect.fail();
+				}
+			});
+
+			it("PUT for courses - invalid id whitespace", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/ /courses")
+						.send(serverGetContentFromArchives("courses.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid id");
+							// console.log("res.body.error", res.body.error);
+						})
+						.catch(function (err) {
+							// console.log("ERR", err);
+							expect.fail();
+						});
+				} catch (err) {
+					expect.fail();
+				}
+			});
+
+			it("PUT for courses - invalid kind", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/mycourses/course")
+						.send(serverGetContentFromArchives("courses.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid kind");
+						})
+						.catch(function (err) {
+							// console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					// console.log(err);
+					expect.fail();
+				}
+			});
 		});
 
-		it("PUT for courses - invalid id with underscore", function () {
-			try {
-				return request(SERVER_URL)
-					.put("/dataset/my_courses/courses")
-					.send(serverGetContentFromArchives("courses.zip"))
-					.set("Content-Type", "application/x-zip-compressed")
-					.then(function (res: ChaiHttp.Response) {
-						expect(res.status).to.be.equal(400);
-						expect(res.body).to.haveOwnProperty("error");
-						expect(res.body.error).to.equal("Invalid id");
-						// console.log("res.body.error", res.body.error);
-					})
-					.catch(function (err) {
-						// console.log("ERR", err);
-						expect.fail();
-					});
-			} catch (err) {
-				expect.fail();
-			}
-		});
+		describe("ROOMS DATASET", function () {
+			it("PUT for rooms dataset - valid", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/rooms/rooms")
+						.send(serverGetContentFromArchives("rooms.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(200);
+							expect(res.body).to.haveOwnProperty("result");
+							expect(res.body.result).to.deep.equal(["mycourses", "rooms"]);
+						})
+						.catch(function (err) {
+							// console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					// console.log(err);
+					expect.fail();
+				}
+			});
 
-		it("PUT for courses dataset", function () {
-			try {
-				return request(SERVER_URL)
-					.put("/dataset/mycourses/courses")
-					.send(serverGetContentFromArchives("courses.zip"))
-					.set("Content-Type", "application/x-zip-compressed")
-					.then(function (res: ChaiHttp.Response) {
-						// some logging
-						expect(res.status).to.be.equal(200);
-						expect(res.body).to.haveOwnProperty("result");
-						expect(res.body.result).to.deep.equal(["mycourses"]);
-					})
-					.catch(function (err) {
-						// some logging
-						// console.log(err);
-						expect.fail();
-					});
-			} catch (err) {
-				// some logging
-				console.log(err);
-				expect.fail();
-			}
+			// it("PUT for rooms dataset - invalid repeat id", function () {
+			// 	try {
+			// 		return request(SERVER_URL)
+			// 			.put("/dataset/rooms/rooms")
+			// 			.send(serverGetContentFromArchives("rooms_small.zip"))
+			// 			.set("Content-Type", "application/x-zip-compressed")
+			// 			.then(function (res: ChaiHttp.Response) {
+			// 				expect(res.status).to.be.equal(200);
+			// 				return request(SERVER_URL)
+			// 					.put("/dataset/rooms/rooms")
+			// 					.send(serverGetContentFromArchives("rooms_small.zip"))
+			// 					.set("Content-Type", "application/x-zip-compressed")
+			// 					.then(function (res2: ChaiHttp.Response) {
+			// 						expect(res.status).to.be.equal(400);
+			// 						expect(res.body.error).to.equal("Invalid id");
+			// 					});
+			// 			})
+			// 			.catch(function (err) {
+			// 				console.log(err);
+			// 				expect.fail();
+			// 			});
+			// 	} catch (err) {
+			// 		// console.log(err);
+			// 		expect.fail();
+			// 	}
+			// });
+
+			it("PUT for rooms dataset - invalid repeat id", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/rooms/rooms")
+						.send(serverGetContentFromArchives("rooms.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid id");
+						})
+						.catch(function (err) {
+							// console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					// console.log(err);
+					expect.fail();
+				}
+			});
+
+			it("PUT for rooms - invalid id with underscore", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/ubc_rooms/rooms")
+						.send(serverGetContentFromArchives("rooms.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid id");
+							// console.log("res.body.error", res.body.error);
+						})
+						.catch(function (err) {
+							// console.log("ERR", err);
+							expect.fail();
+						});
+				} catch (err) {
+					expect.fail();
+				}
+			});
+
+			it("PUT for rooms - invalid id whitespace", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/ /rooms")
+						.send(serverGetContentFromArchives("rooms.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid id");
+							// console.log("res.body.error", res.body.error);
+						})
+						.catch(function (err) {
+							// console.log("ERR", err);
+							expect.fail();
+						});
+				} catch (err) {
+					expect.fail();
+				}
+			});
+
+			it("PUT for rooms - invalid kind", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/ubc rooms/room")
+						.send(serverGetContentFromArchives("rooms.zip"))
+						.set("Content-Type", "application/x-zip-compressed")
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.be.equal(400);
+							expect(res.body).to.haveOwnProperty("error");
+							expect(res.body.error).to.equal("Invalid kind");
+						})
+						.catch(function (err) {
+							// console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					// console.log(err);
+					expect.fail();
+				}
+			});
 		});
 	});
 });

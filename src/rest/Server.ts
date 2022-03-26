@@ -15,6 +15,7 @@ export default class Server {
 		console.info(`Server::<init>( ${port} )`);
 		this.port = port;
 		this.express = express();
+		// TODO: load persisted data
 		this.facade = new InsightFacade();
 
 		this.registerMiddleware();
@@ -61,6 +62,7 @@ export default class Server {
 	 * @returns {Promise<void>}
 	 */
 	public stop(): Promise<void> {
+		// TODO: store facade's addedIds and addedDatasets on disk before closing
 		console.info("Server::stop()");
 		return new Promise((resolve, reject) => {
 			if (this.server === undefined) {

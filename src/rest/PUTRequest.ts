@@ -16,9 +16,9 @@ export function putDatasetHelper(req: Request, res: Response, facade: IInsightFa
 			.catch((err) => {
 				res.status(400).json({error: err.message});
 			});
-	} catch (err) {
-		console.log("putDataset error response: ", err);
-		res.status(400).json({error: err});
+	} catch (err: any) {
+		// console.log("putDataset error message: ", err.message);
+		res.status(400).json({error: err.message});
 	}
 }
 
