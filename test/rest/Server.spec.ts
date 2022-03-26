@@ -1,5 +1,4 @@
 import Server from "../../src/rest/Server";
-import InsightFacade from "../../src/controller/InsightFacade";
 import {expect, request, use} from "chai";
 import chaiHttp from "chai-http";
 import {clearDisk, serverGetContentFromArchives} from "../TestUtil";
@@ -61,6 +60,48 @@ describe("Facade D3", function () {
 	// The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
 
 	describe("PUT Request Tests", function () {
+		it("PUT for courses dataset - valid", function () {
+			try {
+				return request(SERVER_URL)
+					.put("/dataset/mycourses/courses")
+					.send(serverGetContentFromArchives("courses.zip"))
+					.set("Content-Type", "application/x-zip-compressed")
+					.then(function (res: ChaiHttp.Response) {
+						expect(res.status).to.be.equal(200);
+						expect(res.body).to.haveOwnProperty("result");
+						expect(res.body.result).to.deep.equal(["mycourses"]);
+					})
+					.catch(function (err) {
+						// console.log(err);
+						expect.fail();
+					});
+			} catch (err) {
+				// console.log(err);
+				expect.fail();
+			}
+		});
+
+		it("PUT for courses - invalid id with underscore", function () {
+			try {
+				return request(SERVER_URL)
+					.put("/dataset/my_courses/courses")
+					.send(serverGetContentFromArchives("courses.zip"))
+					.set("Content-Type", "application/x-zip-compressed")
+					.then(function (res: ChaiHttp.Response) {
+						expect(res.status).to.be.equal(400);
+						expect(res.body).to.haveOwnProperty("error");
+						expect(res.body.error).to.equal("Invalid id");
+						// console.log("res.body.error", res.body.error);
+					})
+					.catch(function (err) {
+						// console.log("ERR", err);
+						expect.fail();
+					});
+			} catch (err) {
+				expect.fail();
+			}
+		});
+
 		it("PUT for courses dataset", function () {
 			try {
 				return request(SERVER_URL)
@@ -75,7 +116,7 @@ describe("Facade D3", function () {
 					})
 					.catch(function (err) {
 						// some logging
-						console.log(err);
+						// console.log(err);
 						expect.fail();
 					});
 			} catch (err) {

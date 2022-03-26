@@ -4,7 +4,7 @@ import InsightFacade from "../controller/InsightFacade";
 
 export function putDatasetHelper(req: Request, res: Response, facade: IInsightFacade) {
 	try {
-		console.log("Server::putDataset(..) - params: " + JSON.stringify(req.params));
+		// console.log("Server::putDataset(..) - params: " + JSON.stringify(req.params));
 		const reqBody: Buffer = req.body;
 		let reqBodyBase64 = reqBody.toString("base64");
 		checkValuesValid(req.params.id, req.params.kind, reqBodyBase64);
@@ -12,6 +12,9 @@ export function putDatasetHelper(req: Request, res: Response, facade: IInsightFa
 		facade.addDataset(req.params.id, reqBodyBase64, kind)
 			.then((response) => {
 				res.status(200).json({result: response});
+			})
+			.catch((err) => {
+				res.status(400).json({error: err.message});
 			});
 	} catch (err) {
 		console.log("putDataset error response: ", err);
