@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {IInsightFacade, InsightDatasetKind, InsightError} from "../controller/IInsightFacade";
-import InsightFacade from "../controller/InsightFacade";
 
 export function putDatasetHelper(req: Request, res: Response, facade: IInsightFacade) {
 	try {
