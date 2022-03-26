@@ -1,17 +1,21 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
-import {putDataset} from "./PUTRequest";
+import {IInsightFacade} from "../controller/IInsightFacade";
+import InsightFacade from "../controller/InsightFacade";
+import {putDatasetHelper} from "./PUTRequest";
 
 export default class Server {
 	private readonly port: number;
 	private express: Application;
 	private server: http.Server | undefined;
+	protected facade: IInsightFacade;
 
 	constructor(port: number) {
 		console.info(`Server::<init>( ${port} )`);
 		this.port = port;
 		this.express = express();
+		this.facade = new InsightFacade();
 
 		this.registerMiddleware();
 		this.registerRoutes();
@@ -88,7 +92,12 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
-		this.express.put("/dataset/:id/:kind", putDataset);
+		this.express.put("/dataset/:id/:kind", this.putDataset.bind(this));
+	}
+
+	// TODO: handlers for PUT/POST/DEL/GET here
+	private putDataset(req: Request, res: Response) {
+		putDatasetHelper(req, res, this.facade);
 	}
 
 	// The next two methods handle the echo service.

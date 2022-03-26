@@ -2,35 +2,27 @@ import Server from "../../src/rest/Server";
 import InsightFacade from "../../src/controller/InsightFacade";
 import {expect, request, use} from "chai";
 import chaiHttp from "chai-http";
-import {serverGetContentFromArchives} from "../TestUtil";
+import {clearDisk, serverGetContentFromArchives} from "../TestUtil";
 
 describe("Facade D3", function () {
-	let facade: InsightFacade;
+	this.timeout(10000);
 	let server: Server;
 	const SERVER_URL = "localhost:4321";
 
 	use(chaiHttp);
 
 	before(function () {
-		facade = new InsightFacade();
+		clearDisk();
 		server = new Server(4321);
-		// TODO: start server here once and handle errors properly
 		return server
 			.start()
-			.then(() => {
-				console.info("TestServer::initServer() - started");
-			})
 			.catch((err: Error) => {
 				console.error("TestServer::initServer() - ERROR: ", err.message);
 			});
 	});
 
 	after(function () {
-		// TODO: stop server here once!
 		return server.stop()
-			.then(() => {
-				console.info("TestServer - stopped");
-			})
 			.catch((err: Error) => {
 				console.error("TestServer - ERROR: ", err.message);
 			});
@@ -70,7 +62,6 @@ describe("Facade D3", function () {
 
 	describe("PUT Request Tests", function () {
 		it("PUT for courses dataset", function () {
-			let result = {result: ["mycourses"]};
 			try {
 				return request(SERVER_URL)
 					.put("/dataset/mycourses/courses")
@@ -79,7 +70,8 @@ describe("Facade D3", function () {
 					.then(function (res: ChaiHttp.Response) {
 						// some logging
 						expect(res.status).to.be.equal(200);
-						expect(res.body).to.be.equal(result);
+						expect(res.body).to.haveOwnProperty("result");
+						expect(res.body.result).to.deep.equal(["mycourses"]);
 					})
 					.catch(function (err) {
 						// some logging
