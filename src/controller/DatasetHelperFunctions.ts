@@ -65,16 +65,20 @@ function parseResult(
 	tempList: any[]
 ) {
 	promise.then(function (fileData) {
-		const dataObj = JSON.parse(fileData)["result"];
-		if (dataObj.length !== 0) {
-			dataObj.forEach((section: object) => {
-				const validSection = checkValidSection(section);
-				if (validSection) {
-					formatSection(mapForEachFormattedSection, section);
-					let modifiedSection = Object.fromEntries(mapForEachFormattedSection);
-					tempList.push(modifiedSection);
-				}
-			});
+		try {
+			const dataObj = JSON.parse(fileData)["result"];
+			if (dataObj.length !== 0) {
+				dataObj.forEach((section: object) => {
+					const validSection = checkValidSection(section);
+					if (validSection) {
+						formatSection(mapForEachFormattedSection, section);
+						let modifiedSection = Object.fromEntries(mapForEachFormattedSection);
+						tempList.push(modifiedSection);
+					}
+				});
+			}
+		} catch (err) {
+			console.log("DATASET HELPER ERROR: ", err);
 		}
 	});
 }
