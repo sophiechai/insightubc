@@ -74,7 +74,7 @@ describe("Facade D3", function () {
 							expect(res.body.result).to.deep.equal(["mycourses"]);
 						})
 						.catch(function (err) {
-							// console.log(err);
+							console.log(err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -326,6 +326,64 @@ describe("Facade D3", function () {
 					// console.log(err);
 					expect.fail();
 				}
+			});
+		});
+	});
+
+	describe("POST Request Tests", function () {
+		describe("COURSES DATASET", function () {
+			it("simple query - valid", function () {
+				let query = {
+					WHERE: {
+						AND: [
+							{
+								IS: {
+									mycourses_dept: "cpsc"
+								}
+							},
+							{
+								EQ: {
+									mycourses_avg: 95
+								}
+							}
+						]
+					},
+					OPTIONS: {
+						COLUMNS: [
+							"mycourses_dept",
+							"mycourses_id",
+							"mycourses_avg"
+						]
+					}
+				};
+				return request(SERVER_URL)
+					.post("/query")
+					.send(query)
+					.set("Content-Type", "application/json")
+					.then((res) => {
+						expect(res.status).to.be.equal(200);
+						expect(res.body.result).to.have.length(2);
+						expect(res.body.result).to.deep.equal(
+							[
+								{
+									mycourses_dept: "cpsc",
+									mycourses_id: "589",
+									mycourses_avg: 95
+								},
+								{
+									mycourses_dept: "cpsc",
+									mycourses_id: "589",
+									mycourses_avg: 95
+								}
+							]
+						);
+					});
+			});
+		});
+
+		describe("ROOMS DATASET", function () {
+			it("simple query - valid", function () {
+				let query = {};
 			});
 		});
 	});
