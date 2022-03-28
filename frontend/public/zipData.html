@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+		<title>InsightUBC</title>
+		<link href="/style.css" rel="stylesheet" />
+	</head>
+	<body>
+
+		<div class="header">
+			<h1>InsightUBC</h1>
+		</div>
+		<!-- Top navigation -->
+		<div class="topnav">
+			<!-- Left-aligned links (default) -->
+			<a href="zipData.html">Data</a>
+			<a href="index.html">Queries</a>
+		</div>
+
+		<div style="padding-left:16px">
+			<div class="row">
+				<div class="column half">
+					<h2>Add Zip File</h2>
+
+					<label>ID:
+						<input type="text" id="zipID" />
+					</label>
+					<br><br>
+
+					<label>Choose Type:
+						<select id="datasetType" name="datasetType" required>
+							<option value="">Select One ...</option>
+							<option value="courses">Courses</option>
+							<option value="rooms">Rooms</option>
+						</select>
+					</label>
+
+					<br><br>
+					<label>Upload:
+						<br><br>
+						<input type="file" id="myFile" accept=".zip" name="filename">
+					</label>
+					<br><br><br>
+					<span id="submitZipButton" >
+  						Submit
+					</span>
+					<br><br>
+				</div>
+				<div class="column half">
+					<h2>Added Zip Files ID</h2>
+					<div id="addedZipFilesList">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer">
+			<p>By Sophie Chai and Lisa Lam</p>
+		</div>
+
+<!--		<script data-main="scripts/app" src="scripts/require.js"></script>-->
+<!--		<script type="module" src="/scripts/importExport.js"></script>-->
+		<script type="text/javascript" src="/scripts/addZip.js"></script>
+	</body>
+</html>
