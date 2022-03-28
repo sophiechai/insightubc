@@ -38,7 +38,7 @@
 					<br><br>
 					<label>Upload:
 						<br><br>
-						<input type="file" id="myFile" name="filename">
+						<input type="file" id="myFile" accept=".zip" name="filename">
 					</label>
 					<br><br><br>
 					<span id="submitZipButton" >
@@ -47,8 +47,9 @@
 					<br><br>
 				</div>
 				<div class="column half">
-					<h2>Remove Zip File</h2>
-					<p>Some text..</p>
+					<h2>Added Zip Files ID</h2>
+					<div id="addedZipFilesList">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -57,7 +58,8 @@
 			<p>By Sophie Chai and Lisa Lam</p>
 		</div>
 
-		<script src="dist2/bundle.js"></script>
-		<script type="text/javascript" src="/addZip.js"></script>
+<!--		<script data-main="scripts/app" src="scripts/require.js"></script>-->
+<!--		<script type="module" src="/scripts/importExport.js"></script>-->
+		<script type="text/javascript" src="/scripts/addZip.js"></script>
 	</body>
 </html>

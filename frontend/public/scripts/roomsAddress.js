@@ -1,24 +1,13 @@
-import * as fs from "fs-extra";
-// const fs = require("fs-extra");
-
 let httpRequest;
-document.getElementById("submitZipButton").addEventListener('click', function() {
-	let id = document.getElementById("zipID").value;
-	let type = document.getElementById("datasetType").value;
-	let filePath = document.getElementById("myFile").value;
-	// let fs = require('./bundle');
-	let fileBuffer;
-	try {
-		fileBuffer =  fs.readFileSync(filePath);
-	} catch (err) {
-		throw new Error(err);
-	}
-	 // = document.getElementById("myFile").value;
+
+document.getElementById("buildingCodeFilterButton").addEventListener('click', function() {
+	let code = document.getElementById("buildingCodeFilter").value;
+	let id = document.getElementById("roomsID").value;
 	// makeRequest('filter2.php', userName);
-	makeRequest("http://localhost:4321/dataset/", id, type, fileBuffer);
+	makeRequestRoomsAddress("http://localhost:4321/query", code, id);
 });
 
-function makeRequest(url, id, type, file) {
+function makeRequestRoomsAddress(url, code, id) {
 	// To make an HTTP request to the server with JavaScript, you need an instance of an object.
 	httpRequest = new XMLHttpRequest();
 
@@ -30,30 +19,47 @@ function makeRequest(url, id, type, file) {
 	// you need to tell the XMLHttp request object which JavaScript function will
 	// handle the response, by setting the onreadystatechange property of the object
 	// and naming it after the function to call when the request changes state.
-	httpRequest.onreadystatechange = alertContents2;
+	httpRequest.onreadystatechange = alertContents;
 
 	// after declaring what happens when you receive the response, you need to actually
 	// make the request, by calling the open() and send() methods of the HTTP request object.
 	// The second parameter is the URL you're sending the request to.
 
 	// Our JavaScript will request an HTML document, test.html, which contains the text "I'm a test."
-	httpRequest.open('PUT', url + id + "/" + type);
+	httpRequest.open('POST', url);
 
 	// for form data sent as a query string
 	httpRequest.setRequestHeader('Content-Type', "application/json");
 
+	const shortname = id + "_shortname";
+	const address = id + "_address";
 	// The parameter to the send() method can be any data you want to send to the server
 	// if POST-ing the request. Form data should be sent in a format that the server can parse.\
 	let data = JSON.stringify(
 		{
-			id: id,
-			type: type,
-			file: file
+			"WHERE": {
+				"IS": {
+					[shortname]: code
+				}
+			},
+			"OPTIONS": {
+				"COLUMNS": [
+					shortname,
+					address
+				]
+			},
+			"TRANSFORMATIONS": {
+				"GROUP": [
+					shortname,
+					address
+				],
+				"APPLY": []
+			}
 		});
 	httpRequest.send(data);
 }
 
-function alertContents2() {
+function alertContents() {
 	try {
 		// the function needs to check the request's state.
 		if (httpRequest.readyState === XMLHttpRequest.DONE) {
@@ -63,8 +69,7 @@ function alertContents2() {
 				// httpRequest.responseText – returns the server response as a string of text
 				// httpRequest.responseXML – returns the response as an XMLDocument object you can traverse with JavaScript DOM functions
 				// alert(httpRequest.responseText);
-				displayResult(this);
-				// alert(response.computedString);
+				displayResultRoomsAddress(this.responseText);
 			} else {
 				alert('There was a problem with the request.');
 			}
@@ -75,13 +80,12 @@ function alertContents2() {
 	}
 }
 
-function displayResult(xml) {
-	let text = xml.responseText;
-	let textJSON = JSON.parse(text);
+function displayResultRoomsAddress(xml) {
+	let textJSON = JSON.parse(xml);
 	let values = Object.values(textJSON["result"][0]);
 	let table="<table><tr><th>Shortname</th><th>Address</th></tr>";
 	table += "<tr><td>" +
-		values[0] +
+		 values[0] +
 		"</td><td>" +
 		values[1] +
 		"</td></tr></table>";
