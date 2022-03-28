@@ -1,24 +1,16 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
-import {IInsightFacade} from "../controller/IInsightFacade";
-import InsightFacade from "../controller/InsightFacade";
-import {putDatasetHelper} from "./PUTRequest";
-import {postQueryHelper} from "./POSTRequest";
-import {deleteDatasetHelper} from "./DELETERequest";
 
 export default class Server {
 	private readonly port: number;
 	private express: Application;
 	private server: http.Server | undefined;
-	protected facade: IInsightFacade;
 
 	constructor(port: number) {
 		console.info(`Server::<init>( ${port} )`);
 		this.port = port;
 		this.express = express();
-		// TODO: load persisted data
-		this.facade = new InsightFacade();
 
 		this.registerMiddleware();
 		this.registerRoutes();
@@ -64,7 +56,6 @@ export default class Server {
 	 * @returns {Promise<void>}
 	 */
 	public stop(): Promise<void> {
-		// TODO: store facade's addedIds and addedDatasets on disk before closing
 		console.info("Server::stop()");
 		return new Promise((resolve, reject) => {
 			if (this.server === undefined) {
@@ -96,22 +87,6 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
-		this.express.put("/dataset/:id/:kind", this.putDataset.bind(this));
-		this.express.post("/query", this.postQuery.bind(this));
-		this.express.delete("/dataset/:id", this.deleteDataset.bind(this));
-	}
-
-	// TODO: handlers for PUT/POST/DEL/GET here
-	private putDataset(req: Request, res: Response) {
-		putDatasetHelper(req, res, this.facade);
-	}
-
-	private postQuery(req: Request, res: Response) {
-		postQueryHelper(req, res, this.facade);
-	}
-
-	private deleteDataset(req: Request, res: Response) {
-		deleteDatasetHelper(req, res, this.facade);
 	}
 
 	// The next two methods handle the echo service.
