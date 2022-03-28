@@ -465,6 +465,22 @@ describe("Facade D3", function () {
 					expect.fail();
 				}
 			});
+
+			it("remove mycourses again - 404 NotFoundError", function () {
+				try {
+					return request(SERVER_URL)
+						.delete("/dataset/mycourses")
+						.then((res) => {
+							expect(res.status).to.equal(404);
+						})
+						.catch((err) => {
+							console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					expect.fail();
+				}
+			});
 		});
 	});
 
