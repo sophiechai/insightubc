@@ -46,7 +46,7 @@ function writeToData(fileName: string, myJSON: string): void {
 			console.error("file created error: " + err);
 			return;
 		}
-		console.log("file written successfully");
+		// console.log("file written successfully");
 	});
 }
 
@@ -66,7 +66,13 @@ function parseResult(
 ) {
 	promise.then(function (fileData) {
 		try {
-			const dataObj = JSON.parse(fileData)["result"];
+			let dataObj;
+			if (fileData === "") {
+				dataObj = [];
+			} else {
+				dataObj = JSON.parse(fileData)["result"];
+			}
+			// const dataObj = JSON.parse(fileData)["result"];
 			if (dataObj.length !== 0) {
 				dataObj.forEach((section: object) => {
 					const validSection = checkValidSection(section);
@@ -78,7 +84,7 @@ function parseResult(
 				});
 			}
 		} catch (err) {
-			console.log("DATASET HELPER ERROR: ", err);
+			console.log("DATASET HELPER PARSE RESULT ERROR: ", err);
 		}
 	});
 }
