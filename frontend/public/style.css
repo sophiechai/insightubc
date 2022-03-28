@@ -41,6 +41,21 @@ body {
 	width: 70%;
 }
 
+#buildingCodeFilterButton, #submitZipButton {
+	width: 100%;
+	background-color: #4CAF50;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#buildingCodeFilterButton:hover {
+	background-color: #45a049;
+}
+
 /* Style the header */
 .header {
 	background-color: #f1f1f1;
@@ -84,6 +99,18 @@ input[type=submit]:hover {
 	display: none;
 }
 
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
 .topnav {
 	position: relative;
 	overflow: hidden;
@@ -102,6 +129,10 @@ input[type=submit]:hover {
 .topnav a:hover {
 	background-color: #ddd;
 	color: black;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
 }
 
 /* Responsive navigation menu (for mobile devices) */

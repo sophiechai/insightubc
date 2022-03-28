@@ -22,34 +22,29 @@
 				<div class="column half">
 					<h2>Add Zip File</h2>
 
-					<div>
-						<form action="zipData.php">
+					<label>ID:
+						<input type="text" id="zipID" />
+					</label>
+					<br><br>
 
-							<label for="datasetId">ID:
-								<input type="text" id="datasetId" name="datasetId" required></label><br>
+					<label>Choose Type:
+						<select id="datasetType" name="datasetType" required>
+							<option value="">Select One ...</option>
+							<option value="courses">Courses</option>
+							<option value="rooms">Rooms</option>
+						</select>
+					</label>
 
-							<br><br>
-							<label>Choose Type:
-								<select id="datasetType" name="datasetType" required>
-									<option value="">Select One ...</option>
-									<option value="courses">Courses</option>
-									<option value="rooms">Rooms</option>
-								</select>
-							</label>
-
-							<br><br>
-
-							<label>Upload:
-								<br><br>
-								<input type="file" id="myFile" name="filename">
-							</label>
-							<br><br>
-
-							<input type="submit" value="Submit">
-						</form>
-						<div class="result"></div>
-						<div class="order"></div>
-					</div>
+					<br><br>
+					<label>Upload:
+						<br><br>
+						<input type="file" id="myFile" name="filename">
+					</label>
+					<br><br><br>
+					<span id="submitZipButton" >
+  						Submit
+					</span>
+					<br><br>
 				</div>
 				<div class="column half">
 					<h2>Remove Zip File</h2>
@@ -62,6 +57,7 @@
 			<p>By Sophie Chai and Lisa Lam</p>
 		</div>
 
-		<script type="text/javascript" src="/frontend.js"></script>
+		<script src="dist2/bundle.js"></script>
+		<script type="text/javascript" src="/addZip.js"></script>
 	</body>
 </html>

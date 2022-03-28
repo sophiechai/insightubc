@@ -1,6 +1,6 @@
 // document.getElementById("click-me-button").addEventListener("click", handleClickMe);
 
-document.getElementById("zipfile").addEventListener("change", changeLayout);
+// document.getElementById("zipfile").addEventListener("change", changeLayout);
 
 function changeLayout(){
 	let coursesList = ["courses", "courses2"];
@@ -8,8 +8,9 @@ function changeLayout(){
 	let id = this.value;
 	if (coursesList.includes(id)) {
 		showCoursesFilter();
-		document.getElementById("coursesColumns").addEventListener("change",
-			function() { updateOrderCourses("courses[]", "coursesOrder"); });
+		// document.getElementById("coursesColumns").addEventListener("change",
+		// 	function() { updateOrderCourses("courses[]", "coursesOrder"); });
+		updateOrderCourses("courses[]", "coursesOrder");
 		showCoursesOrder();
 	} else {
 		showRoomsFilter();
