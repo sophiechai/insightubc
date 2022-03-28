@@ -2,6 +2,7 @@ import Server from "../../src/rest/Server";
 import {expect, request, use} from "chai";
 import chaiHttp from "chai-http";
 import {clearDisk, serverGetContentFromArchives} from "../TestUtil";
+import {describe} from "mocha";
 
 describe("Facade D3", function () {
 	this.timeout(10000);
@@ -467,4 +468,24 @@ describe("Facade D3", function () {
 		});
 	});
 
+	// GET REQUEST TESTS
+	describe("GET Request Tests", function () {
+		it("GET array with rooms dataset", function () {
+			let result = [{id: "rooms", kind: "rooms", numRows: 364}];
+			try {
+				return request(SERVER_URL)
+					.get("/datasets")
+					.then((res) => {
+						expect(res.status).to.equal(200);
+						expect(res.body.result).to.deep.equal(result);
+					})
+					.catch((err) => {
+						console.log(err);
+						expect.fail();
+					});
+			} catch (err) {
+				expect.fail();
+			}
+		});
+	});
 });
