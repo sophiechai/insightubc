@@ -1,12 +1,11 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
-import {IInsightFacade, InsightDatasetKind} from "../controller/IInsightFacade";
+import {IInsightFacade} from "../controller/IInsightFacade";
 import InsightFacade from "../controller/InsightFacade";
 import {putDatasetHelper} from "./PUTRequest";
 import {postQueryHelper} from "./POSTRequest";
 import {deleteDatasetHelper} from "./DELETERequest";
-import {getContentFromArchives, getContentFromArchivesAwait, serverGetContentFromArchives} from "../../test/TestUtil";
 import {getDatasetsHelper} from "./GETRequest";
 
 export default class Server {
@@ -24,7 +23,6 @@ export default class Server {
 
 		this.registerMiddleware();
 		this.registerRoutes();
-		this.facade.addDataset("rooms", getContentFromArchivesAwait("rooms.zip"), InsightDatasetKind.Rooms);
 
 		// NOTE: you can serve static frontend files in from your express server
 		// by uncommenting the line below. This makes files in ./frontend/public
