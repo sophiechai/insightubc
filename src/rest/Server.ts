@@ -18,7 +18,6 @@ export default class Server {
 		console.info(`Server::<init>( ${port} )`);
 		this.port = port;
 		this.express = express();
-		// TODO: load persisted data
 		this.facade = new InsightFacade();
 
 		this.registerMiddleware();
@@ -65,7 +64,6 @@ export default class Server {
 	 * @returns {Promise<void>}
 	 */
 	public stop(): Promise<void> {
-		// TODO: store facade's addedIds and addedDatasets on disk before closing
 		console.info("Server::stop()");
 		return new Promise((resolve, reject) => {
 			if (this.server === undefined) {
@@ -96,14 +94,12 @@ export default class Server {
 		// http://localhost:4321/echo/hello
 		this.express.get("/echo/:msg", Server.echo);
 
-		// TODO: your other endpoints should go here
 		this.express.put("/dataset/:id/:kind", this.putDataset.bind(this));
 		this.express.post("/query", this.postQuery.bind(this));
 		this.express.delete("/dataset/:id", this.deleteDataset.bind(this));
 		this.express.get("/datasets", this.getDatasets.bind(this));
 	}
 
-	// TODO: handlers for PUT/POST/DEL/GET here
 	private putDataset(req: Request, res: Response) {
 		putDatasetHelper(req, res, this.facade);
 	}
