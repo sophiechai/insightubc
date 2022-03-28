@@ -7,6 +7,9 @@ describe("Facade D3", function () {
 	this.timeout(10000);
 	let server: Server;
 	const SERVER_URL = "localhost:4321";
+	const contentType = "Content-Type";
+	const typeJson = "application/json";
+	const typeZip = "application/x-zip-compressed";
 
 	use(chaiHttp);
 
@@ -67,7 +70,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/mycourses/courses")
 						.send(serverGetContentFromArchives("courses.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(200);
 							expect(res.body).to.haveOwnProperty("result");
@@ -88,13 +91,13 @@ describe("Facade D3", function () {
 			// 		return request(SERVER_URL)
 			// 			.put("/dataset/mycourses/courses")
 			// 			.send(serverGetContentFromArchives("courses.zip"))
-			// 			.set("Content-Type", "application/x-zip-compressed")
+			// 			.set(contentType, typeZip)
 			// 			.then(function (res: ChaiHttp.Response) {
 			// 				expect(res.status).to.be.equal(200);
 			// 				return request(SERVER_URL)
 			// 					.put("/dataset/mycourses/courses")
 			// 					.send(serverGetContentFromArchives("courses.zip"))
-			// 					.set("Content-Type", "application/x-zip-compressed")
+			// 					.set(contentType, typeZip)
 			// 					.then(function (res2: ChaiHttp.Response) {
 			// 						expect(res2.status).to.be.equal(400);
 			// 						expect(res2.body.error).to.be.equal("Invalid id");
@@ -115,7 +118,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/mycourses/courses")
 						.send(serverGetContentFromArchives("courses.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -136,7 +139,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/my_courses/courses")
 						.send(serverGetContentFromArchives("courses.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -157,7 +160,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/ /courses")
 						.send(serverGetContentFromArchives("courses.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -178,7 +181,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/mycourses/course")
 						.send(serverGetContentFromArchives("courses.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -201,7 +204,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/rooms/rooms")
 						.send(serverGetContentFromArchives("rooms.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(200);
 							expect(res.body).to.haveOwnProperty("result");
@@ -222,13 +225,13 @@ describe("Facade D3", function () {
 			// 		return request(SERVER_URL)
 			// 			.put("/dataset/rooms/rooms")
 			// 			.send(serverGetContentFromArchives("rooms_small.zip"))
-			// 			.set("Content-Type", "application/x-zip-compressed")
+			// 			.set(contentType, typeZip)
 			// 			.then(function (res: ChaiHttp.Response) {
 			// 				expect(res.status).to.be.equal(200);
 			// 				return request(SERVER_URL)
 			// 					.put("/dataset/rooms/rooms")
 			// 					.send(serverGetContentFromArchives("rooms_small.zip"))
-			// 					.set("Content-Type", "application/x-zip-compressed")
+			// 					.set(contentType, typeZip)
 			// 					.then(function (res2: ChaiHttp.Response) {
 			// 						expect(res.status).to.be.equal(400);
 			// 						expect(res.body.error).to.equal("Invalid id");
@@ -249,7 +252,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/rooms/rooms")
 						.send(serverGetContentFromArchives("rooms.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -270,7 +273,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/ubc_rooms/rooms")
 						.send(serverGetContentFromArchives("rooms.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -291,7 +294,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/ /rooms")
 						.send(serverGetContentFromArchives("rooms.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -312,7 +315,7 @@ describe("Facade D3", function () {
 					return request(SERVER_URL)
 						.put("/dataset/ubc rooms/room")
 						.send(serverGetContentFromArchives("rooms.zip"))
-						.set("Content-Type", "application/x-zip-compressed")
+						.set(contentType, typeZip)
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
@@ -359,7 +362,7 @@ describe("Facade D3", function () {
 				return request(SERVER_URL)
 					.post("/query")
 					.send(query)
-					.set("Content-Type", "application/json")
+					.set(contentType, typeJson)
 					.then((res) => {
 						expect(res.status).to.be.equal(200);
 						expect(res.body.result).to.have.length(2);
@@ -383,7 +386,61 @@ describe("Facade D3", function () {
 
 		describe("ROOMS DATASET", function () {
 			it("simple query - valid", function () {
-				let query = {};
+				let query =
+					{
+						WHERE: {
+							AND: [{
+								IS: {
+									rooms_furniture: "*Tables*"
+								}
+							}, {
+								GT: {
+									rooms_seats: 300
+								}
+							}]
+						},
+						OPTIONS: {
+							COLUMNS: [
+								"rooms_shortname",
+								"maxSeats"
+							],
+							ORDER: {
+								dir: "DOWN",
+								keys: ["maxSeats"]
+							}
+						},
+						TRANSFORMATIONS: {
+							GROUP: ["rooms_shortname"],
+							APPLY: [{
+								maxSeats: {
+									MAX: "rooms_seats"
+								}
+							}]
+						}
+					};
+				let result =
+					[
+						{
+							rooms_shortname: "OSBO",
+							maxSeats: 442
+						},
+						{
+							rooms_shortname: "HEBB",
+							maxSeats: 375
+						},
+						{
+							rooms_shortname: "LSC",
+							maxSeats: 350
+						}
+					];
+				return request(SERVER_URL)
+					.post("/query")
+					.send(query)
+					.set(contentType, typeJson)
+					.then((res) => {
+						expect(res.status).to.equal(200);
+						expect(res.body.result).to.deep.equal(result);
+					});
 			});
 		});
 	});
