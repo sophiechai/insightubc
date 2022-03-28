@@ -7,6 +7,7 @@ import {putDatasetHelper} from "./PUTRequest";
 import {postQueryHelper} from "./POSTRequest";
 import {deleteDatasetHelper} from "./DELETERequest";
 import {getContentFromArchives, getContentFromArchivesAwait, serverGetContentFromArchives} from "../../test/TestUtil";
+import {getDatasetsHelper} from "./GETRequest";
 
 export default class Server {
 	private readonly port: number;
@@ -101,6 +102,7 @@ export default class Server {
 		this.express.put("/dataset/:id/:kind", this.putDataset.bind(this));
 		this.express.post("/query", this.postQuery.bind(this));
 		this.express.delete("/dataset/:id", this.deleteDataset.bind(this));
+		this.express.get("/datasets", this.getDatasets.bind(this));
 	}
 
 	// TODO: handlers for PUT/POST/DEL/GET here
@@ -114,6 +116,10 @@ export default class Server {
 
 	private deleteDataset(req: Request, res: Response) {
 		deleteDatasetHelper(req, res, this.facade);
+	}
+
+	private getDatasets(req: Request, res: Response) {
+		getDatasetsHelper(req, res, this.facade);
 	}
 
 	// The next two methods handle the echo service.
