@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {IInsightFacade, InsightError} from "../controller/IInsightFacade";
+import {IInsightFacade, InsightError, NotFoundError} from "../controller/IInsightFacade";
 
 export function deleteDatasetHelper(req: Request, res: Response, facade: IInsightFacade) {
 	try {
@@ -9,7 +9,11 @@ export function deleteDatasetHelper(req: Request, res: Response, facade: IInsigh
 				res.status(200).json({result: response});
 			})
 			.catch((err) => {
-				res.status(400).json({error: err.message});
+				if (err instanceof NotFoundError) {
+					res.status(404).json({error: err.message});
+				} else {
+					res.status(400).json({error: err.message});
+				}
 			});
 	} catch (err: any) {
 		res.status(400).json({error: err.message});
