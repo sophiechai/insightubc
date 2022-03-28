@@ -5,6 +5,7 @@ import {IInsightFacade} from "../controller/IInsightFacade";
 import InsightFacade from "../controller/InsightFacade";
 import {putDatasetHelper} from "./PUTRequest";
 import {postQueryHelper} from "./POSTRequest";
+import {deleteDatasetHelper} from "./DELETERequest";
 
 export default class Server {
 	private readonly port: number;
@@ -97,6 +98,7 @@ export default class Server {
 		// TODO: your other endpoints should go here
 		this.express.put("/dataset/:id/:kind", this.putDataset.bind(this));
 		this.express.post("/query", this.postQuery.bind(this));
+		this.express.delete("/dataset/:id", this.deleteDataset.bind(this));
 	}
 
 	// TODO: handlers for PUT/POST/DEL/GET here
@@ -106,6 +108,10 @@ export default class Server {
 
 	private postQuery(req: Request, res: Response) {
 		postQueryHelper(req, res, this.facade);
+	}
+
+	private deleteDataset(req: Request, res: Response) {
+		deleteDatasetHelper(req, res, this.facade);
 	}
 
 	// The next two methods handle the echo service.

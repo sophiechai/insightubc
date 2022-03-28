@@ -31,12 +31,12 @@ describe("Facade D3", function () {
 	});
 
 	beforeEach(function () {
-		// might want to add some process logging here to keep track of what"s going on
+		// might want to add some process logging here to keep track of what's going on
 		// clearDisk();
 	});
 
 	afterEach(function () {
-		// might want to add some process logging here to keep track of what"s going on
+		// might want to add some process logging here to keep track of what's going on
 	});
 
 	// Sample on how to format PUT requests
@@ -63,6 +63,7 @@ describe("Facade D3", function () {
 
 	// The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
 
+	// PUT REQUEST TESTS
 	describe("PUT Request Tests", function () {
 		describe("COURSES DATASET", function () {
 			it("PUT for courses dataset - valid", function () {
@@ -125,7 +126,7 @@ describe("Facade D3", function () {
 							expect(res.body.error).to.equal("Invalid id");
 						})
 						.catch(function (err) {
-							// console.log(err);
+							console.log(err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -147,7 +148,7 @@ describe("Facade D3", function () {
 							// console.log("res.body.error", res.body.error);
 						})
 						.catch(function (err) {
-							// console.log("ERR", err);
+							console.log("ERR", err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -168,7 +169,7 @@ describe("Facade D3", function () {
 							// console.log("res.body.error", res.body.error);
 						})
 						.catch(function (err) {
-							// console.log("ERR", err);
+							console.log("ERR", err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -188,11 +189,11 @@ describe("Facade D3", function () {
 							expect(res.body.error).to.equal("Invalid kind");
 						})
 						.catch(function (err) {
-							// console.log(err);
+							console.log(err);
 							expect.fail();
 						});
 				} catch (err) {
-					// console.log(err);
+					console.log(err);
 					expect.fail();
 				}
 			});
@@ -211,11 +212,10 @@ describe("Facade D3", function () {
 							expect(res.body.result).to.deep.equal(["mycourses", "rooms"]);
 						})
 						.catch(function (err) {
-							// console.log(err);
+							console.log(err);
 							expect.fail();
 						});
 				} catch (err) {
-					// console.log(err);
 					expect.fail();
 				}
 			});
@@ -259,7 +259,7 @@ describe("Facade D3", function () {
 							expect(res.body.error).to.equal("Invalid id");
 						})
 						.catch(function (err) {
-							// console.log(err);
+							console.log(err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -281,7 +281,7 @@ describe("Facade D3", function () {
 							// console.log("res.body.error", res.body.error);
 						})
 						.catch(function (err) {
-							// console.log("ERR", err);
+							console.log("ERR", err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -302,7 +302,7 @@ describe("Facade D3", function () {
 							// console.log("res.body.error", res.body.error);
 						})
 						.catch(function (err) {
-							// console.log("ERR", err);
+							console.log("ERR", err);
 							expect.fail();
 						});
 				} catch (err) {
@@ -322,17 +322,17 @@ describe("Facade D3", function () {
 							expect(res.body.error).to.equal("Invalid kind");
 						})
 						.catch(function (err) {
-							// console.log(err);
+							console.log(err);
 							expect.fail();
 						});
 				} catch (err) {
-					// console.log(err);
 					expect.fail();
 				}
 			});
 		});
 	});
 
+	// POST REQUEST TESTS
 	describe("POST Request Tests", function () {
 		describe("COURSES DATASET", function () {
 			it("simple query - valid", function () {
@@ -444,4 +444,27 @@ describe("Facade D3", function () {
 			});
 		});
 	});
+
+	// DELETE REQUEST TESTS
+	describe("DELETE Request Tests", function () {
+		describe("COURSES DATASET", function () {
+			it("remove mycourses", function () {
+				try {
+					return request(SERVER_URL)
+						.delete("/dataset/mycourses")
+						.then((res) => {
+							expect(res.status).to.equal(200);
+							expect(res.body.result).to.equal("mycourses");
+						})
+						.catch((err) => {
+							console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					expect.fail();
+				}
+			});
+		});
+	});
+
 });
