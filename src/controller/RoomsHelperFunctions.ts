@@ -5,7 +5,7 @@ import http from "http";
 import {searchTreeByID, searchTreeByTag, convertToJSON} from "./RoomHelperFunction2";
 import {writeToData} from "./DatasetHelperFunctions";
 import {checkNonNull} from "./Filter";
-import {updateSave} from "../data persistence/DataPersistence";
+// import {updateSave} from "../data persistence/DataPersistence";
 let dataPath = __dirname + "/../../data";
 function parseTable(table: object, codeArray: string[]) {
 	let tableKeys = Object.keys(table);
@@ -289,7 +289,7 @@ function jszipRooms(
 			let data = combineRoomsAndBuildingInfo(buildingInfoArray, roomInfoList, tempList, id, kind);
 			addedIds.push(id);
 			addedDatasets.push(data);
-			updateSave(addedIds, addedDatasets);
+			// updateSave(addedIds, addedDatasets);
 			return Promise.resolve(addedIds);
 		})
 		.catch((err) => {
