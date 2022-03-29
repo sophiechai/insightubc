@@ -5,13 +5,12 @@ import http from "http";
 import {searchTreeByID, searchTreeByTag, convertToJSON} from "./RoomHelperFunction2";
 import {writeToData} from "./DatasetHelperFunctions";
 import {checkNonNull} from "./Filter";
-
+import {updateSave} from "../data persistence/DataPersistence";
 let dataPath = __dirname + "/../../data";
 function parseTable(table: object, codeArray: string[]) {
 	let tableKeys = Object.keys(table);
 	let tableValues = Object.values(table);
 	let tbody: object = tableValues[tableKeys.indexOf("childNodes")][3];
-
 	let tbodyKeys = Object.keys(tbody);
 	let tbodyValues = Object.values(tbody);
 	let tbodyChildNodes = tbodyValues[tbodyKeys.indexOf("childNodes")];
@@ -290,6 +289,7 @@ function jszipRooms(
 			let data = combineRoomsAndBuildingInfo(buildingInfoArray, roomInfoList, tempList, id, kind);
 			addedIds.push(id);
 			addedDatasets.push(data);
+			updateSave(addedIds, addedDatasets);
 			return Promise.resolve(addedIds);
 		})
 		.catch((err) => {

@@ -115,7 +115,7 @@ describe("Facade D3", function () {
 			// 	}
 			// });
 
-			it("PUT for courses dataset - invalid repeat id", function () {
+			it("PUT - invalid repeat id", function () {
 				try {
 					return request(SERVER_URL)
 						.put("/dataset/mycourses/courses")
@@ -136,7 +136,7 @@ describe("Facade D3", function () {
 				}
 			});
 
-			it("PUT for courses - invalid id with underscore", function () {
+			it("PUT - invalid id with underscore", function () {
 				try {
 					return request(SERVER_URL)
 						.put("/dataset/my_courses/courses")
@@ -157,7 +157,7 @@ describe("Facade D3", function () {
 				}
 			});
 
-			it("PUT for courses - invalid id whitespace", function () {
+			it("PUT - invalid id whitespace", function () {
 				try {
 					return request(SERVER_URL)
 						.put("/dataset/ /courses")
@@ -178,7 +178,7 @@ describe("Facade D3", function () {
 				}
 			});
 
-			it("PUT for courses - invalid kind", function () {
+			it("PUT - invalid kind", function () {
 				try {
 					return request(SERVER_URL)
 						.put("/dataset/mycourses/course")
@@ -195,6 +195,46 @@ describe("Facade D3", function () {
 						});
 				} catch (err) {
 					console.log(err);
+					expect.fail();
+				}
+			});
+
+			it("PUT - missing body", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/courses/courses")
+						.set(contentType, typeZip)
+						.then(function (res: ChaiHttp.Response) {
+							expect(res.status).to.equal(400);
+							expect(res.body.error).to.exist;
+							expect(typeof res.body.error).to.equal("string");
+						})
+						.catch(function (err) {
+							console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
+					console.log(err);
+					expect.fail();
+				}
+			});
+
+			// TODO: fix
+			it("PUT - incomplete URL", function () {
+				try {
+					return request(SERVER_URL)
+						.put("/dataset/courses")
+						.set(contentType, typeZip)
+						.send(serverGetContentFromArchives("courses.zip"))
+						.then(function (res: ChaiHttp.Response) {
+							// TODO: is this supposed to be a 404 error?
+							expect(res.status).to.equal(404);
+						})
+						.catch(function (err) {
+							console.log(err);
+							expect.fail();
+						});
+				} catch (err) {
 					expect.fail();
 				}
 			});

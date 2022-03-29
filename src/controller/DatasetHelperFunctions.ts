@@ -1,6 +1,7 @@
 import fse from "fs-extra";
 import JSZip from "jszip";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {updateSave} from "../data persistence/DataPersistence";
 
 let dataPath = __dirname + "/../../data";
 
@@ -127,6 +128,7 @@ function jszipCourses(
 				}
 				addedIds.push(id);
 				addedDatasets.push(data);
+				updateSave(addedIds, addedDatasets);
 				return Promise.resolve(addedIds);
 			});
 	});

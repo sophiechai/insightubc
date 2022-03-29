@@ -23,6 +23,7 @@ import {ValidateQueryRooms} from "./ValidateQueryRooms";
 import {Rooms} from "./Rooms";
 import {Dataset} from "./Datasets";
 import {Sections} from "./Sections";
+import {updateSave} from "../data persistence/DataPersistence";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -42,6 +43,7 @@ export default class InsightFacade implements IInsightFacade {
 		// jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
+		this.loadSave();
 		mapForEachFormattedSection = new Map<string, number | string>();
 		try {
 			if (!fs.existsSync(dataPath)) {
@@ -94,6 +96,7 @@ export default class InsightFacade implements IInsightFacade {
 				let index = addedIds.indexOf(id);
 				addedIds = removeItem(addedIds, id);
 				addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
+				updateSave(addedIds, addedDatasets);
 				await fse.unlink(fileName);
 				console.log("Successfully removed file!");
 				// console.log("File successfully deleted.");
@@ -256,5 +259,20 @@ export default class InsightFacade implements IInsightFacade {
 
 	public listDatasets(): Promise<InsightDataset[]> {
 		return Promise.resolve(addedDatasets);
+	}
+
+	private loadSave() {
+		let path = "src/data persistence/save.json";
+		let jsonContent = "";
+		if (fs.existsSync(path)) {
+			jsonContent = fs.readFileSync(path).toString("utf8");
+		}
+		if (jsonContent !== "") {
+			let jsonObj = JSON.parse(jsonContent);
+			let ids = jsonObj["ids"];
+			let datasets = jsonObj["datasets"];
+			addedIds = ids;
+			addedDatasets = datasets;
+		}
 	}
 }
