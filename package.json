@@ -9,7 +9,6 @@
 		"node": ">= 16 < 17"
 	},
 	"dependencies": {
-		"browserify": "^17.0.0",
 		"cors": "^2.8.5",
 		"decimal.js": "10.3.1",
 		"express": "4.17.2",
