@@ -62,6 +62,9 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		if (content === null || content === undefined || content === "") {
+			return Promise.reject(new InsightError("Invalid input string"));
+		}
 		jsZip = new JSZip();
 		if (id.includes("_") || id.trim() === "" || addedIds.includes(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
@@ -113,6 +116,9 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
+		if (query === undefined || query === null || query === "") {
+			throw new InsightError("Undefined or missing query input");
+		}
 		datasetArray = [];
 		let q: any = query;
 		let id = "";
@@ -208,7 +214,7 @@ export default class InsightFacade implements IInsightFacade {
 			if (!Object.prototype.hasOwnProperty.call(optionsValue, "COLUMNS")) {
 				throw new InsightError("Missing COLUMNS");
 			}
-			let columnsValue = optionsValue.COLUMNS;
+			let columnsValue: string[] = optionsValue.COLUMNS;
 			if (!Array.isArray(columnsValue) || columnsValue.length === 0) {
 				throw new InsightError("COLUMNS value invalid");
 			}

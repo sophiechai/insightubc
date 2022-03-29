@@ -124,7 +124,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid id");
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log(err);
@@ -145,8 +145,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid id");
-							// console.log("res.body.error", res.body.error);
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log("ERR", err);
@@ -166,8 +165,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid id");
-							// console.log("res.body.error", res.body.error);
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log("ERR", err);
@@ -187,7 +185,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid kind");
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log(err);
@@ -297,7 +295,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid id");
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log(err);
@@ -318,8 +316,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid id");
-							// console.log("res.body.error", res.body.error);
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log("ERR", err);
@@ -339,8 +336,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid id");
-							// console.log("res.body.error", res.body.error);
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log("ERR", err);
@@ -360,7 +356,7 @@ describe("Facade D3", function () {
 						.then(function (res: ChaiHttp.Response) {
 							expect(res.status).to.be.equal(400);
 							expect(res.body).to.haveOwnProperty("error");
-							expect(res.body.error).to.equal("Invalid kind");
+							expect(typeof res.body.error).to.equal("string");
 						})
 						.catch(function (err) {
 							console.log(err);
