@@ -23,7 +23,7 @@ import {ValidateQueryRooms} from "./ValidateQueryRooms";
 import {Rooms} from "./Rooms";
 import {Dataset} from "./Datasets";
 import {Sections} from "./Sections";
-import {updateSave} from "../data persistence/DataPersistence";
+// import {updateSave} from "../data persistence/DataPersistence";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -43,7 +43,8 @@ export default class InsightFacade implements IInsightFacade {
 		// jsZip = new JSZip();
 		addedIds = [];
 		addedDatasets = [];
-		this.loadSave();
+		// this.loadSave();
+		this.loadData();
 		mapForEachFormattedSection = new Map<string, number | string>();
 		try {
 			if (!fs.existsSync(dataPath)) {
@@ -96,10 +97,9 @@ export default class InsightFacade implements IInsightFacade {
 				let index = addedIds.indexOf(id);
 				addedIds = removeItem(addedIds, id);
 				addedDatasets = removeItem(addedDatasets, addedDatasets[index]);
-				updateSave(addedIds, addedDatasets);
+				// updateSave(addedIds, addedDatasets);
 				await fse.unlink(fileName);
-				console.log("Successfully removed file!");
-				// console.log("File successfully deleted.");
+				// console.log("Successfully removed file!");
 				return Promise.resolve(id);
 			} catch (err) {
 				console.log(err);
@@ -261,18 +261,35 @@ export default class InsightFacade implements IInsightFacade {
 		return Promise.resolve(addedDatasets);
 	}
 
-	private loadSave() {
-		let path = "src/data persistence/save.json";
-		let jsonContent = "";
-		if (fs.existsSync(path) && fs.existsSync(dataPath)) {
-			jsonContent = fs.readFileSync(path).toString("utf8");
-		}
-		if (jsonContent !== "") {
-			let jsonObj = JSON.parse(jsonContent);
-			let ids = jsonObj["ids"];
-			let datasets = jsonObj["datasets"];
-			addedIds = ids;
-			addedDatasets = datasets;
+	// private loadSave() {
+	// 	let path = "src/data persistence/save.json";
+	// 	let jsonContent = "";
+	// 	if (fs.existsSync(path) && fs.existsSync(dataPath)) {
+	// 		jsonContent = fs.readFileSync(path).toString("utf8");
+	// 	}
+	// 	if (jsonContent !== "") {
+	// 		let jsonObj = JSON.parse(jsonContent);
+	// 		let ids = jsonObj["ids"];
+	// 		let datasets = jsonObj["datasets"];
+	// 		addedIds = ids;
+	// 		addedDatasets = datasets;
+	// 	}
+	// }
+
+	private loadData() {
+		if (fs.existsSync(dataPath)) {
+			const files = fse.readdirSync(dataPath);
+			// console.log("FILES: ", files);
+			for (const f of files) {
+				let fileContent = fse.readFileSync(dataPath + "/" + f).toString("utf8");
+				let jsonObj = JSON.parse(fileContent);
+				let headerValue = jsonObj["header"];
+				// console.log("HEADER: ", headerValue);
+				let id = headerValue["id"];
+				// console.log("ID: ", id);
+				addedDatasets.push(headerValue);
+				addedIds.push(id);
+			}
 		}
 	}
 }
