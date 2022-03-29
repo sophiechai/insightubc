@@ -264,7 +264,7 @@ export default class InsightFacade implements IInsightFacade {
 	private loadSave() {
 		let path = "src/data persistence/save.json";
 		let jsonContent = "";
-		if (fs.existsSync(path)) {
+		if (fs.existsSync(path) && fs.existsSync(dataPath)) {
 			jsonContent = fs.readFileSync(path).toString("utf8");
 		}
 		if (jsonContent !== "") {
