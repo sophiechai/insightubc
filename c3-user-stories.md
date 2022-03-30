@@ -2,12 +2,12 @@ Please edit this template and commit to the master branch for your user stories 
 Make sure to follow the *Role, Goal, Benefit* framework for the user stories and the *Given/When/Then* framework for the Definitions of Done! You can also refer to the examples DoDs in [C3 spec](https://sites.google.com/view/ubc-cpsc310-21w2-intro-to-se/project/checkpoint-3).
 
 ## User Story 1
-As a student, I want to be able to add a zip file with valid id, so that I can query the data afterwards.
+As a student, I want to be able to add a zip file with valid id, so that I can store data about UBC courses and buildings.
 
 ---
 
 #### Definitions of Done(s)
-**Scenario 1**: Adding valid zip file, id
+**Scenario 1**: Adding valid zip file and id
 
 Given: User is on the 'Dataset' tab  
 When:
@@ -52,6 +52,7 @@ As a new student attending UBC, I want to be able to search a building by short 
 
 #### Definitions of Done(s)
 **Scenario 1**: Valid building name & id  
+
 Given: The UBC buildings/rooms dataset is already added (and not removed)  
 When: 
 - User clicks "Queries" tab.
