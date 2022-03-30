@@ -70,6 +70,7 @@ function parseResult(
 			if (fileData === "") {
 				dataObj = [];
 			} else {
+				fileData = JSON.stringify(fileData);
 				dataObj = JSON.parse(fileData)["result"];
 			}
 			// const dataObj = JSON.parse(fileData)["result"];
