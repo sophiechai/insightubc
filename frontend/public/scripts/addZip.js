@@ -58,8 +58,13 @@ function alertContents2() {
 				// httpRequest.responseText – returns the server response as a string of text
 				// httpRequest.responseXML – returns the response as an XMLDocument object you can traverse with JavaScript DOM functions
 				displayResult(this);
+			} else if (httpRequest.status === 400){
+				let text = this.responseText;
+				let textJSON = JSON.parse(text);
+				let values = textJSON["error"];
+				alert("Err: " + values);
 			} else {
-				alert('There was a problem with the request.');
+				alert('Err: There was a problem with the request.');
 			}
 		}
 	}
