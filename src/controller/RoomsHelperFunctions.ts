@@ -291,8 +291,8 @@ function jszipRooms(
 			return Promise.resolve(addedIds);
 		})
 		.catch((err) => {
-			console.log("error");
-			return Promise.reject(err);
+			console.log("error jszipRooms");
+			return Promise.reject(new InsightError(err));
 		});
 }
 export {jszipRooms, searchTreeByID};

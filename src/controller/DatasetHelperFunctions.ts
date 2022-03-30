@@ -86,6 +86,9 @@ function parseResult(
 		} catch (err) {
 			console.log("DATASET HELPER PARSE RESULT ERROR: ", err);
 		}
+	}).catch((err) => {
+		console.log("error parseResult");
+		return Promise.reject(new InsightError(err));
 	});
 }
 
@@ -128,6 +131,9 @@ function jszipCourses(
 				addedIds.push(id);
 				addedDatasets.push(data);
 				return Promise.resolve(addedIds);
+			}).catch((err) => {
+				console.log("error jszipCourses");
+				return Promise.reject(new InsightError(err));
 			});
 	});
 }

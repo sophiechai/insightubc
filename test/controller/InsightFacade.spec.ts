@@ -313,7 +313,7 @@ describe("InsightFacade", function () {
 				let invalidZip: Promise<string> = getContentFromArchives("test.txt");
 
 				invalidZip.then(function (content) {
-					return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+					return facade.addDataset("courses", "content", InsightDatasetKind.Courses);
 				}).catch((err: InsightError) => {
 					expect(err).to.be.instanceof(InsightError);
 				});
