@@ -214,6 +214,19 @@ describe("InsightFacade", function () {
 					expect(err).to.be.instanceof(InsightError);
 				});
 			});
+
+			it("should add a valid zip file with only one valid course", async function () {
+
+				let oneValidFile = getContentFromArchives("one valid.zip");
+				oneValidFile.then(function (content) {
+					return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+				}).then((addedIds: string[]) => {
+					expect(addedIds).to.be.an.instanceof(Array);
+					expect(addedIds).to.have.length(1);
+				}).catch((err: InsightError) => {
+					expect(err).to.be.instanceof(InsightError);
+				});
+			});
 		});
 
 		describe("Reject With InsightError", function () {
@@ -313,7 +326,7 @@ describe("InsightFacade", function () {
 				let invalidZip: Promise<string> = getContentFromArchives("test.txt");
 
 				invalidZip.then(function (content) {
-					return facade.addDataset("courses", content, InsightDatasetKind.Courses);
+					return facade.addDataset("courses", "content", InsightDatasetKind.Courses);
 				}).catch((err: InsightError) => {
 					expect(err).to.be.instanceof(InsightError);
 				});
